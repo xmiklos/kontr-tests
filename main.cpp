@@ -1,7 +1,7 @@
 #include <iostream>
 #include "kontr.h"
 
-class Cl_master_testing : public kontr::MasterTest {
+class Cl_master_testing : public kontr::MasterTestDelegator {
 public:
     Cl_master_testing(IMasterTest &generator);
 };
@@ -9,7 +9,7 @@ Cl_master_testing master_testing(kontr::IMasterTest& generator) {
     return Cl_master_testing(generator);
 }
 Cl_master_testing::Cl_master_testing(kontr::IMasterTest &generator) :
-    kontr::MasterTest(generator) {
+    kontr::MasterTestDelegator(generator, "master_testing") {
     name("master_testing");
 
     register_unit("unit_matrix_test2.pl");
@@ -55,10 +55,27 @@ Cl_master_testing::Cl_master_testing(kontr::IMasterTest &generator) :
     stage_file("data_simple_structure_page2.html");
 }
 
+class Cl_Session : public ::kontr::ISession {
+public:
+    Cl_Session();
+};
+Cl_Session Session() {
+    return Cl_Session();
+}
+Cl_Session::Cl_Session() :
+    kontr::ISession({
+                    "script_dir",
+                    "files_dir",
+                    {master_testing},
+                    {},
+                    nullptr
+                })
+{}
+
 int main()
 {
-    kontr::Generator::MasterTest gen;
-    master_testing(gen);
+    Session();
     return 0;
+
 }
 
