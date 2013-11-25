@@ -63,13 +63,12 @@ Cl_Session Session() {
     return Cl_Session();
 }
 Cl_Session::Cl_Session() :
-    kontr::ISession({
+    kontr::ISession(
                     "script_dir",
                     "files_dir",
                     {master_testing},
-                    {},
-                    nullptr
-                })
+                    {}
+                )
 {}
 
 int main()
