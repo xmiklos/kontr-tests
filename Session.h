@@ -9,7 +9,7 @@ namespace kontr {
 
 class ISession;
 
-typedef const std::vector<std::function<::kontr::MasterTestDelegator(::kontr::IMasterTest&)> > TMasterTests;
+typedef const std::vector<std::function< ::kontr::MasterTestDelegator(::kontr::IMasterTest&)> > TMasterTests;
 typedef const std::function<void(const ISession&)> TPost;
 
 
