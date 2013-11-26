@@ -1,0 +1,3 @@
+[submodule "backtracexx"]
+	path = backtracexx
+	url = https://github.com/xbrukner/backtracexx.git

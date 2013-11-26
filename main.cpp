@@ -1,5 +1,6 @@
 #include <iostream>
 #include "kontr.h"
+#include "backtracexx/backtracexx.hpp"
 
 class Cl_master_testing : public kontr::MasterTestDelegator {
 public:
@@ -74,6 +75,7 @@ Cl_Session::Cl_Session() :
 int main()
 {
     Session();
+    std::cout << backtracexx::scan() << std::endl;
     return 0;
 
 }
