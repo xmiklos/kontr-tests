@@ -2,15 +2,24 @@
 #include "kontr.h"
 #include "backtracexx/backtracexx.hpp"
 
-class Cl_master_testing : public kontr::MasterTestDelegator {
+template<typename T>
+class Cl_master_testing : public kontr::MasterTestDelegator<T> {
 public:
-    Cl_master_testing(IMasterTest &generator);
+    Cl_master_testing() : kontr::MasterTestDelegator<T>("master_testing") {}
+    virtual void execute () override;
+    using kontr::MasterTestDelegator<T>::name;
+    using kontr::MasterTestDelegator<T>::register_unit;
+    using kontr::MasterTestDelegator<T>::stage_compiled_file;
+    using kontr::MasterTestDelegator<T>::stage_compiled_student_file;
+    using kontr::MasterTestDelegator<T>::stage_file;
+    using kontr::MasterTestDelegator<T>::stage_student_file;
 };
-Cl_master_testing master_testing(kontr::IMasterTest& generator) {
-    return Cl_master_testing(generator);
+template<typename T>
+kontr::MasterTestDelegator<T>* master_testing() {
+    return new Cl_master_testing<T>();
 }
-Cl_master_testing::Cl_master_testing(kontr::IMasterTest &generator) :
-    kontr::MasterTestDelegator(generator, "master_testing") {
+template<typename T>
+void Cl_master_testing<T>::execute () {
     name("master_testing");
 
     register_unit("unit_matrix_test2.pl");
@@ -56,15 +65,18 @@ Cl_master_testing::Cl_master_testing(kontr::IMasterTest &generator) :
     stage_file("data_simple_structure_page2.html");
 }
 
-class Cl_Session : public ::kontr::ISession {
+template <typename T>
+class Cl_Session : public ::kontr::ISession<T> {
 public:
     Cl_Session();
 };
-Cl_Session Session() {
-    return Cl_Session();
+template <typename T>
+::kontr::ISession<T> Session() {
+    return Cl_Session<T>();
 }
-Cl_Session::Cl_Session() :
-    kontr::ISession(
+template <typename T>
+Cl_Session<T>::Cl_Session() :
+    ::kontr::ISession<T>(
                     "script_dir",
                     "files_dir",
                     {master_testing},
@@ -74,7 +86,7 @@ Cl_Session::Cl_Session() :
 
 int main()
 {
-    Session();
+    Session<kontr::Generator::MasterTest>();
     std::cout << backtracexx::scan() << std::endl;
     return 0;
 

@@ -5,7 +5,9 @@ namespace kontr {
 
 using namespace std;
 
-ISession::ISession(const char *script_dir, const char *files_dir, TMasterTests nanecisto, TMasterTests naostro, TPost post) :
+#if 0
+template<typename T>
+ISession<T>::ISession(const char *script_dir, const char *files_dir, TMasterTests nanecisto, TMasterTests naostro, TPost post) :
     script_dir(script_dir), files_dir(files_dir),
     nanecisto(nanecisto), naostro(naostro),
     post(post)
@@ -18,16 +20,13 @@ ISession::ISession(const char *script_dir, const char *files_dir, TMasterTests n
 
     cout << "Nanecisto: " << endl;
     for (auto i : nanecisto) {
-        ::kontr::Generator::MasterTest gen;
-        ::kontr::MasterTestDelegator obj = i(gen);
-        cout << " (" << obj.getClassName() << ") " << endl;
+        cout << " (" << i.getClassName() << ") " << endl;
     }
 
     cout << "Naostro: " << endl;
     for (auto i : naostro) {
-        ::kontr::Generator::MasterTest gen;
-        ::kontr::MasterTestDelegator obj = i(gen);
-        cout << " (" << obj.getClassName() << ") " << endl;
+        cout << " (" << i.getClassName() << ") " << endl;
     }
 }
+#endif
 }

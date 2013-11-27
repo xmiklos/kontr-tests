@@ -47,12 +47,13 @@ public:
     virtual void stage_compiled_student_file(const char* filename) = 0;
 };
 
+template <typename T>
 class MasterTestDelegator : public ::kontr::IMasterTest
 {
-    IMasterTest& delegate;
+    T delegate;
     const char* className;
 protected:
-    MasterTestDelegator(IMasterTest& delegate, const char* className) : delegate(delegate), className(className) {}
+    MasterTestDelegator<T>(const char* className) : className(className) {}
 public:
     virtual void name(const char* name) {
         delegate.name(name);
@@ -81,6 +82,8 @@ public:
     const char* getClassName() const {
         return className;
     }
+
+    virtual void execute () = 0;
 };
 
 }
