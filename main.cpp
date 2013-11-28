@@ -66,27 +66,33 @@ void Cl_master_testing<T>::execute () {
 }
 
 template <typename T>
-class Cl_Session : public ::kontr::ISession<T> {
+class Cl_Session : public ::kontr::SessionDelegator<T> {
 public:
+    using ::kontr::SessionDelegator<T>::pre_test;
+    using ::kontr::SessionDelegator<T>::post_test;
     Cl_Session();
 };
 template <typename T>
-::kontr::ISession<T> Session() {
-    return Cl_Session<T>();
+::kontr::SessionDelegator<T>* Session() {
+    return new Cl_Session<T>();
 }
 template <typename T>
 Cl_Session<T>::Cl_Session() :
-    ::kontr::ISession<T>(
-                    "script_dir",
-                    "files_dir",
-                    {master_testing},
-                    {}
-                )
+    ::kontr::SessionDelegator<T>(
+                "script_dir",
+                "files_dir",
+                {master_testing},
+                {}
+             )
 {}
+
 
 int main()
 {
-    Session<kontr::Generator::MasterTest>();
+
+    std::unique_ptr<kontr::SessionDelegator<kontr::ConfigurationGeneration>> session(Session<kontr::ConfigurationGeneration>());
+    session->pre_test();
+
     std::cout << backtracexx::scan() << std::endl;
     return 0;
 

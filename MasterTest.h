@@ -1,6 +1,8 @@
 #ifndef MASTERTEST_H
 #define MASTERTEST_H
 
+#include "kontr.h"
+
 namespace kontr {
 
 class IMasterTest {
@@ -50,7 +52,7 @@ public:
 template <typename T>
 class MasterTestDelegator : public ::kontr::IMasterTest
 {
-    T delegate;
+    typename T::Master delegate;
     const char* className;
 protected:
     MasterTestDelegator<T>(const char* className) : className(className) {}
