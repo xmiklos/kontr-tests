@@ -72,7 +72,7 @@ public:
             suppressed.erase(it);
         }
         else {
-            cerr << "=================" << endl
+            cerr << endl << "==================" << endl
                  << Severity_strings[severity]
                  << ": " << type << endl;
             cerr << backtracexx::scan() << endl;
