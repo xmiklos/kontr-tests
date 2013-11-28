@@ -12,9 +12,14 @@ struct ConfigurationGeneration {
 
     typedef ::kontr::MasterTestDelegator<ConfigurationGeneration> MasterDelegator;
     typedef ::kontr::SessionDelegator<ConfigurationGeneration> SessionDelegator;
+
+    ::kontr::Report::ReportConfiguration <
+                ::kontr::Report::Reporting::ERR,
+                ::kontr::Report::Reporting::ERR,
+                ::kontr::Report::Reporting::ERR_ABORT> ReportConfiguration;
+
+    ::kontr::Report::Reporter<ConfigurationGeneration> report = (*this);
 };
-
-
 
 }
 #endif // CONFIGURATION_H

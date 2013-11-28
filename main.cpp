@@ -90,10 +90,15 @@ Cl_Session<T>::Cl_Session() :
 int main()
 {
 
-    std::unique_ptr<kontr::SessionDelegator<kontr::ConfigurationGeneration>> session(Session<kontr::ConfigurationGeneration>());
-    session->pre_test();
+    kontr::ConfigurationGeneration cg;
+    cg.report.create(kontr::Report::NOTICE, "test");
+    cg.report.suppress(kontr::Report::NOTICE, "test", [&] {} );
+    cg.report.suppress(kontr::Report::NOTICE, "test", [&] { cg.report.create(kontr::Report::NOTICE, "test"); } );
 
-    std::cout << backtracexx::scan() << std::endl;
+    //std::unique_ptr<kontr::SessionDelegator<kontr::ConfigurationGeneration>> session(Session<kontr::ConfigurationGeneration>());
+    //session->pre_test();
+
+    //std::cout << backtracexx::scan() << std::endl;
     return 0;
 
 }
