@@ -19,6 +19,12 @@ struct ConfigurationGeneration {
                 ::kontr::Report::Reporting::ERR_ABORT> ReportConfiguration;
 
     ::kontr::Report::Reporter<ConfigurationGeneration> report = (*this);
+
+    std::unique_ptr<SessionDelegator> session = nullptr;
+
+    void setSession(SessionDelegator::Function f) {
+        session = std::unique_ptr<SessionDelegator>(f(*this));
+    }
 };
 
 }

@@ -1,11 +1,12 @@
 #ifndef KONTR_H
 #define KONTR_H
 
+#include "Reporter.h"
+
 #include "MasterTest.h"
 #include "Generator/MasterTest.h"
 #include "Session.h"
 #include "Generator/Session.h"
-#include "Reporter.h"
 
 #include "Configuration.h"
 

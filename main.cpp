@@ -5,7 +5,7 @@
 template<typename T>
 class Cl_master_testing : public kontr::MasterTestDelegator<T> {
 public:
-    Cl_master_testing() : kontr::MasterTestDelegator<T>("master_testing") {}
+    Cl_master_testing(T& instance) : kontr::MasterTestDelegator<T>(instance, "master_testing") {}
     virtual void execute () override;
     using kontr::MasterTestDelegator<T>::name;
     using kontr::MasterTestDelegator<T>::register_unit;
@@ -15,8 +15,8 @@ public:
     using kontr::MasterTestDelegator<T>::stage_student_file;
 };
 template<typename T>
-kontr::MasterTestDelegator<T>* master_testing() {
-    return new Cl_master_testing<T>();
+kontr::MasterTestDelegator<T>* master_testing(T& instance) {
+    return new Cl_master_testing<T>(instance);
 }
 template<typename T>
 void Cl_master_testing<T>::execute () {
@@ -70,16 +70,16 @@ class Cl_Session : public ::kontr::SessionDelegator<T> {
 public:
     using ::kontr::SessionDelegator<T>::pre_test;
     using ::kontr::SessionDelegator<T>::post_test;
-    Cl_Session();
+    Cl_Session(T& instance);
 };
 template <typename T>
-::kontr::SessionDelegator<T>* Session() {
-    return new Cl_Session<T>();
+::kontr::SessionDelegator<T>* Session(T& instance) {
+    return new Cl_Session<T>(instance);
 }
 template <typename T>
-Cl_Session<T>::Cl_Session() :
-    ::kontr::SessionDelegator<T>(
-                "script_dir",
+Cl_Session<T>::Cl_Session(T &instance) :
+    ::kontr::SessionDelegator<T>(instance,
+                ".",
                 "files_dir",
                 {master_testing},
                 {}
@@ -107,12 +107,12 @@ int main()
 {
 
     kontr::ConfigurationGeneration cg;
-    cg.report.create(kontr::Report::NOTICE, "test");
-    cg.report.suppress(kontr::Report::NOTICE, "test", [&] {} );
-    cg.report.suppress(kontr::Report::NOTICE, "test", [&] { cg.report.create(kontr::Report::NOTICE, "test"); } );
+    //cg.report.create(kontr::Report::NOTICE, "test");
+    //cg.report.suppress(kontr::Report::NOTICE, "test", [&] {} );
+    //cg.report.suppress(kontr::Report::NOTICE, "test", [&] { cg.report.create(kontr::Report::NOTICE, "test"); } );
 
-    //std::unique_ptr<kontr::SessionDelegator<kontr::ConfigurationGeneration>> session(Session<kontr::ConfigurationGeneration>());
-    //session->pre_test();
+    cg.setSession(Session);
+    cg.session->pre_test();
 
     //std::cout << backtracexx::scan() << std::endl;
     return 0;

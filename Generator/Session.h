@@ -27,14 +27,14 @@ public:
 
         cout << "Nanecisto: " << endl;
         for (auto i : nanecisto) {
-            unique_ptr<typename T::MasterDelegator> obj(i());
+            unique_ptr<typename T::MasterDelegator> obj(i(this->instance));
             cout << " (" << obj->getClassName() << ") " << endl;
             obj->execute();
         }
 
         cout << "Naostro: " << endl;
         for (auto i : naostro) {
-            unique_ptr<typename T::MasterDelegator> obj(i());
+            unique_ptr<typename T::MasterDelegator> obj(i(this->instance));
             cout << " (" << obj->getClassName() << ") " << endl;
             obj->execute();
         }

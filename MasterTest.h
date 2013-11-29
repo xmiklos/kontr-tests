@@ -5,8 +5,14 @@
 
 namespace kontr {
 
+template<typename T>
 class IMasterTest {
+protected:
+    T& instance;
 public:
+    IMasterTest(T& instance) : instance(instance) {}
+    virtual ~IMasterTest() {}
+
     /**
      * Set name to the master test
      * @brief name
@@ -50,13 +56,17 @@ public:
 };
 
 template <typename T>
-class MasterTestDelegator : public ::kontr::IMasterTest
+class MasterTestDelegator : public ::kontr::IMasterTest<T>
 {
     typename T::Master delegate;
     const char* className;
 protected:
-    MasterTestDelegator<T>(const char* className) : className(className) {}
+    MasterTestDelegator<T>(T& instance, const char* className) :
+        ::kontr::IMasterTest<T>(instance), delegate(instance), className(className) {}
 public:
+    /// Type of a function returning pointer to this delegator type
+    using Function = MasterTestDelegator*(*)(T&);
+
     virtual void name(const char* name) {
         delegate.name(name);
     }

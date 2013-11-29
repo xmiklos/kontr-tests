@@ -6,23 +6,25 @@
 #include <functional>
 #include <iostream>
 #include <memory>
+#include <string>
 
 namespace kontr {
 
 template<typename T>
 class ISession {
 public:
-    using TMasterTests = std::vector< typename T::MasterDelegator* (*)() > ;
+    using TMasterTests = std::vector< typename T::MasterDelegator::Function > ;
     typedef std::function<void(const ISession&)> TPost;
 protected:
-    const char* script_dir;
-    const char* files_dir;
-    TMasterTests nanecisto;
-    TMasterTests naostro;
-    TPost post;
+    T& instance;
 
-    ISession<T>() = delete;
 public:
+    const std::string script_dir;
+    const std::string files_dir;
+    const TMasterTests nanecisto;
+    const TMasterTests naostro;
+    const TPost post;
+
     /**
      * Configure Session
      * @brief Session
@@ -32,13 +34,16 @@ public:
      * @param naostro Master tests to be executed "naostro" (apart from nanecisto tests)
      * @param post Optional post method
      */
-    ISession(const char* script_dir, const char* files_dir,
+    ISession(T& instance, const char* script_dir, const char* files_dir,
              TMasterTests nanecisto, TMasterTests naostro,
              TPost post = nullptr) :
+        instance(instance),
         script_dir(script_dir), files_dir(files_dir),
         nanecisto(nanecisto), naostro(naostro),
         post(post)
     {}
+
+    virtual ~ISession() {}
 
     /**
      * Execute pre_test - add master tests
@@ -59,11 +64,14 @@ class SessionDelegator : public ISession<T> {
     using typename ISession<T>::TMasterTests;
     using typename ISession<T>::TPost;
 public:
-    SessionDelegator(const char* script_dir, const char* files_dir,
+    /// Type of a function returning pointer to this delegator type
+    using Function = SessionDelegator* (*)(T&);
+
+    SessionDelegator(T& instance, const char* script_dir, const char* files_dir,
                      TMasterTests nanecisto, TMasterTests naostro,
                      TPost post = nullptr) :
-        ISession<T>(script_dir, files_dir, nanecisto, naostro, post),
-        delegate(script_dir, files_dir, nanecisto, naostro, post)
+        ISession<T>(instance, script_dir, files_dir, nanecisto, naostro, post),
+        delegate(instance, script_dir, files_dir, nanecisto, naostro, post)
 
     {}
 
