@@ -52,6 +52,11 @@ struct ReportConfiguration {
     };
 };
 
+void print_report_text(std::ostream& where, const Severity& severity, const std::string& type) {
+    where << std::endl << "==================" << std::endl
+         << Severity_strings[severity] << ": " << type << std::endl;
+}
+
 template<typename T>
 class Reporter
 {
@@ -72,18 +77,16 @@ public:
             suppressed.erase(it);
         }
         else {
-            cerr << endl << "==================" << endl
-                 << Severity_strings[severity]
-                 << ": " << type << endl;
+            print_report_text(cerr, severity, type);
             cerr << backtracexx::scan() << endl;
             if (instance.ReportConfiguration.report[severity] == Reporting::ERR_ABORT) {
                 abort();
             }
             if (instance.ReportConfiguration.report[severity] == Reporting::ERR_EXCEPTION) {
                 switch(severity) {
-                    case NOTICE: throw new ReportNotice(type.c_str());
-                    case WARNING: throw new ReportWarning(type.c_str());
-                    case ERROR: throw new ReportError(type.c_str());
+                    case NOTICE: throw ReportNotice(type.c_str());
+                    case WARNING: throw ReportWarning(type.c_str());
+                    case ERROR: throw ReportError(type.c_str());
                 }
             }
         }
