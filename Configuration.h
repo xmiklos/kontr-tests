@@ -6,26 +6,45 @@
 
 namespace kontr {
 
-struct ConfigurationGeneration {
-    typedef ::kontr::Generator::Session<ConfigurationGeneration> Session;
-    typedef ::kontr::Generator::MasterTest<ConfigurationGeneration> Master;
+namespace Configuration {
 
-    typedef ::kontr::MasterTestDelegator<ConfigurationGeneration> MasterDelegator;
-    typedef ::kontr::SessionDelegator<ConfigurationGeneration> SessionDelegator;
-
-    ::kontr::Report::ReportConfiguration <
-                ::kontr::Report::Reporting::ERR,
-                ::kontr::Report::Reporting::ERR,
-                ::kontr::Report::Reporting::ERR_ABORT> ReportConfiguration;
-
-    ::kontr::Report::Reporter<ConfigurationGeneration> report = (*this);
-
-    std::unique_ptr<SessionDelegator> session = nullptr;
-
-    void setSession(SessionDelegator::Function f) {
-        session = std::unique_ptr<SessionDelegator>(f(*this));
+/// Define configuration
+#define CONFIGURATION(NAME, SESSION, MASTER, ...) \
+struct NAME { \
+        typedef ::kontr::MasterTestDelegator<NAME> MasterDelegator; \
+        typedef ::kontr::SessionDelegator<NAME> SessionDelegator; \
+\
+        typedef std::unique_ptr<MasterDelegator> MasterDelegatorInstance; \
+        typedef std::unique_ptr<SessionDelegator> SessionDelegatorInstance; \
+\
+        typedef SESSION<NAME> Session; \
+        typedef MASTER<NAME> Master; \
+\
+        std::unique_ptr<SessionDelegator> session = nullptr; \
+\
+        void setSession(SessionDelegator::Function f) { \
+            session = std::unique_ptr<SessionDelegator>(f(*this)); \
+        } \
+\
+        MasterDelegatorInstance MasterTestInstance(MasterDelegator::Function f) { \
+            return MasterDelegatorInstance(f(*this)); \
+        } \
+\
+        ::kontr::Report::ReportConfiguration __VA_ARGS__ ReportConfiguration; \
+\
+        ::kontr::Report::Reporter<NAME> report = (*this); \
+        \
     }
-};
+
+CONFIGURATION(Generation,
+              ::kontr::Generator::Session,
+              ::kontr::Generator::MasterTest,
+              <::kontr::Report::Reporting::ERR,
+              ::kontr::Report::Reporting::ERR,
+              ::kontr::Report::Reporting::ERR_ABORT>
+             );
+
+}
 
 }
 #endif // CONFIGURATION_H

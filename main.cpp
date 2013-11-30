@@ -2,24 +2,7 @@
 #include "kontr.h"
 #include "backtracexx/backtracexx.hpp"
 
-template<typename T>
-class Cl_master_testing : public kontr::MasterTestDelegator<T> {
-public:
-    Cl_master_testing(T& instance) : kontr::MasterTestDelegator<T>(instance, "master_testing") {}
-    virtual void execute () override;
-    using kontr::MasterTestDelegator<T>::name;
-    using kontr::MasterTestDelegator<T>::register_unit;
-    using kontr::MasterTestDelegator<T>::stage_compiled_file;
-    using kontr::MasterTestDelegator<T>::stage_compiled_student_file;
-    using kontr::MasterTestDelegator<T>::stage_file;
-    using kontr::MasterTestDelegator<T>::stage_student_file;
-};
-template<typename T>
-kontr::MasterTestDelegator<T>* master_testing(T& instance) {
-    return new Cl_master_testing<T>(instance);
-}
-template<typename T>
-void Cl_master_testing<T>::execute () {
+MASTER_TEST(master_testing) {
     name("master_testing");
 
     register_unit("unit_matrix_test2.pl");
@@ -65,26 +48,10 @@ void Cl_master_testing<T>::execute () {
     stage_file("data_simple_structure_page2.html");
 }
 
-template <typename T>
-class Cl_Session : public ::kontr::SessionDelegator<T> {
-public:
-    using ::kontr::SessionDelegator<T>::pre_test;
-    using ::kontr::SessionDelegator<T>::post_test;
-    Cl_Session(T& instance);
-};
-template <typename T>
-::kontr::SessionDelegator<T>* Session(T& instance) {
-    return new Cl_Session<T>(instance);
-}
-template <typename T>
-Cl_Session<T>::Cl_Session(T &instance) :
-    ::kontr::SessionDelegator<T>(instance,
-                ".",
-                "files_dir",
-                {master_testing},
-                {}
-             )
-{}
+SESSION(".",
+        "files_dir",
+        {master_testing},
+        {})
 
 #if 0
 #define CATCH_CONFIG_MAIN
@@ -106,7 +73,7 @@ TEST_CASE( "Factorials are computed", "[factorial]" ) {
 int main()
 {
 
-    kontr::ConfigurationGeneration cg;
+    kontr::Configuration::Generation cg;
     //cg.report.create(kontr::Report::NOTICE, "test");
     //cg.report.suppress(kontr::Report::NOTICE, "test", [&] {} );
     //cg.report.suppress(kontr::Report::NOTICE, "test", [&] { cg.report.create(kontr::Report::NOTICE, "test"); } );

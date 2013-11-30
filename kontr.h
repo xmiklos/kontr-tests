@@ -9,6 +9,6 @@
 #include "Generator/Session.h"
 
 #include "Configuration.h"
-
+#include "macros-types.h"
 
 #endif // KONTR_H
