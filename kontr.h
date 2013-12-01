@@ -7,6 +7,8 @@
 #include "Generator/MasterTest.h"
 #include "Session.h"
 #include "Generator/Session.h"
+#include "Variable.h"
+#include "Generator/Variable.h"
 
 #include "Configuration.h"
 #include "macros-types.h"

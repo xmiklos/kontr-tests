@@ -13,6 +13,7 @@ using namespace std;
 CONFIGURATION(Testing,
               ::kontr::Generator::Session,
               ::kontr::Generator::MasterTest,
+              ::kontr::Generator::Variable,
               <::kontr::Report::Reporting::ERR_EXCEPTION,
               ::kontr::Report::Reporting::ERR_EXCEPTION,
               ::kontr::Report::Reporting::ERR_EXCEPTION>);

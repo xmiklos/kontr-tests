@@ -15,6 +15,7 @@ template <typename T>
 class MasterTest : public ::kontr::IMasterTest<T>  {
     const char* variable = "$master_test";
     std::ostream* out_ptr = nullptr;
+    using Variable = typename ::kontr::IMasterTest<T>::Variable;
 
     bool check_out() {
         if (out_ptr == nullptr) {
@@ -28,11 +29,11 @@ class MasterTest : public ::kontr::IMasterTest<T>  {
 public:
     using ::kontr::IMasterTest<T>::IMasterTest;
 
-    virtual void name(const char *name) {
+    virtual void name(Variable name) {
         if (out_ptr == nullptr) {
             assert(this->instance.session != nullptr);
             out_ptr = new std::ofstream(this->instance.session->script_dir
-                                        + "/" + name + ".pl");
+                                        + "/" + name.data.String + ".pl");
         }
         else {
             this->instance.report.create(Report::ERROR,
@@ -40,37 +41,37 @@ public:
             return;
         }
         std::ostream& out = *out_ptr;
-        out << variable << "->name('" << name << "');" << std::endl;
+        out << variable << "->name(" << name << ");" << std::endl;
     }
 
-    virtual void register_unit(const char *unit) {
+    virtual void register_unit(Variable unit) {
         if (!check_out()) return;
         std::ostream& out = *out_ptr;
-        out << variable << "->register_unit('" << unit << "');" << std::endl;
+        out << variable << "->register_unit(" << unit << ");" << std::endl;
     }
 
-    virtual void stage_file(const char* filename) {
+    virtual void stage_file(Variable filename) {
         if (!check_out()) return;
         std::ostream& out = *out_ptr;
-        out << variable << "->stage_file('" << filename << "');" << std::endl;
+        out << variable << "->stage_file(" << filename << ");" << std::endl;
     }
 
-    virtual void stage_compiled_file(const char* filename) {
+    virtual void stage_compiled_file(Variable filename) {
         if (!check_out()) return;
         std::ostream& out = *out_ptr;
-        out << variable << "->stage_compiled_file('" << filename << "');" << std::endl;
+        out << variable << "->stage_compiled_file(" << filename << ");" << std::endl;
     }
 
-    virtual void stage_student_file(const char* filename) {
+    virtual void stage_student_file(Variable filename) {
         if (!check_out()) return;
         std::ostream& out = *out_ptr;
-        out << variable << "->stage_student_file('" << filename << "');" << std::endl;
+        out << variable << "->stage_student_file(" << filename << ");" << std::endl;
     }
 
-    virtual void stage_compiled_student_file(const char* filename) {
+    virtual void stage_compiled_student_file(Variable filename) {
         if (!check_out()) return;
         std::ostream& out = *out_ptr;
-        out << variable << "->stage_compiled_student_file('" << filename << "');" << std::endl;
+        out << variable << "->stage_compiled_student_file(" << filename << ");" << std::endl;
     }
 
     virtual ~MasterTest() {

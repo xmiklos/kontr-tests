@@ -72,7 +72,6 @@ TEST_CASE( "Factorials are computed", "[factorial]" ) {
 
 int main()
 {
-
     kontr::Configuration::Generation cg;
     //cg.report.create(kontr::Report::NOTICE, "test");
     //cg.report.suppress(kontr::Report::NOTICE, "test", [&] {} );

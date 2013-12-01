@@ -9,16 +9,19 @@ namespace kontr {
 namespace Configuration {
 
 /// Define configuration
-#define CONFIGURATION(NAME, SESSION, MASTER, ...) \
+#define CONFIGURATION(NAME, SESSION, MASTER, VARIABLE, ...) \
 struct NAME { \
         typedef ::kontr::MasterTestDelegator<NAME> MasterDelegator; \
         typedef ::kontr::SessionDelegator<NAME> SessionDelegator; \
+        typedef ::kontr::VariableDelegator<NAME> VariableDelegator; \
 \
         typedef std::unique_ptr<MasterDelegator> MasterDelegatorInstance; \
         typedef std::unique_ptr<SessionDelegator> SessionDelegatorInstance; \
+        typedef std::unique_ptr<VariableDelegator> VariableDelegatorInstance; \
 \
         typedef SESSION<NAME> Session; \
         typedef MASTER<NAME> Master; \
+        typedef VARIABLE<NAME> Variable; \
 \
         std::unique_ptr<SessionDelegator> session = nullptr; \
 \
@@ -39,6 +42,7 @@ struct NAME { \
 CONFIGURATION(Generation,
               ::kontr::Generator::Session,
               ::kontr::Generator::MasterTest,
+              ::kontr::Generator::Variable,
               <::kontr::Report::Reporting::ERR,
               ::kontr::Report::Reporting::ERR,
               ::kontr::Report::Reporting::ERR_ABORT>
