@@ -30,7 +30,7 @@ class Variable : public ::kontr::Variable<T> {
         const char delimiter = (s <= d ? '\'' : '"');
         out << delimiter;
         for (const char c : str) {
-            if (c == delimiter) {
+            if (c == delimiter || c == '\\') {
                 out << '\\';
             }
             out << c;
@@ -44,10 +44,10 @@ public:
 
     virtual void __generate(std::ostream &out) const {
         switch (type) {
-        case Type::Int: out << data.Int;
-        case Type::Float: out << data.Float;
-        case Type::Bool: out << data.Bool;
-        case Type::String: printString(out, data.String);
+        case Type::Int: out << data.Int; return;
+        case Type::Float: out << data.Float; return;
+        case Type::Bool: out << data.Bool; return;
+        case Type::String: printString(out, data.String); return;
         }
     }
 };

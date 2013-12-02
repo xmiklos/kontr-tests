@@ -1,4 +1,4 @@
-#include "kontr.h"
+#include "common.h"
 #define CATCH_CONFIG_MAIN
 #include "Catch/single_include/catch.hpp"
 
@@ -9,14 +9,6 @@
 
 using namespace kontr;
 using namespace std;
-
-CONFIGURATION(Testing,
-              ::kontr::Generator::Session,
-              ::kontr::Generator::MasterTest,
-              ::kontr::Generator::Variable,
-              <::kontr::Report::Reporting::ERR_EXCEPTION,
-              ::kontr::Report::Reporting::ERR_EXCEPTION,
-              ::kontr::Report::Reporting::ERR_EXCEPTION>);
 
 MASTER_TEST(noname) {
     stage_file("dummy");

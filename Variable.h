@@ -8,7 +8,7 @@ namespace kontr {
 
 template <typename T>
 class Variable {
-protected:
+public:
     enum class Type {
         Int,
         Bool,
@@ -22,16 +22,15 @@ protected:
     struct Storage {
         int Int;
         bool Bool;
-        float Float;
+        double Float;
         std::string String;
 
         Storage(int i) : Int(i) {}
         Storage(bool b) : Bool(b) {}
-        Storage(float f) : Float(f) {}
+        Storage(double f) : Float(f) {}
         Storage(const char* c) : String(c) {}
-        Storage(const char*& c) : String(c) {}
     };
-
+protected:
     mutable T* instancePtr = nullptr;
 
     Variable() = delete;
@@ -67,7 +66,7 @@ public:
 
     VARIABLE_CONST(int, Type::Int, i)
     VARIABLE_CONST(bool, Type::Bool, b)
-    VARIABLE_CONST(float, Type::Float, f)
+    VARIABLE_CONST(double, Type::Float, f)
     VARIABLE_CONST(const char*, Type::String, s)
 
 #undef VARIABLE_CONST
@@ -90,7 +89,7 @@ public:
 
     DELEGATOR_CONST(int, i)
     DELEGATOR_CONST(bool, b)
-    DELEGATOR_CONST(float, f)
+    DELEGATOR_CONST(double, f)
     DELEGATOR_CONST(const char*, s)
 #undef DELEGATOR_CONST
 
