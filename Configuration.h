@@ -24,6 +24,7 @@ struct NAME { \
         typedef VARIABLE<NAME> Variable; \
 \
         std::unique_ptr<SessionDelegator> session = nullptr; \
+        std::ostream* out_ptr = nullptr; /*Needed for variable constructor*/ \
 \
         void setSession(SessionDelegator::Function f) { \
             session = std::unique_ptr<SessionDelegator>(f(*this)); \

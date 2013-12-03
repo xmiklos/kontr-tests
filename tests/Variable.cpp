@@ -7,9 +7,9 @@
 using namespace kontr;
 using namespace std;
 
-void testType(Testing& cg, Variable<Testing>::Type t, const Testing::VariableDelegator& input) {
+void testType(Testing& cg, Variable<Testing>::DataType t, const Testing::VariableDelegator& input) {
     input.__setInstance(cg);
-    CHECK(input.type == t);
+    CHECK(input.dataType == t);
 }
 
 void testGenerate(Testing& cg, const Testing::VariableDelegator& input, string result) {
@@ -29,7 +29,7 @@ void testGenerate(Testing& cg, const Testing::VariableDelegator& input, string r
 
 TEST_CASE("Constants type deduction") {
     Testing cg;
-    using Type = Variable<Testing>::Type;
+    using Type = Variable<Testing>::DataType;
 
     testType (cg, Type::Int, 10);
     testType (cg, Type::Int, 0);
@@ -71,4 +71,38 @@ TEST_CASE("Generator") {
     testGenerate (cg, "both '\"\" quotes", "'both \\'\"\" quotes'");
 
     testGenerate (cg, "escape \\", "'escape \\'");
+}
+
+TEST_CASE("Variable") {
+    Testing cg;
+    using Type = Variable<Testing>::DataType;
+    stringstream ss;
+    cg.out_ptr = &ss;
+
+    VariableDelegator<Testing> a("a", cg, 10);
+    CHECK( ss.str() == "$a = 10;\n");
+    ss.str("");
+
+    CHECK( a.variableType == ::kontr::Variable<Testing>::VariableType::Variable);
+    CHECK( a.dataType == ::kontr::Variable<Testing>::DataType::Int);
+    CHECK( a.data.Int == 10);
+
+    a = 25.2;
+    CHECK( ss.str() == "$a = 25.2;\n");
+    ss.str("");
+
+    VariableDelegator<Testing> other("other", cg, "string");
+    CHECK( ss.str() == "$other = \'string\';\n");
+    ss.str("");
+
+    a = other;
+    CHECK( ss.str() == "$a = $other;\n");
+    ss.str("");
+
+    ss << a;
+    CHECK( ss.str() == "$a" );
+
+    CHECK( a.__getDelegate().dataType == Type::String );
+    CHECK( a.__getDelegate().data.String == "string" );
+    CHECK( a.__getDelegate().variableName == "a" );
 }

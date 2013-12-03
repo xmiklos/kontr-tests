@@ -9,13 +9,19 @@ namespace kontr {
 template <typename T>
 class Variable {
 public:
-    enum class Type {
+    enum class VariableType {
+        Constant,
+        Variable
+    };
+    static const unsigned int VARIABLE_TYPE_LENGTH = 2;
+
+    enum class DataType {
         Int,
         Bool,
         Float,
         String
     };
-    const unsigned int TYPE_LENGTH = 4;
+    static const unsigned int DATA_TYPE_LENGTH = 4;
 
     //TODO - change to union (not easy because of String)
     //http://www.informit.com/guides/content.aspx?g=cplusplus&seqNum=556
@@ -36,8 +42,17 @@ protected:
     Variable() = delete;
 
 public:
-    Type type;
+    /// Type of variable (Constant, Variable)
+    VariableType variableType;
+
+    /// Type of data (Int, Float, ...)
+    DataType dataType;
+
+    /// Stored data
     Storage data;
+
+    /// Name of variable
+    std::string variableName;
 
     /// Required for methods taking Variable
     virtual void __setInstance(T& instance) const {
@@ -53,21 +68,34 @@ public:
         return stream;
     }
 
+    virtual Variable& operator=(const Variable&) = default;
+    virtual Variable& operator=(Variable&&) = default;
+    Variable(const Variable&) = default;
+
 public:
 #define VARIABLE_CONST(TYPE, INT_TYPE, VARIABLE) \
     Variable(TYPE VARIABLE) : \
-        type(INT_TYPE), \
+        variableType(VariableType::Constant), \
+        dataType(INT_TYPE), \
         data((TYPE) VARIABLE) {} \
  \
     Variable(T& instance, TYPE VARIABLE): \
         instancePtr(&instance), \
-        type(INT_TYPE), \
-        data((TYPE) VARIABLE) {}
+        variableType(VariableType::Constant), \
+        dataType(INT_TYPE), \
+        data((TYPE) VARIABLE) {} \
+ \
+    Variable(const char* name, T& instance, TYPE VARIABLE): \
+        instancePtr(&instance), \
+        variableType(VariableType::Variable), \
+        dataType(INT_TYPE), \
+        data((TYPE) VARIABLE), \
+        variableName(name) {}
 
-    VARIABLE_CONST(int, Type::Int, i)
-    VARIABLE_CONST(bool, Type::Bool, b)
-    VARIABLE_CONST(double, Type::Float, f)
-    VARIABLE_CONST(const char*, Type::String, s)
+    VARIABLE_CONST(int, DataType::Int, i)
+    VARIABLE_CONST(bool, DataType::Bool, b)
+    VARIABLE_CONST(double, DataType::Float, f)
+    VARIABLE_CONST(const char*, DataType::String, s)
 
 #undef VARIABLE_CONST
 
@@ -78,6 +106,9 @@ template<typename T>
 class VariableDelegator : public Variable<T> {
     typename T::Variable delegate;
 public:
+    typename T::Variable& __getDelegate() {
+        return delegate;
+    }
 
 #define DELEGATOR_CONST(TYPE, VARIABLE) \
     VariableDelegator(TYPE VARIABLE) : \
@@ -85,7 +116,11 @@ public:
  \
     VariableDelegator(T& instance, TYPE VARIABLE) : \
         Variable<T>(instance, VARIABLE), \
-        delegate(instance, VARIABLE) {}
+        delegate(instance, VARIABLE) {} \
+ \
+    VariableDelegator(const char* name, T& instance, TYPE VARIABLE) : \
+        Variable<T>(name, instance, VARIABLE), \
+        delegate(name, instance, VARIABLE) {}
 
     DELEGATOR_CONST(int, i)
     DELEGATOR_CONST(bool, b)
@@ -103,6 +138,20 @@ public:
     virtual void __generate(std::ostream& out) const {
         delegate.__generate(out);
     }
+
+    virtual VariableDelegator& operator=(const VariableDelegator& other) {
+        if (this != &other) {
+            delegate = other.delegate;
+        }
+        return *this;
+    }
+
+    virtual VariableDelegator& operator=(VariableDelegator&& other) {
+        delegate = other.delegate;
+        return *this;
+    }
+
+    VariableDelegator(const VariableDelegator&) = default;
 };
 
 }

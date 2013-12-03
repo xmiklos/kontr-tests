@@ -10,9 +10,9 @@ namespace Generator {
 
 template<typename T>
 class Variable : public ::kontr::Variable<T> {
-    using Type = typename ::kontr::Variable<T>::Type;
-    using ::kontr::Variable<T>::type;
-    using ::kontr::Variable<T>::data;
+    using DataType = typename ::kontr::Variable<T>::DataType;
+    using VariableType = typename ::kontr::Variable<T>::VariableType;
+    using ::kontr::Variable<T>::instancePtr;
 
     static void printString(std::ostream& out, const std::string& str) {
         using namespace std;
@@ -38,17 +38,73 @@ class Variable : public ::kontr::Variable<T> {
         out << delimiter;
     }
 
+    bool testOutPtr () const {
+        if (instancePtr->out_ptr == nullptr) {
+            instancePtr->report.create(Report::ERROR,
+                                        "No out_ptr to print to variable declaration!");
+            return true;
+        }
+        return false;
+    }
+
+    void printVariable() const {
+        using namespace std;
+        if (testOutPtr()) return;
+        std::ostream& out = *(instancePtr->out_ptr);
+        out << '$' << variableName << " = ";
+        printScalar(out);
+        out << ";" << endl;
+    }
+
+    void printScalar(std::ostream& out) const {
+        switch (dataType) {
+        case DataType::Int: out << data.Int; return;
+        case DataType::Float: out << data.Float; return;
+        case DataType::Bool: out << data.Bool; return;
+        case DataType::String: printString(out, data.String); return;
+        }
+    }
+
 public:
-    using ::kontr::Variable<T>::Variable;
+    using ::kontr::Variable<T>::variableType;
+    using ::kontr::Variable<T>::variableName;
+    using ::kontr::Variable<T>::dataType;
+    using ::kontr::Variable<T>::data;
+
+#define CONST(TYPE, VARIABLE) \
+    Variable(TYPE VARIABLE) : \
+        ::kontr::Variable<T>(VARIABLE) {} \
+ \
+    Variable(T& instance, TYPE VARIABLE) : \
+        ::kontr::Variable<T>(instance, VARIABLE) {} \
+ \
+    Variable(const char* name, T& instance, TYPE VARIABLE) : \
+        ::kontr::Variable<T>(name, instance, VARIABLE) { printVariable(); }
+
+    CONST(int, i)
+    CONST(bool, b)
+    CONST(double, f)
+    CONST(const char*, s)
+#undef CONST
+
     using ::kontr::Variable<T>::__setInstance;
 
     virtual void __generate(std::ostream &out) const {
-        switch (type) {
-        case Type::Int: out << data.Int; return;
-        case Type::Float: out << data.Float; return;
-        case Type::Bool: out << data.Bool; return;
-        case Type::String: printString(out, data.String); return;
+        switch(variableType) {
+        case VariableType::Constant: printScalar(out); return;
+        case VariableType::Variable: out << '$' << variableName; return;
         }
+    }
+
+    virtual Variable<T>&  operator=(const Variable<T>& other) {
+        if (this != &other) {
+            if (testOutPtr()) return *this;
+            std::ostream& out = *(instancePtr->out_ptr);
+            out << '$' << variableName << " = " << other << ";" << std::endl;
+            this->data = other.data;
+            this->dataType = other.dataType;
+        }
+        return *this;
     }
 };
 
