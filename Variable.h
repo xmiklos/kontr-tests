@@ -68,8 +68,8 @@ public:
         return stream;
     }
 
-    virtual Variable& operator=(const Variable&) = default;
-    virtual Variable& operator=(Variable&&) = default;
+    Variable& operator=(const Variable&) = default;
+    Variable& operator=(Variable&&) = default;
     Variable(const Variable&) = default;
 
 public:
@@ -139,19 +139,39 @@ public:
         delegate.__generate(out);
     }
 
-    virtual VariableDelegator& operator=(const VariableDelegator& other) {
+    VariableDelegator& operator=(const VariableDelegator& other) {
         if (this != &other) {
             delegate = other.delegate;
         }
         return *this;
     }
 
-    virtual VariableDelegator& operator=(VariableDelegator&& other) {
+    VariableDelegator& operator=(VariableDelegator&& other) {
         delegate = other.delegate;
         return *this;
     }
 
     VariableDelegator(const VariableDelegator&) = default;
+
+    VariableDelegator& toInt() {
+        delegate = delegate.toInt();
+        return *this;
+    }
+
+    VariableDelegator& toFloat() {
+        delegate = delegate.toFloat();
+        return *this;
+    }
+
+    VariableDelegator& toBool() {
+        delegate = delegate.toBool();
+        return *this;
+    }
+
+    VariableDelegator& toString() {
+        delegate = delegate.toString();
+        return *this;
+    }
 };
 
 }

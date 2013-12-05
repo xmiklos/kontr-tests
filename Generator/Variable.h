@@ -96,7 +96,7 @@ public:
         }
     }
 
-    virtual Variable<T>&  operator=(const Variable<T>& other) {
+    Variable&  operator=(const Variable& other) {
         if (this != &other) {
             if (testOutPtr()) return *this;
             std::ostream& out = *(instancePtr->out_ptr);
@@ -106,6 +106,23 @@ public:
         }
         return *this;
     }
+
+    Variable& toInt() {
+        return *this;
+    }
+
+    Variable& toFloat() {
+        return *this;
+    }
+
+    Variable& toBool() {
+        return *this;
+    }
+
+    Variable& toString() {
+        return *this;
+    }
+
 };
 
 }
