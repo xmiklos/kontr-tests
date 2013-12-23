@@ -5,11 +5,13 @@
 MASTER_TEST(master_testing) {
     name("master_testing");
 
+    VAR(matrix, "matrix.cpp");
+
     register_unit("unit_matrix_test2.pl");
     register_unit("unit_matrix_test3.pl");
     register_unit("unit_parser_test2.pl");
 
-    stage_compiled_student_file("matrix.cpp");
+    stage_compiled_student_file(matrix);
     stage_compiled_student_file("pagerank.cpp");
     stage_compiled_student_file("parser.cpp");
 

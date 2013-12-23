@@ -9,8 +9,9 @@
 #define MASTER_TEST(NAME) \
     template<typename T> \
     class CLASS(NAME) : public ::kontr::MasterTestDelegator<T> { \
+        T& instance;    \
     public: \
-        CLASS(NAME)(T& instance) : kontr::MasterTestDelegator<T>(instance, #NAME) {} \
+        CLASS(NAME)(T& instance) : kontr::MasterTestDelegator<T>(instance, #NAME), instance(instance) {} \
         virtual void execute () override; \
         using kontr::MasterTestDelegator<T>::name; \
         using kontr::MasterTestDelegator<T>::register_unit; \
@@ -50,5 +51,7 @@
 /// Global session (named Session)
 /// Usage: SESSION("script", "files", {nanecisto}, {naostro}, [&]{ post;} )
 #define SESSION(...) SESSION_NAME(Session, __VA_ARGS__)
+
+#define VAR(name, data) typename T::VariableDelegator name(#name, instance, data)
 
 #endif // MACROSTYPES_H
