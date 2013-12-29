@@ -12,3 +12,7 @@ add_test(Variable Variable)
 add_executable(Names Names.cpp)
 target_link_libraries(Names ${LIBRARIES})
 add_test(Names Names)
+
+add_executable(Session Session.cpp)
+target_link_libraries(Session ${LIBRARIES})
+add_test(Session Session)

@@ -10,6 +10,8 @@
 using namespace kontr;
 using namespace std;
 
+/*
+ * This will be tested in Checker
 MASTER_TEST(noname) {
     stage_file("dummy");
 }
@@ -18,6 +20,7 @@ MASTER_TEST(doublename) {
     name("fddf");
     name("fddf");
 }
+*/
 
 MASTER_TEST(normal) {
     name("master_testing");
@@ -75,6 +78,8 @@ TEST_CASE("master_test") {
     stringstream buffer;
     streambuf* old = cerr.rdbuf(buffer.rdbuf());
 
+    /*
+     * This will be tested in Checker
     SECTION("Test without name") {
         auto tmp = cg.MasterTestInstance(noname);
         REQUIRE(tmp->getClassName() == string("noname"));
@@ -99,11 +104,14 @@ TEST_CASE("master_test") {
 
         CHECK(err.str() == buffer.str().substr(0, err.str().size()));
     }
-    buffer.str("");
+    buffer.str("");*/
 
     SECTION("Correct test") {
-        auto tmp = cg.MasterTestInstance(normal);
         auto filename = "./master_testing.pl";
+        cg.storage.nextFileName = "master_testing"; //Must be before inicialization
+
+        auto tmp = cg.MasterTestInstance(normal);
+
         REQUIRE(tmp->getClassName() == string("normal"));
 
         CHECK_NOTHROW(tmp->execute());
@@ -147,14 +155,18 @@ $master_test->stage_file('data_simple_structure_index.html');
 $master_test->stage_file('data_simple_structure_page1.html');
 $master_test->stage_file('data_simple_structure_page2.html');
 )delimiter";
-        unsigned int index = 0;
-        while(generated.good()) {
-            int c = generated.get();
-            if (c == EOF) break;
-            CHECK(c == result[index++]);
-        }
 
-        CHECK(index == strlen(result));
+        stringstream buf;
+        buf << result;
+
+        while(generated.good() && buf.good()) {
+            string gen, res;
+            getline(generated, gen);
+            getline(buf, res);
+            CHECK(gen == res);
+        }
+        CHECK(generated.eof());
+        CHECK(buf.eof());
 
         generated.close();
         CHECK(remove(filename) == 0);

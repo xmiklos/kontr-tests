@@ -7,6 +7,13 @@
 namespace kontr {
 namespace Configuration {
 
+namespace Storage {
+    struct Generation {
+        std::ostream* out_ptr = nullptr;
+        const char* nextFileName = nullptr;
+    };
+}
+
 /// Define configuration
 #define CONFIGURATION(NAME, SESSION, MASTER, VARIABLE, STORAGE, REPORTING) \
 struct NAME { \
@@ -23,13 +30,11 @@ struct NAME { \
         typedef VARIABLE<NAME> Variable; \
 \
         STORAGE storage; \
-        std::unique_ptr<SessionDelegator> session = nullptr; \
-        std::ostream* out_ptr = nullptr; /*Needed for variable constructor*/ \
+        SessionDelegatorInstance session = nullptr; \
 \
         void setSession(SessionDelegator::Function f) { \
-            session = f(); \
-        } \
-\
+            this->session = f(); \
+        }\
         static MasterDelegatorInstance MasterTestInstance(MasterDelegator::Function f) { \
             return f(); \
         } \
@@ -48,7 +53,7 @@ CONFIGURATION(Generation,
               ::kontr::Generator::Session,
               ::kontr::Generator::MasterTest,
               ::kontr::Generator::Variable,
-              char,
+              Storage::Generation,
               ::kontr::Report::Default
              );
 

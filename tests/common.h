@@ -10,7 +10,7 @@ CONFIGURATION(Testing,
               ::kontr::Generator::Session,
               ::kontr::Generator::MasterTest,
               ::kontr::Generator::Variable,
-              char,
+              ::kontr::Configuration::Storage::Generation,
               ::kontr::Report::Exception);
 
 #endif // COMMON_H

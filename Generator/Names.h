@@ -18,7 +18,7 @@ public:
     }
 };
 
-struct Storage {
+struct NameStorage {
     const char* name;
 };
 
@@ -26,7 +26,7 @@ CONFIGURATION(Configuration,
               ::kontr::Session::Empty,
               ::kontr::Names::MasterTest,
               ::kontr::Variable::Empty,
-              Storage,
+              NameStorage,
               ::kontr::Report::Exception
              );
 

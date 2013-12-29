@@ -71,7 +71,7 @@ TEST_CASE("Variable") {
     Testing& cg = Testing::instance();;
     using Type = Variable::Data<Testing>::DataType;
     stringstream ss;
-    cg.out_ptr = &ss;
+    cg.storage.out_ptr = &ss;
 
     Variable::Delegator<Testing> a("a", 10);
     CHECK( ss.str() == "$a = 10;\n");

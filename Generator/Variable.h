@@ -38,7 +38,7 @@ class Variable : public ::kontr::Variable::Data<T> {
     }
 
     bool testOutPtr () const {
-        if (T::instance().out_ptr == nullptr) {
+        if (T::instance().storage.out_ptr == nullptr) {
             T::instance().report.create(Report::ERROR,
                                         "No out_ptr to print to variable declaration!");
             return true;
@@ -49,7 +49,7 @@ class Variable : public ::kontr::Variable::Data<T> {
     void printVariable() const {
         using namespace std;
         if (testOutPtr()) return;
-        std::ostream& out = *(T::instance().out_ptr);
+        std::ostream& out = *(T::instance().storage.out_ptr);
         out << '$' << variableName << " = ";
         printScalar(out);
         out << ";" << endl;
@@ -93,7 +93,7 @@ public:
     Variable& operator=(const Variable& other) {
         if (this != &other) {
             if (testOutPtr()) return *this;
-            std::ostream& out = *(T::instance().out_ptr);
+            std::ostream& out = *(T::instance().storage.out_ptr);
             out << '$' << variableName << " = " << other << ";" << std::endl;
             this->data = other.data;
             this->dataType = other.dataType;

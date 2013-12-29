@@ -23,17 +23,17 @@ public:
     /**
      * Configure Session
      * @brief Session
-     * @param script_dir Script dir location
+     * @param scripts_dir Scripts dir location
      * @param files_dir Files dir location
      * @param nanecisto Master tests to be executed "nanecisto"
      * @param naostro Master tests to be executed "naostro" (apart from nanecisto tests)
      * @param post Optional post method
      */
-    Interface(const char* script_dir, const char* files_dir,
+    Interface(const char* scripts_dir, const char* files_dir,
              TMasterTests nanecisto, TMasterTests naostro,
              TPost post = nullptr)
     {
-        ::kontr::unused(script_dir, files_dir, nanecisto, naostro, post);
+        ::kontr::unused(scripts_dir, files_dir, nanecisto, naostro, post);
     }
 
     virtual ~Interface() {}
@@ -49,6 +49,20 @@ public:
      * @brief post_test
      */
     virtual void post_test() = 0;
+
+    /**
+     * Return scripts dir
+     * @brief __getScriptsDir
+     * @return
+     */
+    virtual const std::string& __getScriptsDir() const = 0;
+
+    /**
+     * Return files dir
+     * @brief __getFilesDir
+     * @return
+     */
+    virtual const std::string& __getFilesDir() const = 0;
 };
 
 /// Stores data for session
@@ -59,22 +73,25 @@ public:
     using typename Interface<T>::TMasterTests;
     using typename Interface<T>::TPost;
 
-    const std::string script_dir;
+    const std::string scripts_dir;
     const std::string files_dir;
     const TMasterTests nanecisto;
     const TMasterTests naostro;
     const TPost post;
 
-    Data(const char* script_dir, const char* files_dir,
+    Data(const char* scripts_dir, const char* files_dir,
              TMasterTests nanecisto, TMasterTests naostro,
              TPost post = nullptr) :
-        Interface<T>(script_dir, files_dir, nanecisto, naostro, post),
-        script_dir(script_dir), files_dir(files_dir),
+        Interface<T>(scripts_dir, files_dir, nanecisto, naostro, post),
+        scripts_dir(scripts_dir), files_dir(files_dir),
         nanecisto(nanecisto), naostro(naostro),
         post(post)
     {}
 
     virtual ~Data() {}
+
+    virtual const std::string& __getScriptsDir() const override { return scripts_dir; }
+    virtual const std::string& __getFilesDir() const override { return files_dir; }
 };
 
 /// Empty data class - implements all the methods as empty functions
@@ -122,6 +139,14 @@ public:
 
     virtual void post_test() {
         delegate.post_test();
+    }
+
+    virtual const std::string& __getScriptsDir() const {
+        return delegate.__getScriptsDir();
+    }
+
+    virtual const std::string& __getFilesDir() const {
+        return delegate.__getFilesDir();
     }
 };
 

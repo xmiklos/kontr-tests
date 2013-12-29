@@ -8,18 +8,17 @@ namespace Generator {
 
 template<typename T>
 class Session : public ::kontr::Session::Data<T> {
-    using ::kontr::Session::Data<T>::script_dir;
+    using ::kontr::Session::Data<T>::scripts_dir;
     using ::kontr::Session::Data<T>::files_dir;
     using ::kontr::Session::Data<T>::nanecisto;
     using ::kontr::Session::Data<T>::naostro;
     using ::kontr::Session::Data<T>::post;
 public:
-
     using ::kontr::Session::Data<T>::Data;
 
     virtual void pre_test() {
         using namespace std;
-        cout << "Script dir: " << script_dir << endl;
+        cout << "Scripts dir: " << scripts_dir << endl;
         cout << "Files dir: " << files_dir << endl;
 
         cout << "Pre test: " << endl;
