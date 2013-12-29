@@ -8,8 +8,18 @@ namespace kontr {
 
 namespace Configuration {
 
+typedef ::kontr::Report::ReportConfiguration<
+    ::kontr::Report::Reporting::ERR,
+    ::kontr::Report::Reporting::ERR,
+    ::kontr::Report::Reporting::ERR_ABORT> ConfigurationDefault;
+
+typedef ::kontr::Report::ReportConfiguration<
+    ::kontr::Report::Reporting::ERR_EXCEPTION,
+    ::kontr::Report::Reporting::ERR_EXCEPTION,
+    ::kontr::Report::Reporting::ERR_EXCEPTION> ConfigurationException;
+
 /// Define configuration
-#define CONFIGURATION(NAME, SESSION, MASTER, VARIABLE, ...) \
+#define CONFIGURATION(NAME, SESSION, MASTER, VARIABLE, CONFIGURATION) \
 struct NAME { \
         typedef ::kontr::MasterTestDelegator<NAME> MasterDelegator; \
         typedef ::kontr::SessionDelegator<NAME> SessionDelegator; \
@@ -34,7 +44,7 @@ struct NAME { \
             return MasterDelegatorInstance(f(*this)); \
         } \
 \
-        ::kontr::Report::ReportConfiguration __VA_ARGS__ ReportConfiguration; \
+        CONFIGURATION ReportConfiguration; \
 \
         ::kontr::Report::Reporter<NAME> report = (*this); \
         \
@@ -44,9 +54,7 @@ CONFIGURATION(Generation,
               ::kontr::Generator::Session,
               ::kontr::Generator::MasterTest,
               ::kontr::Generator::Variable,
-              <::kontr::Report::Reporting::ERR,
-              ::kontr::Report::Reporting::ERR,
-              ::kontr::Report::Reporting::ERR_ABORT>
+              ConfigurationDefault
              );
 
 }
