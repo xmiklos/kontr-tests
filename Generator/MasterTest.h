@@ -16,11 +16,10 @@ class MasterTest : public ::kontr::IMasterTest<T>  {
     const char* variable = "$master_test";
     std::ostream* out_ptr = nullptr;
     using Variable = typename ::kontr::IMasterTest<T>::Variable;
-    using ::kontr::IMasterTest<T>::instance;
 
     bool check_out() {
         if (out_ptr == nullptr) {
-            instance.report.create(Report::ERROR,
+            T::instance().report.create(Report::ERROR,
                                    "No file opened for output; was name the first to call?");
             return false;
         }
@@ -32,16 +31,16 @@ public:
 
     virtual void name(Variable name) {
         if (out_ptr == nullptr) {
-            assert(instance.session != nullptr);
-            out_ptr = new std::ofstream(this->instance.session->script_dir
+            assert(T::instance().session != nullptr);
+            out_ptr = new std::ofstream(T::instance().session->script_dir
                                         + "/" + name.data.String + ".pl");
         }
         else {
-            instance.report.create(Report::ERROR,
+            T::instance().report.create(Report::ERROR,
                                          "Name set twice, ignoring");
             return;
         }
-        instance.out_ptr = out_ptr;
+        T::instance().out_ptr = out_ptr;
         std::ostream& out = *out_ptr;
         out << variable << "->name(" << name << ");" << std::endl;
     }

@@ -9,9 +9,8 @@
 #define MASTER_TEST(NAME) \
     template<typename T> \
     class CLASS(NAME) : public ::kontr::MasterTestDelegator<T> { \
-        T& instance;    \
     public: \
-        CLASS(NAME)(T& instance) : kontr::MasterTestDelegator<T>(instance, #NAME), instance(instance) {} \
+        CLASS(NAME)() : kontr::MasterTestDelegator<T>(#NAME) {} \
         virtual void execute () override; \
         using kontr::MasterTestDelegator<T>::name; \
         using kontr::MasterTestDelegator<T>::register_unit; \
@@ -21,8 +20,8 @@
         using kontr::MasterTestDelegator<T>::stage_student_file; \
     }; \
     template<typename T> \
-    kontr::MasterTestDelegator<T>* NAME(T& instance) { \
-        return new CLASS(NAME)<T>(instance); \
+    std::unique_ptr<::kontr::MasterTestDelegator<T>> NAME() { \
+        return std::unique_ptr<::kontr::MasterTestDelegator<T>> (new CLASS(NAME)<T>()); \
     } \
     template<typename T> \
     void CLASS(NAME)<T>::execute ()
@@ -33,17 +32,17 @@
     template <typename T> \
     class CLASS(NAME) : public ::kontr::SessionDelegator<T> { \
     public: \
+        CLASS(NAME)();\
         using ::kontr::SessionDelegator<T>::pre_test; \
         using ::kontr::SessionDelegator<T>::post_test; \
-        CLASS(NAME)(T& instance); \
     }; \
     template <typename T> \
-    ::kontr::SessionDelegator<T>* NAME(T& instance) { \
-        return new CLASS(NAME)<T>(instance); \
+    std::unique_ptr<::kontr::SessionDelegator<T>> NAME() { \
+        return std::unique_ptr<::kontr::SessionDelegator<T>> (new CLASS(NAME)<T>()); \
     } \
     template <typename T> \
-    CLASS(NAME)<T>::CLASS(NAME)(T &instance) : \
-        ::kontr::SessionDelegator<T>(instance, \
+    CLASS(NAME)<T>::CLASS(NAME)() : \
+        ::kontr::SessionDelegator<T>( \
         __VA_ARGS__ \
                                      ) \
     {}
@@ -52,6 +51,6 @@
 /// Usage: SESSION("script", "files", {nanecisto}, {naostro}, [&]{ post;} )
 #define SESSION(...) SESSION_NAME(Session, __VA_ARGS__)
 
-#define VAR(name, data) typename T::VariableDelegator name(#name, instance, data)
+#define VAR(name, data) typename T::VariableDelegator name(#name, data)
 
 #endif // MACROSTYPES_H

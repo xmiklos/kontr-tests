@@ -36,8 +36,6 @@ public:
         Storage(double f) : Float(f) {}
         Storage(const char* c) : String(c) {}
     };
-protected:
-    mutable T* instancePtr = nullptr;
 
     Variable() = delete;
 
@@ -53,11 +51,6 @@ public:
 
     /// Name of variable
     std::string variableName;
-
-    /// Required for methods taking Variable
-    virtual void __setInstance(T& instance) const {
-        instancePtr = &instance;
-    }
 
     /// Print representation to ostream (for Generation)
     virtual void __generate(std::ostream& out) const = 0;
@@ -79,14 +72,7 @@ public:
         dataType(INT_TYPE), \
         data((TYPE) VARIABLE) {} \
  \
-    Variable(T& instance, TYPE VARIABLE): \
-        instancePtr(&instance), \
-        variableType(VariableType::Constant), \
-        dataType(INT_TYPE), \
-        data((TYPE) VARIABLE) {} \
- \
-    Variable(const char* name, T& instance, TYPE VARIABLE): \
-        instancePtr(&instance), \
+    Variable(const char* name, TYPE VARIABLE): \
         variableType(VariableType::Variable), \
         dataType(INT_TYPE), \
         data((TYPE) VARIABLE), \
@@ -114,13 +100,9 @@ public:
     VariableDelegator(TYPE VARIABLE) : \
         Variable<T>(VARIABLE), delegate(VARIABLE) {} \
  \
-    VariableDelegator(T& instance, TYPE VARIABLE) : \
-        Variable<T>(instance, VARIABLE), \
-        delegate(instance, VARIABLE) {} \
- \
-    VariableDelegator(const char* name, T& instance, TYPE VARIABLE) : \
-        Variable<T>(name, instance, VARIABLE), \
-        delegate(name, instance, VARIABLE) {}
+    VariableDelegator(const char* name, TYPE VARIABLE) : \
+        Variable<T>(name, VARIABLE), \
+        delegate(name, VARIABLE) {}
 
     DELEGATOR_CONST(int, i)
     DELEGATOR_CONST(bool, b)
@@ -129,11 +111,6 @@ public:
 #undef DELEGATOR_CONST
 
     VariableDelegator() = delete;
-
-    virtual void __setInstance(T &instance) const {
-        this->Variable<T>::__setInstance(instance);
-        delegate.__setInstance(instance);
-    }
 
     virtual void __generate(std::ostream& out) const {
         delegate.__generate(out);

@@ -2,18 +2,16 @@
 #define MASTERTEST_H
 
 #include "kontr.h"
+#include <memory>
 
 namespace kontr {
 
 template<typename T>
 class IMasterTest {
-protected:
-    T& instance;
 public:
     /// Parameter type
     using Variable = const typename T::VariableDelegator&;
 
-    IMasterTest(T& instance) : instance(instance) {}
     virtual ~IMasterTest() {}
 
     /**
@@ -62,45 +60,37 @@ template <typename T>
 class MasterTestDelegator : public ::kontr::IMasterTest<T>
 {
     typename T::Master delegate;
-    using ::kontr::IMasterTest<T>::instance;
     const char* className;
     using Variable = typename ::kontr::IMasterTest<T>::Variable;
 
 protected:
-    MasterTestDelegator<T>(T& instance, const char* className) :
-        ::kontr::IMasterTest<T>(instance), delegate(instance), className(className) {}
+    MasterTestDelegator<T>(const char* className) :
+        ::kontr::IMasterTest<T>(), delegate(), className(className) {}
 public:
-    /// Type of a function returning pointer to this delegator type
-    using Function = MasterTestDelegator*(*)(T&);
-
+    /// Type of a function returning unique pointer to this delegator type
+    using Function = std::unique_ptr<MasterTestDelegator> (*)();
 
     virtual void name(Variable name) {
-        name.__setInstance(instance);
         delegate.name(name);
     }
 
     virtual void register_unit(Variable unit) {
-        unit.__setInstance(instance);
         delegate.register_unit(unit);
     }
 
     virtual void stage_file(Variable filename) {
-        filename.__setInstance(instance);
         delegate.stage_file(filename);
     }
 
     virtual void stage_compiled_file(Variable filename) {
-        filename.__setInstance(instance);
         delegate.stage_compiled_file(filename);
     }
 
     virtual void stage_student_file(Variable filename) {
-        filename.__setInstance(instance);
         delegate.stage_student_file(filename);
     }
 
     virtual void stage_compiled_student_file(Variable filename) {
-        filename.__setInstance(instance);
         delegate.stage_compiled_student_file(filename);
     }
 

@@ -12,7 +12,6 @@ template<typename T>
 class Variable : public ::kontr::Variable<T> {
     using DataType = typename ::kontr::Variable<T>::DataType;
     using VariableType = typename ::kontr::Variable<T>::VariableType;
-    using ::kontr::Variable<T>::instancePtr;
 
     static void printString(std::ostream& out, const std::string& str) {
         using namespace std;
@@ -39,8 +38,8 @@ class Variable : public ::kontr::Variable<T> {
     }
 
     bool testOutPtr () const {
-        if (instancePtr->out_ptr == nullptr) {
-            instancePtr->report.create(Report::ERROR,
+        if (T::instance().out_ptr == nullptr) {
+            T::instance().report.create(Report::ERROR,
                                         "No out_ptr to print to variable declaration!");
             return true;
         }
@@ -50,7 +49,7 @@ class Variable : public ::kontr::Variable<T> {
     void printVariable() const {
         using namespace std;
         if (testOutPtr()) return;
-        std::ostream& out = *(instancePtr->out_ptr);
+        std::ostream& out = *(T::instance().out_ptr);
         out << '$' << variableName << " = ";
         printScalar(out);
         out << ";" << endl;
@@ -75,19 +74,14 @@ public:
     Variable(TYPE VARIABLE) : \
         ::kontr::Variable<T>(VARIABLE) {} \
  \
-    Variable(T& instance, TYPE VARIABLE) : \
-        ::kontr::Variable<T>(instance, VARIABLE) {} \
- \
-    Variable(const char* name, T& instance, TYPE VARIABLE) : \
-        ::kontr::Variable<T>(name, instance, VARIABLE) { printVariable(); }
+    Variable(const char* name, TYPE VARIABLE) : \
+        ::kontr::Variable<T>(name, VARIABLE) { printVariable(); }
 
     CONST(int, i)
     CONST(bool, b)
     CONST(double, f)
     CONST(const char*, s)
 #undef CONST
-
-    using ::kontr::Variable<T>::__setInstance;
 
     virtual void __generate(std::ostream &out) const {
         switch(variableType) {
@@ -96,10 +90,10 @@ public:
         }
     }
 
-    Variable&  operator=(const Variable& other) {
+    Variable& operator=(const Variable& other) {
         if (this != &other) {
             if (testOutPtr()) return *this;
-            std::ostream& out = *(instancePtr->out_ptr);
+            std::ostream& out = *(T::instance().out_ptr);
             out << '$' << variableName << " = " << other << ";" << std::endl;
             this->data = other.data;
             this->dataType = other.dataType;

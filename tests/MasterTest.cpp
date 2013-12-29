@@ -70,7 +70,7 @@ MASTER_TEST(normal) {
 SESSION_NAME(tmp, ".", ".", {}, {})
 
 TEST_CASE("master_test") {
-    Testing cg;
+    Testing& cg = Testing::instance();
     cg.setSession(tmp);
     stringstream buffer;
     unique_ptr<streambuf> old(cerr.rdbuf(buffer.rdbuf()));

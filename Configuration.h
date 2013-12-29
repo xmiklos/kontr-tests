@@ -8,11 +8,13 @@ namespace kontr {
 
 namespace Configuration {
 
+/// Default error reporting configuration - print notices and warnings, abort on error
 typedef ::kontr::Report::ReportConfiguration<
     ::kontr::Report::Reporting::ERR,
     ::kontr::Report::Reporting::ERR,
     ::kontr::Report::Reporting::ERR_ABORT> ConfigurationDefault;
 
+/// Error reporting configuration used for testing - always throw exceptions
 typedef ::kontr::Report::ReportConfiguration<
     ::kontr::Report::Reporting::ERR_EXCEPTION,
     ::kontr::Report::Reporting::ERR_EXCEPTION,
@@ -37,16 +39,20 @@ struct NAME { \
         std::ostream* out_ptr = nullptr; /*Needed for variable constructor*/ \
 \
         void setSession(SessionDelegator::Function f) { \
-            session = std::unique_ptr<SessionDelegator>(f(*this)); \
+            session = f(); \
         } \
 \
-        MasterDelegatorInstance MasterTestInstance(MasterDelegator::Function f) { \
-            return MasterDelegatorInstance(f(*this)); \
+        static MasterDelegatorInstance MasterTestInstance(MasterDelegator::Function f) { \
+            return f(); \
         } \
 \
         CONFIGURATION ReportConfiguration; \
 \
-        ::kontr::Report::Reporter<NAME> report = (*this); \
+        ::kontr::Report::Reporter<NAME> report; \
+        static NAME& instance() { \
+            static NAME instance; \
+            return instance; \
+        }\
         \
     }
 

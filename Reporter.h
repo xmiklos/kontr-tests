@@ -60,11 +60,8 @@ void print_report_text(std::ostream& where, const Severity& severity, const std:
 template<typename T>
 class Reporter
 {
-    T& instance;
     std::set<std::pair<Severity, std::string>> suppressed;
 public:
-    Reporter(T& instance) : instance(instance) {}
-
     /**
      * @brief Create a report
      * @param severity
@@ -79,10 +76,10 @@ public:
         else {
             print_report_text(cerr, severity, type);
             cerr << backtracexx::scan() << endl;
-            if (instance.ReportConfiguration.report[severity] == Reporting::ERR_ABORT) {
+            if (T::instance().ReportConfiguration.report[severity] == Reporting::ERR_ABORT) {
                 abort();
             }
-            if (instance.ReportConfiguration.report[severity] == Reporting::ERR_EXCEPTION) {
+            if (T::instance().ReportConfiguration.report[severity] == Reporting::ERR_EXCEPTION) {
                 switch(severity) {
                     case NOTICE: throw ReportNotice(type.c_str());
                     case WARNING: throw ReportWarning(type.c_str());

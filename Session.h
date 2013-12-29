@@ -15,8 +15,6 @@ class ISession {
 public:
     using TMasterTests = std::vector< typename T::MasterDelegator::Function > ;
     typedef std::function<void(const ISession&)> TPost;
-protected:
-    T& instance;
 
 public:
     const std::string script_dir;
@@ -34,10 +32,9 @@ public:
      * @param naostro Master tests to be executed "naostro" (apart from nanecisto tests)
      * @param post Optional post method
      */
-    ISession(T& instance, const char* script_dir, const char* files_dir,
+    ISession(const char* script_dir, const char* files_dir,
              TMasterTests nanecisto, TMasterTests naostro,
              TPost post = nullptr) :
-        instance(instance),
         script_dir(script_dir), files_dir(files_dir),
         nanecisto(nanecisto), naostro(naostro),
         post(post)
@@ -64,14 +61,15 @@ class SessionDelegator : public ISession<T> {
     using typename ISession<T>::TMasterTests;
     using typename ISession<T>::TPost;
 public:
-    /// Type of a function returning pointer to this delegator type
-    using Function = SessionDelegator* (*)(T&);
+    /// Type of a function returning unique pointer to this delegator type
+    using Function = std::unique_ptr<SessionDelegator> (*)();
 
-    SessionDelegator(T& instance, const char* script_dir, const char* files_dir,
+
+    SessionDelegator(const char* script_dir, const char* files_dir,
                      TMasterTests nanecisto, TMasterTests naostro,
                      TPost post = nullptr) :
-        ISession<T>(instance, script_dir, files_dir, nanecisto, naostro, post),
-        delegate(instance, script_dir, files_dir, nanecisto, naostro, post)
+        ISession<T>(script_dir, files_dir, nanecisto, naostro, post),
+        delegate(script_dir, files_dir, nanecisto, naostro, post)
 
     {}
 
