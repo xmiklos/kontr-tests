@@ -73,7 +73,7 @@ TEST_CASE("master_test") {
     Testing& cg = Testing::instance();
     cg.setSession(tmp);
     stringstream buffer;
-    unique_ptr<streambuf> old(cerr.rdbuf(buffer.rdbuf()));
+    streambuf* old = cerr.rdbuf(buffer.rdbuf());
 
     SECTION("Test without name") {
         auto tmp = cg.MasterTestInstance(noname);
@@ -159,5 +159,5 @@ $master_test->stage_file('data_simple_structure_page2.html');
         generated.close();
         CHECK(remove(filename) == 0);
     }
-    cerr.rdbuf(old.release());
+    cerr.rdbuf(old);
 }

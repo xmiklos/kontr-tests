@@ -12,10 +12,10 @@ namespace kontr {
 namespace Generator {
 
 template <typename T>
-class MasterTest : public ::kontr::IMasterTest<T>  {
+class MasterTest : public ::kontr::MasterTest::Interface<T>  {
     const char* variable = "$master_test";
     std::ostream* out_ptr = nullptr;
-    using Variable = typename ::kontr::IMasterTest<T>::Variable;
+    using Variable = typename ::kontr::MasterTest::Interface<T>::Variable;
 
     bool check_out() {
         if (out_ptr == nullptr) {
@@ -27,13 +27,14 @@ class MasterTest : public ::kontr::IMasterTest<T>  {
     }
 
 public:
-    using ::kontr::IMasterTest<T>::IMasterTest;
+    using ::kontr::MasterTest::Interface<T>::Interface;
 
     virtual void name(Variable name) {
         if (out_ptr == nullptr) {
             assert(T::instance().session != nullptr);
-            out_ptr = new std::ofstream(T::instance().session->script_dir
-                                        + "/" + name.data.String + ".pl");
+            // FIX THIS - universal storage in T with names in it
+            out_ptr = new std::ofstream(/*T::instance().session->script_dir
+                                        + "/" + name.data.String + ".pl"*/);
         }
         else {
             T::instance().report.create(Report::ERROR,
@@ -82,7 +83,6 @@ public:
     }
 };
 
-}
-}
-
+} //Generator
+} //kontr
 #endif // GENERATOR_MASTERTEST_H

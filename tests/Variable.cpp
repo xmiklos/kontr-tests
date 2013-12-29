@@ -7,8 +7,8 @@
 using namespace kontr;
 using namespace std;
 
-void testType(Variable<Testing>::DataType t, const Testing::VariableDelegator& input) {
-    CHECK(input.dataType == t);
+void testType(Variable::Data<Testing>::DataType t, const Testing::VariableDelegator& input) {
+    CHECK(input.__getDelegate().dataType == t);
 }
 
 void testGenerate(const Testing::VariableDelegator& input, string result) {
@@ -25,7 +25,7 @@ void testGenerate(const Testing::VariableDelegator& input, string result) {
 }
 
 TEST_CASE("Constants type deduction") {
-    using Type = Variable<Testing>::DataType;
+    using Type = Variable::Data<Testing>::DataType;
 
     testType (Type::Int, 10);
     testType (Type::Int, 0);
@@ -69,23 +69,23 @@ TEST_CASE("Generator") {
 
 TEST_CASE("Variable") {
     Testing& cg = Testing::instance();;
-    using Type = Variable<Testing>::DataType;
+    using Type = Variable::Data<Testing>::DataType;
     stringstream ss;
     cg.out_ptr = &ss;
 
-    VariableDelegator<Testing> a("a", 10);
+    Variable::Delegator<Testing> a("a", 10);
     CHECK( ss.str() == "$a = 10;\n");
     ss.str("");
 
-    CHECK( a.variableType == ::kontr::Variable<Testing>::VariableType::Variable);
-    CHECK( a.dataType == ::kontr::Variable<Testing>::DataType::Int);
-    CHECK( a.data.Int == 10);
+    CHECK( a.__getDelegate().variableType == Variable::Data<Testing>::VariableType::Variable);
+    CHECK( a.__getDelegate().dataType == Variable::Data<Testing>::DataType::Int);
+    CHECK( a.__getDelegate().data.Int == 10);
 
     a = 25.2;
     CHECK( ss.str() == "$a = 25.2;\n");
     ss.str("");
 
-    VariableDelegator<Testing> other("other", "string");
+    Variable::Delegator<Testing> other("other", "string");
     CHECK( ss.str() == "$other = \'string\';\n");
     ss.str("");
 

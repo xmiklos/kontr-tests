@@ -8,20 +8,20 @@
 /// Usage: MASTER_TEST(name) { code; }
 #define MASTER_TEST(NAME) \
     template<typename T> \
-    class CLASS(NAME) : public ::kontr::MasterTestDelegator<T> { \
+    class CLASS(NAME) : public ::kontr::MasterTest::Delegator<T> { \
     public: \
-        CLASS(NAME)() : kontr::MasterTestDelegator<T>(#NAME) {} \
+        CLASS(NAME)() : kontr::MasterTest::Delegator<T>(#NAME) {} \
         virtual void execute () override; \
-        using kontr::MasterTestDelegator<T>::name; \
-        using kontr::MasterTestDelegator<T>::register_unit; \
-        using kontr::MasterTestDelegator<T>::stage_compiled_file; \
-        using kontr::MasterTestDelegator<T>::stage_compiled_student_file; \
-        using kontr::MasterTestDelegator<T>::stage_file; \
-        using kontr::MasterTestDelegator<T>::stage_student_file; \
+        using kontr::MasterTest::Delegator<T>::name; \
+        using kontr::MasterTest::Delegator<T>::register_unit; \
+        using kontr::MasterTest::Delegator<T>::stage_compiled_file; \
+        using kontr::MasterTest::Delegator<T>::stage_compiled_student_file; \
+        using kontr::MasterTest::Delegator<T>::stage_file; \
+        using kontr::MasterTest::Delegator<T>::stage_student_file; \
     }; \
     template<typename T> \
-    std::unique_ptr<::kontr::MasterTestDelegator<T>> NAME() { \
-        return std::unique_ptr<::kontr::MasterTestDelegator<T>> (new CLASS(NAME)<T>()); \
+    std::unique_ptr<::kontr::MasterTest::Delegator<T>> NAME() { \
+        return std::unique_ptr<::kontr::MasterTest::Delegator<T>> (new CLASS(NAME)<T>()); \
     } \
     template<typename T> \
     void CLASS(NAME)<T>::execute ()
@@ -30,19 +30,19 @@
 /// Usage: SESSION_NAME(name, "script", "files", {nanecisto}, {naostro}, [&]{ post;} )
 #define SESSION_NAME(NAME, ...) \
     template <typename T> \
-    class CLASS(NAME) : public ::kontr::SessionDelegator<T> { \
+    class CLASS(NAME) : public ::kontr::Session::Delegator<T> { \
     public: \
         CLASS(NAME)();\
-        using ::kontr::SessionDelegator<T>::pre_test; \
-        using ::kontr::SessionDelegator<T>::post_test; \
+        using ::kontr::Session::Delegator<T>::pre_test; \
+        using ::kontr::Session::Delegator<T>::post_test; \
     }; \
     template <typename T> \
-    std::unique_ptr<::kontr::SessionDelegator<T>> NAME() { \
-        return std::unique_ptr<::kontr::SessionDelegator<T>> (new CLASS(NAME)<T>()); \
+    std::unique_ptr<::kontr::Session::Delegator<T>> NAME() { \
+        return std::unique_ptr<::kontr::Session::Delegator<T>> (new CLASS(NAME)<T>()); \
     } \
     template <typename T> \
     CLASS(NAME)<T>::CLASS(NAME)() : \
-        ::kontr::SessionDelegator<T>( \
+        ::kontr::Session::Delegator<T>(#NAME, \
         __VA_ARGS__ \
                                      ) \
     {}

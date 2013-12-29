@@ -7,15 +7,15 @@ namespace kontr {
 namespace Generator {
 
 template<typename T>
-class Session : public ::kontr::ISession<T> {
-    using ::kontr::ISession<T>::script_dir;
-    using ::kontr::ISession<T>::files_dir;
-    using ::kontr::ISession<T>::nanecisto;
-    using ::kontr::ISession<T>::naostro;
-    using ::kontr::ISession<T>::post;
+class Session : public ::kontr::Session::Data<T> {
+    using ::kontr::Session::Data<T>::script_dir;
+    using ::kontr::Session::Data<T>::files_dir;
+    using ::kontr::Session::Data<T>::nanecisto;
+    using ::kontr::Session::Data<T>::naostro;
+    using ::kontr::Session::Data<T>::post;
 public:
 
-    using ::kontr::ISession<T>::ISession;
+    using ::kontr::Session::Data<T>::Data;
 
     virtual void pre_test() {
         using namespace std;
@@ -58,7 +58,6 @@ void SessionGenerator<T>::configure(const char *script_dir, const char *files_di
 }
 #endif
 
-}
-}
-
+} //Generator
+} //kontr
 #endif // GENERATOR_SESSION_H

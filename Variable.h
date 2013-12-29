@@ -5,9 +5,42 @@
 #include <string>
 
 namespace kontr {
+namespace Variable {
 
+/// Pure interface without any data storage
+/// To be used by Delegator, rest should use Data
 template <typename T>
-class Variable {
+class Interface {
+public:
+    /// Print representation to ostream (for Generation)
+    virtual void __generate(std::ostream& out) const = 0;
+
+    /// Operator for printing
+    friend std::ostream& operator<< (std::ostream& stream, const Interface& var) {
+        var.__generate(stream);
+        return stream;
+    }
+
+public:
+#define VARIABLE_CONST(TYPE, VARIABLE) \
+    Interface(TYPE VARIABLE) \
+        { ::kontr::unused(VARIABLE); } \
+ \
+    Interface(const char* name, TYPE VARIABLE) \
+        { ::kontr::unused(name, VARIABLE); }
+
+    VARIABLE_CONST(int, i)
+    VARIABLE_CONST(bool, b)
+    VARIABLE_CONST(double, f)
+    VARIABLE_CONST(const char*, s)
+#undef VARIABLE_CONST
+
+    virtual ~Interface() {}
+};
+
+/// Data storing version of Interface
+template <typename T>
+class Data : public Interface<T> {
 public:
     enum class VariableType {
         Constant,
@@ -37,10 +70,8 @@ public:
         Storage(const char* c) : String(c) {}
     };
 
-    Variable() = delete;
-
 public:
-    /// Type of variable (Constant, Variable)
+    /// Type of variable (Constant, Variable, ...)
     VariableType variableType;
 
     /// Type of data (Int, Float, ...)
@@ -52,27 +83,16 @@ public:
     /// Name of variable
     std::string variableName;
 
-    /// Print representation to ostream (for Generation)
-    virtual void __generate(std::ostream& out) const = 0;
-
-    /// Operator for printing
-    friend std::ostream& operator<< (std::ostream& stream, const Variable& var) {
-        var.__generate(stream);
-        return stream;
-    }
-
-    Variable& operator=(const Variable&) = default;
-    Variable& operator=(Variable&&) = default;
-    Variable(const Variable&) = default;
-
 public:
 #define VARIABLE_CONST(TYPE, INT_TYPE, VARIABLE) \
-    Variable(TYPE VARIABLE) : \
+    Data(TYPE VARIABLE) : \
+        Interface<T>(VARIABLE), \
         variableType(VariableType::Constant), \
         dataType(INT_TYPE), \
         data((TYPE) VARIABLE) {} \
  \
-    Variable(const char* name, TYPE VARIABLE): \
+    Data(const char* name, TYPE VARIABLE): \
+        Interface<T>(name, VARIABLE), \
         variableType(VariableType::Variable), \
         dataType(INT_TYPE), \
         data((TYPE) VARIABLE), \
@@ -85,23 +105,24 @@ public:
 
 #undef VARIABLE_CONST
 
-    virtual ~Variable() = default;
+    virtual ~Data() = default;
 };
 
 template<typename T>
-class VariableDelegator : public Variable<T> {
+class Delegator : public Interface<T> {
     typename T::Variable delegate;
 public:
-    typename T::Variable& __getDelegate() {
+    /// For testing purposes only!
+    const typename T::Variable& __getDelegate() const {
         return delegate;
     }
 
 #define DELEGATOR_CONST(TYPE, VARIABLE) \
-    VariableDelegator(TYPE VARIABLE) : \
-        Variable<T>(VARIABLE), delegate(VARIABLE) {} \
+    Delegator(TYPE VARIABLE) : \
+        Interface<T>(VARIABLE), delegate(VARIABLE) {} \
  \
-    VariableDelegator(const char* name, TYPE VARIABLE) : \
-        Variable<T>(name, VARIABLE), \
+    Delegator(const char* name, TYPE VARIABLE) : \
+        Interface<T>(name, VARIABLE), \
         delegate(name, VARIABLE) {}
 
     DELEGATOR_CONST(int, i)
@@ -110,46 +131,31 @@ public:
     DELEGATOR_CONST(const char*, s)
 #undef DELEGATOR_CONST
 
-    VariableDelegator() = delete;
-
     virtual void __generate(std::ostream& out) const {
         delegate.__generate(out);
     }
 
-    VariableDelegator& operator=(const VariableDelegator& other) {
-        if (this != &other) {
-            delegate = other.delegate;
-        }
-        return *this;
-    }
-
-    VariableDelegator& operator=(VariableDelegator&& other) {
-        delegate = other.delegate;
-        return *this;
-    }
-
-    VariableDelegator(const VariableDelegator&) = default;
-
-    VariableDelegator& toInt() {
+    Delegator& toInt() {
         delegate = delegate.toInt();
         return *this;
     }
 
-    VariableDelegator& toFloat() {
+    Delegator& toFloat() {
         delegate = delegate.toFloat();
         return *this;
     }
 
-    VariableDelegator& toBool() {
+    Delegator& toBool() {
         delegate = delegate.toBool();
         return *this;
     }
 
-    VariableDelegator& toString() {
+    Delegator& toString() {
         delegate = delegate.toString();
         return *this;
     }
 };
 
-}
+} //Variable
+} //kontr
 #endif // VARIABLE_H

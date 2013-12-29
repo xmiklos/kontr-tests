@@ -11,7 +11,6 @@
 #include <cstdlib>
 
 namespace kontr {
-
 namespace Report {
 
 /**
@@ -114,8 +113,6 @@ public:
     }
 };
 
-}
-
-}
-
+} //Report
+} //kontr
 #endif // REPORTER_H

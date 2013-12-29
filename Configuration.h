@@ -5,7 +5,6 @@
 #include <type_traits>
 
 namespace kontr {
-
 namespace Configuration {
 
 /// Default error reporting configuration - print notices and warnings, abort on error
@@ -23,9 +22,9 @@ typedef ::kontr::Report::ReportConfiguration<
 /// Define configuration
 #define CONFIGURATION(NAME, SESSION, MASTER, VARIABLE, CONFIGURATION) \
 struct NAME { \
-        typedef ::kontr::MasterTestDelegator<NAME> MasterDelegator; \
-        typedef ::kontr::SessionDelegator<NAME> SessionDelegator; \
-        typedef ::kontr::VariableDelegator<NAME> VariableDelegator; \
+        typedef ::kontr::MasterTest::Delegator<NAME> MasterDelegator; \
+        typedef ::kontr::Session::Delegator<NAME> SessionDelegator; \
+        typedef ::kontr::Variable::Delegator<NAME> VariableDelegator; \
 \
         typedef std::unique_ptr<MasterDelegator> MasterDelegatorInstance; \
         typedef std::unique_ptr<SessionDelegator> SessionDelegatorInstance; \
@@ -63,7 +62,6 @@ CONFIGURATION(Generation,
               ConfigurationDefault
              );
 
-}
-
-}
+} //Configuration
+} //kontr
 #endif // CONFIGURATION_H

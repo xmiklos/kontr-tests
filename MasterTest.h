@@ -5,14 +5,16 @@
 #include <memory>
 
 namespace kontr {
+namespace MasterTest {
 
+/// Pure interface
 template<typename T>
-class IMasterTest {
+class Interface {
 public:
     /// Parameter type
     using Variable = const typename T::VariableDelegator&;
 
-    virtual ~IMasterTest() {}
+    virtual ~Interface() {}
 
     /**
      * Set name to the master test
@@ -57,18 +59,19 @@ public:
 };
 
 template <typename T>
-class MasterTestDelegator : public ::kontr::IMasterTest<T>
+class Delegator : public Interface<T>
 {
     typename T::Master delegate;
     const char* className;
-    using Variable = typename ::kontr::IMasterTest<T>::Variable;
-
 protected:
-    MasterTestDelegator<T>(const char* className) :
-        ::kontr::IMasterTest<T>(), delegate(), className(className) {}
+    Delegator(const char* className) :
+        Interface<T>(), delegate(), className(className) {}
+
 public:
     /// Type of a function returning unique pointer to this delegator type
-    using Function = std::unique_ptr<MasterTestDelegator> (*)();
+    using Function = std::unique_ptr<Delegator> (*)();
+
+    using Variable = typename Interface<T>::Variable;
 
     virtual void name(Variable name) {
         delegate.name(name);
@@ -94,12 +97,15 @@ public:
         delegate.stage_compiled_student_file(filename);
     }
 
+    /// Get class name of the MasterTest
     const char* getClassName() const {
         return className;
     }
 
+    /// Code of the master test will be in this method
     virtual void execute () = 0;
 };
 
-}
+} //MasterTest
+} //kontr
 #endif // MASTERTEST_H

@@ -9,9 +9,9 @@ namespace kontr {
 namespace Generator {
 
 template<typename T>
-class Variable : public ::kontr::Variable<T> {
-    using DataType = typename ::kontr::Variable<T>::DataType;
-    using VariableType = typename ::kontr::Variable<T>::VariableType;
+class Variable : public ::kontr::Variable::Data<T> {
+    using DataType = typename ::kontr::Variable::Data<T>::DataType;
+    using VariableType = typename ::kontr::Variable::Data<T>::VariableType;
 
     static void printString(std::ostream& out, const std::string& str) {
         using namespace std;
@@ -65,17 +65,17 @@ class Variable : public ::kontr::Variable<T> {
     }
 
 public:
-    using ::kontr::Variable<T>::variableType;
-    using ::kontr::Variable<T>::variableName;
-    using ::kontr::Variable<T>::dataType;
-    using ::kontr::Variable<T>::data;
+    using ::kontr::Variable::Data<T>::variableType;
+    using ::kontr::Variable::Data<T>::variableName;
+    using ::kontr::Variable::Data<T>::dataType;
+    using ::kontr::Variable::Data<T>::data;
 
 #define CONST(TYPE, VARIABLE) \
     Variable(TYPE VARIABLE) : \
-        ::kontr::Variable<T>(VARIABLE) {} \
+        ::kontr::Variable::Data<T>(VARIABLE) {} \
  \
     Variable(const char* name, TYPE VARIABLE) : \
-        ::kontr::Variable<T>(name, VARIABLE) { printVariable(); }
+        ::kontr::Variable::Data<T>(name, VARIABLE) { printVariable(); }
 
     CONST(int, i)
     CONST(bool, b)
@@ -119,7 +119,6 @@ public:
 
 };
 
-}
-}
-
+} //Generator
+} //kontr
 #endif // VARIABLE_H

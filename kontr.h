@@ -1,6 +1,11 @@
 #ifndef KONTR_H
 #define KONTR_H
 
+namespace kontr {
+    /// Method for not printing unused parameters in interfaces' constructors
+    template<class... T> void unused(T&&...) {}
+}
+
 #include "Reporter.h"
 
 #include "MasterTest.h"
