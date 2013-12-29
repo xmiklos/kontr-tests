@@ -7,20 +7,8 @@
 namespace kontr {
 namespace Configuration {
 
-/// Default error reporting configuration - print notices and warnings, abort on error
-typedef ::kontr::Report::ReportConfiguration<
-    ::kontr::Report::Reporting::ERR,
-    ::kontr::Report::Reporting::ERR,
-    ::kontr::Report::Reporting::ERR_ABORT> ConfigurationDefault;
-
-/// Error reporting configuration used for testing - always throw exceptions
-typedef ::kontr::Report::ReportConfiguration<
-    ::kontr::Report::Reporting::ERR_EXCEPTION,
-    ::kontr::Report::Reporting::ERR_EXCEPTION,
-    ::kontr::Report::Reporting::ERR_EXCEPTION> ConfigurationException;
-
 /// Define configuration
-#define CONFIGURATION(NAME, SESSION, MASTER, VARIABLE, CONFIGURATION) \
+#define CONFIGURATION(NAME, SESSION, MASTER, VARIABLE, REPORTING) \
 struct NAME { \
         typedef ::kontr::MasterTest::Delegator<NAME> MasterDelegator; \
         typedef ::kontr::Session::Delegator<NAME> SessionDelegator; \
@@ -45,7 +33,7 @@ struct NAME { \
             return f(); \
         } \
 \
-        CONFIGURATION ReportConfiguration; \
+        REPORTING ReportConfiguration; \
 \
         ::kontr::Report::Reporter<NAME> report; \
         static NAME& instance() { \
@@ -59,7 +47,7 @@ CONFIGURATION(Generation,
               ::kontr::Generator::Session,
               ::kontr::Generator::MasterTest,
               ::kontr::Generator::Variable,
-              ConfigurationDefault
+              ::kontr::Report::Default
              );
 
 } //Configuration

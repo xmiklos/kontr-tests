@@ -113,6 +113,14 @@ public:
     }
 };
 
+/// Default error reporting configuration - print notices and warnings, abort on error
+typedef ReportConfiguration<Reporting::ERR, Reporting::ERR, Reporting::ERR_ABORT>
+    Default;
+
+/// Error reporting configuration used for testing - always throw exceptions
+typedef ReportConfiguration<Reporting::ERR_EXCEPTION, Reporting::ERR_EXCEPTION, Reporting::ERR_EXCEPTION>
+    Exception;
+
 } //Report
 } //kontr
 #endif // REPORTER_H
