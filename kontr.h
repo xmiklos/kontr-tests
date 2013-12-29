@@ -16,6 +16,8 @@ namespace kontr {
 #include "Generator/Variable.h"
 
 #include "Configuration.h"
+
+#include "Generator/Names.h"
 #include "macros-types.h"
 
 #endif // KONTR_H

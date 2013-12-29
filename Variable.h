@@ -108,6 +108,16 @@ public:
     virtual ~Data() = default;
 };
 
+/// Empty Variable
+template<typename T>
+class Empty : public Data<T> {
+public:
+    using Data<T>::Data;
+
+    virtual void __generate(std::ostream &out) const { kontr::unused(out); }
+};
+
+/// Delegator
 template<typename T>
 class Delegator : public Interface<T> {
     typename T::Variable delegate;

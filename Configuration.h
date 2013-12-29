@@ -8,7 +8,7 @@ namespace kontr {
 namespace Configuration {
 
 /// Define configuration
-#define CONFIGURATION(NAME, SESSION, MASTER, VARIABLE, REPORTING) \
+#define CONFIGURATION(NAME, SESSION, MASTER, VARIABLE, STORAGE, REPORTING) \
 struct NAME { \
         typedef ::kontr::MasterTest::Delegator<NAME> MasterDelegator; \
         typedef ::kontr::Session::Delegator<NAME> SessionDelegator; \
@@ -22,6 +22,7 @@ struct NAME { \
         typedef MASTER<NAME> Master; \
         typedef VARIABLE<NAME> Variable; \
 \
+        STORAGE storage; \
         std::unique_ptr<SessionDelegator> session = nullptr; \
         std::ostream* out_ptr = nullptr; /*Needed for variable constructor*/ \
 \
@@ -47,6 +48,7 @@ CONFIGURATION(Generation,
               ::kontr::Generator::Session,
               ::kontr::Generator::MasterTest,
               ::kontr::Generator::Variable,
+              char,
               ::kontr::Report::Default
              );
 

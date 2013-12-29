@@ -29,7 +29,7 @@ class MasterTest : public ::kontr::MasterTest::Interface<T>  {
 public:
     using ::kontr::MasterTest::Interface<T>::Interface;
 
-    virtual void name(Variable name) {
+    virtual void name(const char* name) {
         if (out_ptr == nullptr) {
             assert(T::instance().session != nullptr);
             // FIX THIS - universal storage in T with names in it

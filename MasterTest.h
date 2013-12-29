@@ -21,7 +21,7 @@ public:
      * @brief name
      * @param name
      */
-    virtual void name(Variable name) = 0;
+    virtual void name(const char* name) = 0;
 
     /**
      * Register unit test
@@ -58,6 +58,21 @@ public:
     virtual void stage_compiled_student_file(Variable filename) = 0;
 };
 
+/// Empty class (all virtual methods implemented as empty)
+template <typename T>
+class Empty : public Interface<T> {
+public:
+    using typename Interface<T>::Variable;
+
+    virtual void name(const char * name) override { kontr::unused(name); }
+    virtual void register_unit(Variable unit) override { kontr::unused(unit); }
+    virtual void stage_compiled_file(Variable filename) override { kontr::unused(filename); }
+    virtual void stage_compiled_student_file(Variable filename) override { kontr::unused(filename); }
+    virtual void stage_file(Variable filename) override { kontr::unused(filename); }
+    virtual void stage_student_file(Variable filename) override { kontr::unused(filename); }
+};
+
+/// Delegator class
 template <typename T>
 class Delegator : public Interface<T>
 {
@@ -73,7 +88,7 @@ public:
 
     using Variable = typename Interface<T>::Variable;
 
-    virtual void name(Variable name) {
+    virtual void name(const char* name) {
         delegate.name(name);
     }
 
