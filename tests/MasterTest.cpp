@@ -74,7 +74,11 @@ SESSION_NAME(tmp, ".", ".", {}, {})
 
 TEST_CASE("master_test") {
     Testing& cg = Testing::instance();
+    cg.storage.nextFileName = "session"; //Must be done before inicialization
     cg.setSession(tmp);
+    ifstream sess("./session.pl");
+    REQUIRE(sess.good());
+
     stringstream buffer;
     streambuf* old = cerr.rdbuf(buffer.rdbuf());
 
@@ -108,7 +112,7 @@ TEST_CASE("master_test") {
 
     SECTION("Correct test") {
         auto filename = "./master_testing.pl";
-        cg.storage.nextFileName = "master_testing"; //Must be before inicialization
+        cg.storage.nextFileName = "master_testing"; //Must be done before inicialization
 
         auto tmp = cg.MasterTestInstance(normal);
 
@@ -169,7 +173,13 @@ $master_test->stage_file('data_simple_structure_page2.html');
         CHECK(buf.eof());
 
         generated.close();
+        tmp = nullptr;
         CHECK(remove(filename) == 0);
     }
+
+    sess.close();
+    cg.session = nullptr;
+    CHECK(remove("./session.pl") == 0);
+
     cerr.rdbuf(old);
 }

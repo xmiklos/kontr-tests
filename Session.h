@@ -120,11 +120,11 @@ public:
     using Function = std::unique_ptr<Delegator> (*)();
 
 protected:
-    Delegator(const char* className, const char* script_dir, const char* files_dir,
+    Delegator(const char* className, const char* scripts_dir, const char* files_dir,
                      TMasterTests nanecisto, TMasterTests naostro,
                      TPost post = nullptr) :
-        Interface<T>(script_dir, files_dir, nanecisto, naostro, post),
-        delegate(script_dir, files_dir, nanecisto, naostro, post),
+        Interface<T>(scripts_dir, files_dir, nanecisto, naostro, post),
+        delegate(scripts_dir, files_dir, nanecisto, naostro, post),
         className(className)
     {}
 public:

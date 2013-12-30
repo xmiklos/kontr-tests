@@ -9,6 +9,7 @@ namespace Generator {
 struct Storage {
     std::ostream* out_ptr = nullptr;
     const char* nextFileName = nullptr;
+    Names::All names;
 };
 
 CONFIGURATION(Configuration,

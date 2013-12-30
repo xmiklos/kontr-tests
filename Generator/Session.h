@@ -2,6 +2,7 @@
 #define GENERATOR_SESSION_H
 
 #include "../kontr.h"
+#include <tuple>
 
 namespace kontr {
 namespace Generator {
@@ -13,32 +14,58 @@ class Session : public ::kontr::Session::Data<T> {
     using ::kontr::Session::Data<T>::nanecisto;
     using ::kontr::Session::Data<T>::naostro;
     using ::kontr::Session::Data<T>::post;
+    std::ofstream out;
 public:
-    using ::kontr::Session::Data<T>::Data;
+    using typename ::kontr::Session::Interface<T>::TMasterTests;
+    using typename ::kontr::Session::Interface<T>::TPost;
+
+    Session(const char* scripts_dir, const char* files_dir,
+            TMasterTests nanecisto, TMasterTests naostro,
+            TPost post = nullptr) :
+        ::kontr::Session::Data<T>(scripts_dir, files_dir, nanecisto, naostro, post),
+        out(std::string(scripts_dir) + "/" + T::instance().storage.nextFileName + ".pl")
+    {
+        if (!out.good()) {
+            T::instance().report.create(::kontr::Report::ERROR, "Could not create output file");
+        }
+    }
 
     virtual void pre_test() {
-        using namespace std;
-        cout << "Scripts dir: " << scripts_dir << endl;
-        cout << "Files dir: " << files_dir << endl;
+        using Variable = const typename T::VariableDelegator&;
+        auto &s = T::instance().storage; //::kontr::Generator::Storage
+        unsigned index = 0;
 
-        cout << "Pre test: " << endl;
-
-
-        cout << "Nanecisto: " << endl;
+        out << "sub pre_test {" << std::endl;
         for (auto i : nanecisto) {
-            auto obj = T::MasterTestInstance(i);
-            //unique_ptr<typename T::MasterDelegator> obj(i(this->instance));
-            cout << " (" << obj->getClassName() << ") " << endl;
-            obj->execute();
+            auto names = s.names.masterTests[index++]; //tuple<string, string>
+            const std::string& strName = std::get<1>(names);
+            s.nextFileName = strName.c_str();
+            typename T::MasterDelegatorInstance instance = T::MasterTestInstance(i);
+            if (instance->__getClassName() != std::get<0>(names)) {
+                T::instance().report.create(Report::ERROR, "Invalid master test class name");
+            }
+            Variable name = (strName + ".pl").c_str();
+            out << "\t$session->register_master(" << name << ");" << std::endl;
+            instance->execute();
         }
 
-        cout << "Naostro: " << endl;
-        for (auto i : naostro) {
-            auto obj = T::MasterTestInstance(i);
-            //unique_ptr<typename T::MasterDelegator> obj(i(this->instance));
-            cout << " (" << obj->getClassName() << ") " << endl;
-            obj->execute();
+        if (naostro.size()) {
+            out << "\tif($session->run_type eq 'teacher') {" << std::endl;
+            for (auto i : naostro) {
+                auto names = s.names.masterTests[index++]; //tuple<string, string>
+                const std::string& strName = std::get<1>(names);
+                s.nextFileName = strName.c_str();
+                typename T::MasterDelegatorInstance instance = T::MasterTestInstance(i);
+                if (instance->__getClassName() != std::get<0>(names)) {
+                    T::instance().report.create(Report::ERROR, "Invalid master test class name");
+                }
+                Variable name = (strName + ".pl").c_str();
+                out << "\t\t$session->register_master(" << name << ");" << std::endl;
+                instance->execute();
+            }
+            out << "\t}" << std::endl;
         }
+        out << "}" << std::endl;
     }
 
     virtual void post_test() {
