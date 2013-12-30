@@ -7,7 +7,7 @@
 using namespace kontr;
 using namespace std;
 
-void testType(Variable::Data<Testing>::DataType t, const Testing::VariableDelegator& input) {
+void testType(Variable::DataType t, const Testing::VariableDelegator& input) {
     CHECK(input.__getDelegate().dataType == t);
 }
 
@@ -25,7 +25,7 @@ void testGenerate(const Testing::VariableDelegator& input, string result) {
 }
 
 TEST_CASE("Constants type deduction") {
-    using Type = Variable::Data<Testing>::DataType;
+    using Type = Variable::DataType;
 
     testType (Type::Int, 10);
     testType (Type::Int, 0);
@@ -69,7 +69,7 @@ TEST_CASE("Generator") {
 
 TEST_CASE("Variable") {
     Testing& cg = Testing::instance();;
-    using Type = Variable::Data<Testing>::DataType;
+    using Type = Variable::DataType;
     stringstream ss;
     cg.storage.out_ptr = &ss;
 
@@ -77,8 +77,8 @@ TEST_CASE("Variable") {
     CHECK( ss.str() == "$a = 10;\n");
     ss.str("");
 
-    CHECK( a.__getDelegate().variableType == Variable::Data<Testing>::VariableType::Variable);
-    CHECK( a.__getDelegate().dataType == Variable::Data<Testing>::DataType::Int);
+    CHECK( a.__getDelegate().variableType == Variable::VariableType::Variable);
+    CHECK( a.__getDelegate().dataType == Variable::DataType::Int);
     CHECK( a.__getDelegate().data.Int == 10);
 
     a = 25.2;
@@ -109,22 +109,49 @@ TEST_CASE("Conversion"){
     Variable::Delegator<Testing> a("a", 10);
     Variable::Delegator<Testing> b("b", 10);
 
+    // Int
     ss.str("");
     b = a.toInt();
     CHECK( ss.str() == "$b = $a;\n");
 
+    a = "40";
+    ss.str("");
+    b = a.toInt();
+    CHECK( ss.str() == "$b = 0 + $a;\n");
+
+
+    // Float
+    ss.str("");
+    b = a.toFloat();
+    CHECK( ss.str() == "$b = 0.0 + $a;\n");
+
+    a = 10.0;
     ss.str("");
     b = a.toFloat();
     CHECK( ss.str() == "$b = $a;\n");
 
+    // Combination float/int
+    ss.str("");
+    b = a.toInt().toFloat();
+    CHECK( ss.str() == "$b = 0.0 + (0 + $a);\n");
+
+    // Bool
+    ss.str("");
+    b = a.toBool();
+    CHECK( ss.str() == "$b = !!$a;\n");
+
+    a = false;
     ss.str("");
     b = a.toBool();
     CHECK( ss.str() == "$b = $a;\n");
 
+    // String
     ss.str("");
-    b = a.toFloat();
+    b = a.toString();
+    CHECK( ss.str() == "$b = \"\" . $a;\n");
+
+    a = "tmp";
+    ss.str("");
+    b = a.toString();
     CHECK( ss.str() == "$b = $a;\n");
-
-
-
 }

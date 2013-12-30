@@ -10,6 +10,21 @@ namespace Variable {
 template <typename T>
 class Delegator;
 
+enum class VariableType {
+    Constant,
+    Variable,
+    Expression
+};
+static const unsigned int VARIABLE_TYPE_LENGTH = 3;
+
+enum class DataType {
+    Int,
+    Bool,
+    Float,
+    String
+};
+static const unsigned int DATA_TYPE_LENGTH = 4;
+
 /// Pure interface without any data storage
 /// To be used by Delegator, rest should use Data
 template <typename T>
@@ -23,7 +38,9 @@ public:
         var.__generate(stream);
         return stream;
     }
-
+protected:
+    explicit Interface(const DataType& type, const std::string& expression)
+    { ::kontr::unused(type, expression); }
 public:
 #define VARIABLE_CONST(TYPE, VARIABLE) \
     Interface(TYPE VARIABLE) \
@@ -74,19 +91,6 @@ public:
 template <typename T>
 class Data : public Interface<T> {
 public:
-    enum class VariableType {
-        Constant,
-        Variable
-    };
-    static const unsigned int VARIABLE_TYPE_LENGTH = 2;
-
-    enum class DataType {
-        Int,
-        Bool,
-        Float,
-        String
-    };
-    static const unsigned int DATA_TYPE_LENGTH = 4;
 
     //TODO - change to union (not easy because of String)
     //http://www.informit.com/guides/content.aspx?g=cplusplus&seqNum=556
@@ -95,11 +99,14 @@ public:
         bool Bool;
         double Float;
         std::string String;
+        std::string Expression;
 
         Storage(int i) : Int(i) {}
         Storage(bool b) : Bool(b) {}
         Storage(double f) : Float(f) {}
         Storage(const char* c) : String(c) {}
+        explicit Storage(const std::string& e) :
+            Expression(e) {}
     };
 
 public:
@@ -114,6 +121,15 @@ public:
 
     /// Name of variable
     std::string variableName;
+
+protected:
+    explicit Data (const DataType& type, const std::string& expression) :
+        Interface<T>(type, expression),
+        variableType(VariableType::Expression),
+        dataType(type),
+        data(expression)
+    {}
+
 
 public:
 #define VARIABLE_CONST(TYPE, INT_TYPE, VARIABLE) \

@@ -4,14 +4,16 @@
 #include "../kontr.h"
 #include <iostream>
 #include <algorithm>
+#include <sstream>
 
 namespace kontr {
 namespace Generator {
 
+using DataType = ::kontr::Variable::DataType;
+using VariableType = ::kontr::Variable::VariableType;
+
 template<typename T>
 class Variable : public ::kontr::Variable::Data<T> {
-    using DataType = typename ::kontr::Variable::Data<T>::DataType;
-    using VariableType = typename ::kontr::Variable::Data<T>::VariableType;
 
     static void printString(std::ostream& out, const std::string& str) {
         using namespace std;
@@ -64,6 +66,24 @@ class Variable : public ::kontr::Variable::Data<T> {
         }
     }
 
+    /// Convert to string. Add parentheses if it is an expression
+    std::string __toString(bool parentheses) const {
+        std::stringstream ss;
+        if (parentheses && this->variableType == VariableType::Expression) {
+            ss << "(";
+        }
+
+        this->__generate(ss);
+
+        if (parentheses && this->variableType == VariableType::Expression) {
+            ss << ")";
+        }
+        return ss.str();
+    }
+
+    explicit Variable(const DataType& type, const std::string& expression) :
+        ::kontr::Variable::Data<T>(type, expression) {}
+
 public:
     using ::kontr::Variable::Data<T>::variableType;
     using ::kontr::Variable::Data<T>::variableName;
@@ -87,6 +107,7 @@ public:
         switch(variableType) {
         case VariableType::Constant: printScalar(out); return;
         case VariableType::Variable: out << '$' << variableName; return;
+        case VariableType::Expression: out << data.Expression; return;
         }
     }
 
@@ -102,19 +123,31 @@ public:
     }
 
     virtual ::kontr::Variable::Delegator<T> toInt() const {
-        return ::kontr::Variable::Delegator<T>::__create(*this);
+        if (dataType == DataType::Int) {
+            return ::kontr::Variable::Delegator<T>::__create(*this);
+        }
+        return ::kontr::Variable::Delegator<T>::__create( Variable(DataType::Int, "0 + " + this->__toString(true)) );
     }
 
     virtual ::kontr::Variable::Delegator<T> toFloat() const {
-        return ::kontr::Variable::Delegator<T>::__create(*this);
+        if (dataType == DataType::Float) {
+            return ::kontr::Variable::Delegator<T>::__create(*this);
+        }
+        return ::kontr::Variable::Delegator<T>::__create( Variable(DataType::Int, "0.0 + " + this->__toString(true)) );
     }
 
     virtual ::kontr::Variable::Delegator<T> toBool() const {
-        return ::kontr::Variable::Delegator<T>::__create(*this);
+        if (dataType == DataType::Bool) {
+            return ::kontr::Variable::Delegator<T>::__create(*this);
+        }
+        return ::kontr::Variable::Delegator<T>::__create( Variable(DataType::Int, "!!" + this->__toString(true)) );
     }
 
     virtual ::kontr::Variable::Delegator<T> toString() const {
-        return ::kontr::Variable::Delegator<T>::__create(*this);
+        if (dataType == DataType::String) {
+            return ::kontr::Variable::Delegator<T>::__create(*this);
+        }
+        return ::kontr::Variable::Delegator<T>::__create( Variable(DataType::Int, "\"\" . " + this->__toString(true)) );
     }
 
 };
