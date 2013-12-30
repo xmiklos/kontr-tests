@@ -2,6 +2,8 @@
 #define CATCH_CONFIG_MAIN
 #include "Catch/single_include/catch.hpp"
 
+#include <tuple>
+
 using namespace kontr;
 using namespace std;
 
@@ -46,6 +48,6 @@ TEST_CASE("Complex") {
     CHECK(res.session == "session");
     CHECK(res.masterTests.size() == 2);
 
-    CHECK(res.masterTests["master_name"] == "name");
-    CHECK(res.masterTests["master_naostro"] == "naostro");
+    CHECK(res.masterTests[0] == (make_tuple<string, string>("master_name", "name")) );
+    CHECK(res.masterTests[1] == (make_tuple<string, string>("master_naostro", "naostro")) );
 }

@@ -3,7 +3,8 @@
 /// Get filename for given Session/MasterTest
 
 #include "../kontr.h"
-#include <map>
+#include <vector>
+#include <tuple>
 
 namespace kontr {
 namespace Names {
@@ -12,7 +13,7 @@ class Stop : std::exception {};
 
 struct All {
     std::string session;
-    std::map<std::string, std::string> masterTests;
+    std::vector<std::tuple<std::string, std::string>> masterTests;
 };
 
 struct NameStorage {
@@ -56,7 +57,7 @@ public:
     virtual void name(const char* name) {
         if (T::instance().storage.all) {
             NameStorage& storage = T::instance().storage;
-            storage.data.masterTests[storage.className] = name;
+            storage.data.masterTests.push_back(std::make_tuple<std::string, std::string>(storage.className, name));
             throw Stop();
         }
         else {
