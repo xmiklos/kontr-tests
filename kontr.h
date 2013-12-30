@@ -7,17 +7,18 @@ namespace kontr {
 }
 
 #include "Reporter.h"
-
-#include "MasterTest.h"
-#include "Generator/MasterTest.h"
-#include "Session.h"
-#include "Generator/Session.h"
-#include "Variable.h"
-#include "Generator/Variable.h"
-
 #include "Configuration.h"
 
+#include "Session.h"
+#include "MasterTest.h"
+#include "Variable.h"
+
 #include "Generator/Names.h"
+#include "Generator/MasterTest.h"
+#include "Generator/Session.h"
+#include "Generator/Variable.h"
+#include "Generator/Configuration.h"
+
 #include "macros-types.h"
 
 #endif // KONTR_H

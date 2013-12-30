@@ -7,13 +7,6 @@
 namespace kontr {
 namespace Configuration {
 
-namespace Storage {
-    struct Generation {
-        std::ostream* out_ptr = nullptr;
-        const char* nextFileName = nullptr;
-    };
-}
-
 /// Define configuration
 #define CONFIGURATION(NAME, SESSION, MASTER, VARIABLE, STORAGE, REPORTING) \
 struct NAME { \
@@ -48,14 +41,6 @@ struct NAME { \
         }\
         \
     }
-
-CONFIGURATION(Generation,
-              ::kontr::Generator::Session,
-              ::kontr::Generator::MasterTest,
-              ::kontr::Generator::Variable,
-              Storage::Generation,
-              ::kontr::Report::Default
-             );
 
 } //Configuration
 } //kontr
