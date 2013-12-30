@@ -100,3 +100,31 @@ TEST_CASE("Variable") {
     CHECK( a.__getDelegate().data.String == "string" );
     CHECK( a.__getDelegate().variableName == "a" );
 }
+
+TEST_CASE("Conversion"){
+    Testing& cg = Testing::instance();;
+    stringstream ss;
+    cg.storage.out_ptr = &ss;
+
+    Variable::Delegator<Testing> a("a", 10);
+    Variable::Delegator<Testing> b("b", 10);
+
+    ss.str("");
+    b = a.toInt();
+    CHECK( ss.str() == "$b = $a;\n");
+
+    ss.str("");
+    b = a.toFloat();
+    CHECK( ss.str() == "$b = $a;\n");
+
+    ss.str("");
+    b = a.toBool();
+    CHECK( ss.str() == "$b = $a;\n");
+
+    ss.str("");
+    b = a.toFloat();
+    CHECK( ss.str() == "$b = $a;\n");
+
+
+
+}

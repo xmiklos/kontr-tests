@@ -7,6 +7,9 @@
 namespace kontr {
 namespace Variable {
 
+template <typename T>
+class Delegator;
+
 /// Pure interface without any data storage
 /// To be used by Delegator, rest should use Data
 template <typename T>
@@ -36,6 +39,35 @@ public:
 #undef VARIABLE_CONST
 
     virtual ~Interface() {}
+
+    /**
+      Convert to Int
+     * @brief toInt
+     * @return
+     */
+    virtual Delegator<T> toInt() const = 0;
+
+    /**
+      Convert to Float
+     * @brief toFloat
+     * @return
+     */
+    virtual Delegator<T> toFloat() const = 0;
+
+    /**
+      Convert to Bool
+     * @brief toBool
+     * @return
+     */
+    virtual Delegator<T> toBool() const = 0;
+
+    /**
+      Convert to String
+     * @brief toString
+     * @return
+     */
+    virtual Delegator<T> toString() const = 0;
+
 };
 
 /// Data storing version of Interface
@@ -115,13 +147,37 @@ public:
     using Data<T>::Data;
 
     virtual void __generate(std::ostream &out) const { kontr::unused(out); }
+
+#define DELEGATE return Delegator<T>::__create(dynamic_cast<const typename T::Variable&>(*this));
+
+    virtual Delegator<T> toInt() const { DELEGATE }
+    virtual Delegator<T> toFloat() const { DELEGATE }
+    virtual Delegator<T> toBool() const { DELEGATE }
+    virtual Delegator<T> toString() const { DELEGATE }
+
+#undef DELEGATE
+
 };
 
 /// Delegator
 template<typename T>
 class Delegator : public Interface<T> {
     typename T::Variable delegate;
+
+    Delegator(const typename T::Variable& create) :
+        Interface<T>(create), delegate(create) {}
+    Delegator(typename T::Variable&& create) :
+        Interface<T>(create), delegate(create) {}
+
 public:
+    static Delegator __create(const typename T::Variable& create) {
+        return Delegator(create);
+    }
+
+    static Delegator __create(typename T::Variable&& create) {
+        return Delegator(create);
+    }
+
     /// For testing purposes only!
     const typename T::Variable& __getDelegate() const {
         return delegate;
@@ -145,24 +201,20 @@ public:
         delegate.__generate(out);
     }
 
-    Delegator& toInt() {
-        delegate = delegate.toInt();
-        return *this;
+    virtual Delegator toInt() const {
+        return delegate.toInt();
     }
 
-    Delegator& toFloat() {
-        delegate = delegate.toFloat();
-        return *this;
+    virtual Delegator toFloat() const {
+        return delegate.toFloat();
     }
 
-    Delegator& toBool() {
-        delegate = delegate.toBool();
-        return *this;
+    virtual Delegator toBool() const {
+        return delegate.toBool();
     }
 
-    Delegator& toString() {
-        delegate = delegate.toString();
-        return *this;
+    virtual Delegator toString() const {
+        return delegate.toString();
     }
 };
 

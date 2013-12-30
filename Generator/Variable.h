@@ -101,20 +101,20 @@ public:
         return *this;
     }
 
-    Variable& toInt() {
-        return *this;
+    virtual ::kontr::Variable::Delegator<T> toInt() const {
+        return ::kontr::Variable::Delegator<T>::__create(*this);
     }
 
-    Variable& toFloat() {
-        return *this;
+    virtual ::kontr::Variable::Delegator<T> toFloat() const {
+        return ::kontr::Variable::Delegator<T>::__create(*this);
     }
 
-    Variable& toBool() {
-        return *this;
+    virtual ::kontr::Variable::Delegator<T> toBool() const {
+        return ::kontr::Variable::Delegator<T>::__create(*this);
     }
 
-    Variable& toString() {
-        return *this;
+    virtual ::kontr::Variable::Delegator<T> toString() const {
+        return ::kontr::Variable::Delegator<T>::__create(*this);
     }
 
 };
