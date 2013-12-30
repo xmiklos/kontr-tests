@@ -12,7 +12,13 @@ MASTER_TEST(master_name) {
     name("name");
 }
 
+MASTER_TEST(master_naostro) {
+    name("naostro");
+}
+
 SESSION("", "", {}, {})
+
+SESSION_NAME(complex, "", "", {master_name}, {master_naostro})
 
 TEST_CASE("Session") {
     CHECK(std::string("session") == Names::get(::Session));
@@ -33,4 +39,13 @@ TEST_CASE("Master test") {
 
         cerr.rdbuf(old);
     }
+}
+
+TEST_CASE("Complex") {
+    ::kontr::Names::All res = Names::getAll(complex);
+    CHECK(res.session == "session");
+    CHECK(res.masterTests.size() == 2);
+
+    CHECK(res.masterTests["master_name"] == "name");
+    CHECK(res.masterTests["master_naostro"] == "naostro");
 }

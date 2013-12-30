@@ -113,7 +113,7 @@ public:
     }
 
     /// Get class name of the MasterTest
-    const char* getClassName() const {
+    const char* __getClassName() const {
         return className;
     }
 

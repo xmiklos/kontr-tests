@@ -112,7 +112,7 @@ TEST_CASE("master_test") {
 
         auto tmp = cg.MasterTestInstance(normal);
 
-        REQUIRE(tmp->getClassName() == string("normal"));
+        REQUIRE(tmp->__getClassName() == string("normal"));
 
         CHECK_NOTHROW(tmp->execute());
 
