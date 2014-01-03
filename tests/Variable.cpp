@@ -155,3 +155,33 @@ TEST_CASE("Conversion"){
     b = a.toString();
     CHECK( ss.str() == "$b = $a;\n");
 }
+
+TEST_CASE("Comparison"){
+    Testing& cg = Testing::instance();;
+    stringstream ss;
+    cg.storage.out_ptr = &ss;
+
+    Variable::Delegator<Testing> a("a", 10);
+    Variable::Delegator<Testing> b("b", 10);
+    Variable::Delegator<Testing> c("c", 10);
+
+    ss.str("");
+    c = a == b;
+    CHECK( ss.str() == "$c = $a == $b;\n" );
+
+    ss.str("");
+    c = a != b;
+    CHECK( ss.str() == "$c = $a != $b;\n" );
+
+    // String
+    a = "324";
+    b = "44";
+
+    ss.str("");
+    c = a == b;
+    CHECK( ss.str() == "$c = $a eq $b;\n" );
+
+    ss.str("");
+    c = a != b;
+    CHECK( ss.str() == "$c = $a ne $b;\n" );
+}

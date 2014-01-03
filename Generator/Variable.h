@@ -150,6 +150,34 @@ public:
         return ::kontr::Variable::Delegator<T>::__create( Variable(DataType::Int, "\"\" . " + this->__toString(true)) );
     }
 
+    virtual ::kontr::Variable::Delegator<T> operator== (const ::kontr::Variable::Delegator<T>& o) const {
+        const Variable& other = o.__getDelegate();
+        if (this->dataType == DataType::String && other.dataType == DataType::String) {
+            return ::kontr::Variable::Delegator<T>::__create(
+                            Variable(DataType::Bool, this->__toString(true) + " eq " + other.__toString(true))
+                        );
+        }
+        else {
+            return ::kontr::Variable::Delegator<T>::__create(
+                            Variable(DataType::Bool, this->__toString(true) + " == " + other.__toString(true))
+                        );
+        }
+    }
+
+    virtual ::kontr::Variable::Delegator<T> operator!= (const ::kontr::Variable::Delegator<T>& o) const {
+        const Variable& other = o.__getDelegate();
+        if (this->dataType == DataType::String && other.dataType == DataType::String) {
+            return ::kontr::Variable::Delegator<T>::__create(
+                            Variable(DataType::Bool, this->__toString(true) + " ne " + other.__toString(true))
+                        );
+        }
+        else {
+            return ::kontr::Variable::Delegator<T>::__create(
+                            Variable(DataType::Bool, this->__toString(true) + " != " + other.__toString(true))
+                        );
+        }
+    }
+
 };
 
 } //Generator

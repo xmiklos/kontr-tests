@@ -85,6 +85,20 @@ public:
      */
     virtual Delegator<T> toString() const = 0;
 
+    /**
+      Comparison operator
+     * @brief operator ==
+     * @return
+     */
+    virtual Delegator<T> operator== (const Delegator<T>&) const = 0;
+
+    /**
+      Comparison operator
+     * @brief operator !=
+     * @return
+     */
+    virtual Delegator<T> operator!= (const Delegator<T>&) const = 0;
+
 };
 
 /// Data storing version of Interface
@@ -171,6 +185,9 @@ public:
     virtual Delegator<T> toBool() const { DELEGATE }
     virtual Delegator<T> toString() const { DELEGATE }
 
+    virtual Delegator<T> operator== (const Delegator<T>&) const { DELEGATE }
+    virtual Delegator<T> operator!= (const Delegator<T>&) const { DELEGATE }
+
 #undef DELEGATE
 
 };
@@ -231,6 +248,14 @@ public:
 
     virtual Delegator toString() const {
         return delegate.toString();
+    }
+
+    virtual Delegator<T> operator== (const Delegator<T>& other) const {
+        return delegate == other;
+    }
+
+    virtual Delegator<T> operator!= (const Delegator<T>& other) const {
+        return delegate != other;
     }
 };
 
