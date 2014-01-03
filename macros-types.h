@@ -53,4 +53,14 @@
 
 #define VAR(name, data) typename T::VariableDelegator name(#name, data)
 
+#define IF_NOELSE(cond, if) T::instance().language._if( (cond) , [&] { if } )
+#define IF_ELSE(cond, if, else) T::instance().language._if( (cond) , [&] { if }, [&] { else } )
+
+//http://stackoverflow.com/questions/3046889/optional-parameters-with-c-macros
+#define GET_4RD_ARG(arg1, arg2, arg3, arg4, ...) arg4
+#define IF_CHOOSER(...) GET_4RD_ARG(__VA_ARGS__, IF_ELSE, IF_NOELSE)
+#define IF(...) IF_CHOOSER(__VA_ARGS__)(__VA_ARGS__)
+#define WHILE(cond, while) T::instance().language._while(cond, [&] { while })
+#define PERL(code) T::instance().language.perl(code)
+
 #endif // MACROSTYPES_H

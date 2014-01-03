@@ -16,6 +16,7 @@ CONFIGURATION(Configuration,
               ::kontr::Generator::Session,
               ::kontr::Generator::MasterTest,
               ::kontr::Generator::Variable,
+              ::kontr::Generator::Language,
               ::kontr::Generator::Storage,
               ::kontr::Report::Default
              );

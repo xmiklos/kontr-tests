@@ -16,3 +16,7 @@ add_test(Names Names)
 add_executable(Session Session.cpp)
 target_link_libraries(Session ${LIBRARIES})
 add_test(Session Session)
+
+add_executable(Language Language.cpp)
+target_link_libraries(Language ${LIBRARIES})
+add_test(Language Language)

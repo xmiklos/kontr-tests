@@ -12,11 +12,13 @@ namespace kontr {
 #include "Session.h"
 #include "MasterTest.h"
 #include "Variable.h"
+#include "Language.h"
 
 #include "Generator/Names.h"
 #include "Generator/MasterTest.h"
 #include "Generator/Session.h"
 #include "Generator/Variable.h"
+#include "Generator/Language.h"
 #include "Generator/Configuration.h"
 
 #include "macros-types.h"

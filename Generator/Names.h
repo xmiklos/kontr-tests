@@ -71,6 +71,7 @@ CONFIGURATION(Configuration,
               ::kontr::Names::Session,
               ::kontr::Names::MasterTest,
               ::kontr::Variable::Empty,
+              ::kontr::Language::Empty,
               NameStorage,
               ::kontr::Report::Exception
              );
