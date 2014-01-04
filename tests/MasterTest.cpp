@@ -6,6 +6,7 @@
 #include <fstream>
 #include <cstdio>
 #include <cstring>
+#include <array>
 
 using namespace kontr;
 using namespace std;
@@ -22,14 +23,26 @@ MASTER_TEST(doublename) {
 }
 */
 
+UNIT_TEST(matrix_2) {
+    name("unit_matrix_test2");
+}
+
+UNIT_TEST(matrix_3) {
+    name("unit_matrix_test3");
+}
+
+UNIT_TEST(parser) {
+    name("unit_parser_test2");
+}
+
 MASTER_TEST(normal) {
     name("master_testing");
 
     VAR(matrix, "matrix.cpp");
 
-    register_unit("unit_matrix_test2.pl");
-    register_unit("unit_matrix_test3.pl");
-    register_unit("unit_parser_test2.pl");
+    register_unit(matrix_2);
+    register_unit(matrix_3);
+    register_unit(parser);
 
     stage_compiled_student_file(matrix);
     stage_compiled_student_file("pagerank.cpp");
@@ -70,11 +83,12 @@ MASTER_TEST(normal) {
     stage_file("data_simple_structure_page2.html");
 }
 
-SESSION_NAME(tmp, ".", ".", {}, {})
+SESSION_NAME(tmp, ".", ".", {normal}, {})
 
 TEST_CASE("master_test") {
     Testing& cg = Testing::instance();
     cg.storage.nextFileName = "session"; //Must be done before inicialization
+    cg.storage.names = kontr::Names::getAll(tmp);
     cg.setSession(tmp);
     ifstream sess("./session.pl");
     REQUIRE(sess.good());
@@ -118,11 +132,27 @@ TEST_CASE("master_test") {
 
         REQUIRE(tmp->__getClassName() == string("normal"));
 
-        CHECK_NOTHROW(tmp->execute());
+        CHECK_NOTHROW(cg.session->pre_test());
 
         ifstream generated(filename);
         REQUIRE(generated.good());
 
+        //Check unit tests existance
+        array<const char*, 3> unit_filenames = {"unit_matrix_test2.pl", "unit_matrix_test3.pl", "unit_parser_test2.pl"};
+        ifstream unit1(unit_filenames[0]), unit2(unit_filenames[1]), unit3(unit_filenames[2]);
+        CHECK(unit1.good());
+        CHECK(unit2.good());
+        CHECK(unit3.good());
+
+        //Remove unit tests
+        unit1.close();
+        CHECK(remove(unit_filenames[0]) == 0);
+        unit2.close();
+        CHECK(remove(unit_filenames[1]) == 0);
+        unit3.close();
+        CHECK(remove(unit_filenames[2]) == 0);
+
+        //Check contents
         const char* result =
 R"delimiter($master_test->name('master_testing');
 $matrix = 'matrix.cpp';
@@ -172,11 +202,13 @@ $master_test->stage_file('data_simple_structure_page2.html');
         CHECK(generated.eof());
         CHECK(buf.eof());
 
+        //Remove generated
         generated.close();
         tmp = nullptr;
         CHECK(remove(filename) == 0);
     }
 
+    //Remove session
     sess.close();
     cg.session = nullptr;
     CHECK(remove("./session.pl") == 0);

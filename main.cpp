@@ -7,9 +7,9 @@ MASTER_TEST(master_testing) {
 
     VAR(matrix, "matrix.cpp");
 
-    register_unit("unit_matrix_test2.pl");
-    register_unit("unit_matrix_test3.pl");
-    register_unit("unit_parser_test2.pl");
+    //register_unit("unit_matrix_test2.pl");
+    //register_unit("unit_matrix_test3.pl");
+    //register_unit("unit_parser_test2.pl");
 
     stage_compiled_student_file(matrix);
     stage_compiled_student_file("pagerank.cpp");

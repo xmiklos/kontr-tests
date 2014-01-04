@@ -13,6 +13,7 @@ class Interface {
 public:
     /// Parameter type
     using Variable = typename T::VariableDelegator;
+    using Unit = typename T::UnitDelegator::Function;
 
     virtual ~Interface() {}
 
@@ -28,7 +29,7 @@ public:
      * @brief register_unit
      * @param unit
      */
-    virtual void register_unit(Variable unit) = 0;
+    virtual void register_unit(Unit unit) = 0;
 
     /**
      * Add a file from _files_
@@ -63,9 +64,10 @@ template <typename T>
 class Empty : public Interface<T> {
 public:
     using typename Interface<T>::Variable;
+    using typename Interface<T>::Unit;
 
     virtual void name(const char * name) override { kontr::unused(name); }
-    virtual void register_unit(Variable unit) override { kontr::unused(unit); }
+    virtual void register_unit(Unit unit) override { kontr::unused(unit); }
     virtual void stage_compiled_file(Variable filename) override { kontr::unused(filename); }
     virtual void stage_compiled_student_file(Variable filename) override { kontr::unused(filename); }
     virtual void stage_file(Variable filename) override { kontr::unused(filename); }
@@ -87,12 +89,13 @@ public:
     using Function = std::unique_ptr<Delegator> (*)();
 
     using Variable = typename Interface<T>::Variable;
+    using Unit = typename Interface<T>::Unit;
 
     virtual void name(const char* name) {
         delegate.name(name);
     }
 
-    virtual void register_unit(Variable unit) {
+    virtual void register_unit(Unit unit) {
         delegate.register_unit(unit);
     }
 

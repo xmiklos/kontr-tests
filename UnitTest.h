@@ -97,12 +97,12 @@ public:
         delegate.stage_compiled_student_file(filename);
     }
 
-    /// Get class name of the MasterTest
+    /// Get class name of the UnitTest
     const char* __getClassName() const {
         return className;
     }
 
-    /// Code of the master test will be in this method
+    /// Code of the unit test will be in this method
     virtual void execute () = 0;
 };
 

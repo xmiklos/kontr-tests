@@ -11,6 +11,7 @@ class UnitTest : public ::kontr::UnitTest::Interface<T>  {
     const char* variable = "$unit_test";
     std::ofstream out;
     using Variable = typename ::kontr::UnitTest::Interface<T>::Variable;
+    std::ostream* prevOutPtr = nullptr;
 
 public:
     UnitTest() : out(T::instance().session->__getScriptsDir() + "/" +
@@ -18,6 +19,7 @@ public:
         if (!out.good()) {
             T::instance().report.create(Report::ERROR, "Could not open file for writing");
         }
+        prevOutPtr = T::instance().storage.out_ptr;
         T::instance().storage.out_ptr = &out;
     }
 
@@ -44,7 +46,7 @@ public:
 
     virtual ~UnitTest() {
         if (T::instance().storage.out_ptr == &out) {
-            T::instance().storage.out_ptr = nullptr;
+            T::instance().storage.out_ptr = prevOutPtr;
         }
     }
 };

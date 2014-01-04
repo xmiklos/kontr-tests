@@ -33,11 +33,11 @@ public:
     virtual void pre_test() {
         using Variable = const typename T::VariableDelegator&;
         auto &s = T::instance().storage; //::kontr::Generator::Storage
-        unsigned index = 0;
+        s.names.currentMasterIndex = 0;
 
         out << "sub pre_test {" << std::endl;
         for (auto i : nanecisto) {
-            auto names = s.names.masterTests[index++]; //tuple<string, string>
+            auto names = s.names.masterTests[s.names.currentMasterIndex]; //tuple<string, string>
             const std::string& strName = std::get<1>(names);
             s.nextFileName = strName.c_str();
             typename T::MasterDelegatorInstance instance = T::MasterTestInstance(i);
@@ -47,12 +47,13 @@ public:
             Variable name = (strName + ".pl").c_str();
             out << "\t$session->register_master(" << name << ");" << std::endl;
             instance->execute();
+            ++ s.names.currentMasterIndex;
         }
 
         if (naostro.size()) {
             out << "\tif($session->run_type eq 'teacher') {" << std::endl;
             for (auto i : naostro) {
-                auto names = s.names.masterTests[index++]; //tuple<string, string>
+                auto names = s.names.masterTests[s.names.currentMasterIndex]; //tuple<string, string>
                 const std::string& strName = std::get<1>(names);
                 s.nextFileName = strName.c_str();
                 typename T::MasterDelegatorInstance instance = T::MasterTestInstance(i);
@@ -62,6 +63,7 @@ public:
                 Variable name = (strName + ".pl").c_str();
                 out << "\t\t$session->register_master(" << name << ");" << std::endl;
                 instance->execute();
+                ++ s.names.currentMasterIndex;
             }
             out << "\t}" << std::endl;
         }
