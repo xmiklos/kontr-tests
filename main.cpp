@@ -50,6 +50,50 @@ MASTER_TEST(master_testing) {
     stage_file("data_simple_structure_page2.html");
 }
 
+UNIT_TEST(unit_testing) {
+    name("unit_testing");
+
+    VAR(matrix, "matrix.cpp");
+
+    stage_compiled_student_file(matrix);
+    stage_compiled_student_file("pagerank.cpp");
+    stage_compiled_student_file("parser.cpp");
+
+    stage_student_file("matrix.h");
+    stage_student_file("pagerank.h");
+    stage_student_file("parser.h");
+
+    stage_compiled_file("test_misc.cpp");
+
+    stage_compiled_file("test_pagerank_case.cpp");
+    stage_compiled_file("test_parser_case.cpp");
+    stage_compiled_file("test_matrix_case.cpp");
+
+    stage_file("test_misc.hpp");
+    stage_file("test_matrix_case.hpp");
+    stage_file("test_parser_case.hpp");
+    stage_file("test_pagerank_case.hpp");
+
+    stage_file("data_full_links_index.html");
+    stage_file("data_full_links_page1.html");
+    stage_file("data_full_links_page2.html");
+    stage_file("data_full_links_page3.html");
+    stage_file("data_mul_dead_links_index.html");
+    stage_file("data_mul_dead_links_page1.html");
+    stage_file("data_mul_dead_links_page2.html");
+
+
+    stage_file("data_mul_links_index.html");
+    stage_file("data_mul_links_page1.html");
+    stage_file("data_mul_links_page2.html");
+
+    stage_file("data_no_links_index.html");
+    stage_file("data_one_self_loop_index.html");
+    stage_file("data_simple_structure_index.html");
+    stage_file("data_simple_structure_page1.html");
+    stage_file("data_simple_structure_page2.html");
+}
+
 SESSION(".",
         "files_dir",
         {master_testing},

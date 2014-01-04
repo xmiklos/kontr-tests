@@ -26,6 +26,27 @@
     template<typename T> \
     void CLASS(NAME)<T>::execute ()
 
+/// Unit test
+/// Usage: UNIT_TEST(name) { code; }
+#define UNIT_TEST(NAME) \
+    template<typename T> \
+    class CLASS(NAME) : public ::kontr::UnitTest::Delegator<T> { \
+    public: \
+        CLASS(NAME)() : kontr::UnitTest::Delegator<T>(#NAME) {} \
+        virtual void execute () override; \
+        using kontr::UnitTest::Delegator<T>::name; \
+        using kontr::UnitTest::Delegator<T>::stage_compiled_file; \
+        using kontr::UnitTest::Delegator<T>::stage_compiled_student_file; \
+        using kontr::UnitTest::Delegator<T>::stage_file; \
+        using kontr::UnitTest::Delegator<T>::stage_student_file; \
+    }; \
+    template<typename T> \
+    std::unique_ptr<::kontr::UnitTest::Delegator<T>> NAME() { \
+        return std::unique_ptr<::kontr::UnitTest::Delegator<T>> (new CLASS(NAME)<T>()); \
+    } \
+    template<typename T> \
+    void CLASS(NAME)<T>::execute ()
+
 /// Session with name
 /// Usage: SESSION_NAME(name, "script", "files", {nanecisto}, {naostro}, [&]{ post;} )
 #define SESSION_NAME(NAME, ...) \

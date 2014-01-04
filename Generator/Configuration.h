@@ -15,6 +15,7 @@ struct Storage {
 CONFIGURATION(Configuration,
               ::kontr::Generator::Session,
               ::kontr::Generator::MasterTest,
+              ::kontr::Generator::UnitTest,
               ::kontr::Generator::Variable,
               ::kontr::Generator::Language,
               ::kontr::Generator::Storage,

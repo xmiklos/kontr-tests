@@ -5,6 +5,10 @@ add_executable(MasterTest MasterTest.cpp)
 target_link_libraries(MasterTest ${LIBRARIES})
 add_test(MasterTest MasterTest)
 
+add_executable(UnitTest UnitTest.cpp)
+target_link_libraries(UnitTest ${LIBRARIES})
+add_test(UnitTest UnitTest)
+
 add_executable(Variable Variable.cpp)
 target_link_libraries(Variable ${LIBRARIES})
 add_test(Variable Variable)

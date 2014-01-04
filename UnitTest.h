@@ -1,11 +1,8 @@
-#ifndef MASTERTEST_H
-#define MASTERTEST_H
-
-#include "kontr.h"
-#include <memory>
+#ifndef UNITTEST_H
+#define UNITTEST_H
 
 namespace kontr {
-namespace MasterTest {
+namespace UnitTest {
 
 /// Pure interface
 template<typename T>
@@ -17,18 +14,11 @@ public:
     virtual ~Interface() {}
 
     /**
-     * Set name to the master test
+     * Set name to the unit test
      * @brief name
      * @param name
      */
     virtual void name(const char* name) = 0;
-
-    /**
-     * Register unit test
-     * @brief register_unit
-     * @param unit
-     */
-    virtual void register_unit(Variable unit) = 0;
 
     /**
      * Add a file from _files_
@@ -65,7 +55,6 @@ public:
     using typename Interface<T>::Variable;
 
     virtual void name(const char * name) override { kontr::unused(name); }
-    virtual void register_unit(Variable unit) override { kontr::unused(unit); }
     virtual void stage_compiled_file(Variable filename) override { kontr::unused(filename); }
     virtual void stage_compiled_student_file(Variable filename) override { kontr::unused(filename); }
     virtual void stage_file(Variable filename) override { kontr::unused(filename); }
@@ -76,7 +65,7 @@ public:
 template <typename T>
 class Delegator : public Interface<T>
 {
-    typename T::Master delegate;
+    typename T::Unit delegate;
     const char* className;
 protected:
     Delegator(const char* className) :
@@ -90,10 +79,6 @@ public:
 
     virtual void name(const char* name) {
         delegate.name(name);
-    }
-
-    virtual void register_unit(Variable unit) {
-        delegate.register_unit(unit);
     }
 
     virtual void stage_file(Variable filename) {
@@ -121,6 +106,7 @@ public:
     virtual void execute () = 0;
 };
 
-} //MasterTest
+
+} //UnitTest
 } //kontr
-#endif // MASTERTEST_H
+#endif // UNITTEST_H

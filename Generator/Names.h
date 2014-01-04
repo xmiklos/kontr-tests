@@ -70,6 +70,7 @@ public:
 CONFIGURATION(Configuration,
               ::kontr::Names::Session,
               ::kontr::Names::MasterTest,
+              ::kontr::UnitTest::Empty,
               ::kontr::Variable::Empty,
               ::kontr::Language::Empty,
               NameStorage,
