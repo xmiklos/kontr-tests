@@ -10,8 +10,13 @@ template <typename T>
 class UnitTest : public ::kontr::UnitTest::Interface<T>  {
     const char* variable = "$unit_test";
     std::ofstream out;
-    using Variable = typename ::kontr::UnitTest::Interface<T>::Variable;
     std::ostream* prevOutPtr = nullptr;
+
+    using typename ::kontr::UnitTest::Interface<T>::Variable;
+    using typename ::kontr::UnitTest::Interface<T>::Execution;
+
+    //Delegator of Generator::Exec
+    Execution executionResult = ::kontr::Generator::Exec<T>("$unit_test->execution");
 
 public:
     UnitTest() : out(T::instance().session->__getScriptsDir() + "/" +
@@ -42,6 +47,10 @@ public:
 
     virtual void stage_compiled_student_file(Variable filename) {
         out << variable << "->stage_compiled_student_file(" << filename << ");" << std::endl;
+    }
+
+    virtual Execution* execution() override {
+        return &executionResult;
     }
 
     virtual ~UnitTest() {

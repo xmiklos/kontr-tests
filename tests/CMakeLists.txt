@@ -9,6 +9,10 @@ add_executable(UnitTest UnitTest.cpp)
 target_link_libraries(UnitTest ${LIBRARIES})
 add_test(UnitTest UnitTest)
 
+add_executable(Execution Execution.cpp)
+target_link_libraries(Execution ${LIBRARIES})
+add_test(Execution Execution)
+
 add_executable(Variable Variable.cpp)
 target_link_libraries(Variable ${LIBRARIES})
 add_test(Variable Variable)

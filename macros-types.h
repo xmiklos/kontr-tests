@@ -39,6 +39,7 @@
         using kontr::UnitTest::Delegator<T>::stage_compiled_student_file; \
         using kontr::UnitTest::Delegator<T>::stage_file; \
         using kontr::UnitTest::Delegator<T>::stage_student_file; \
+        using kontr::UnitTest::Delegator<T>::execution; \
     }; \
     template<typename T> \
     std::unique_ptr<::kontr::UnitTest::Delegator<T>> NAME() { \

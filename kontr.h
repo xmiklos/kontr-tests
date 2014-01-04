@@ -11,15 +11,17 @@ namespace kontr {
 
 #include "Session.h"
 #include "MasterTest.h"
+#include "Exec.h"
 #include "UnitTest.h"
 #include "Variable.h"
 #include "Language.h"
 
 #include "Generator/Names.h"
 #include "Generator/MasterTest.h"
+#include "Generator/Variable.h"
+#include "Generator/Exec.h"
 #include "Generator/UnitTest.h"
 #include "Generator/Session.h"
-#include "Generator/Variable.h"
 #include "Generator/Language.h"
 #include "Generator/Configuration.h"
 

@@ -81,10 +81,10 @@ class Variable : public ::kontr::Variable::Data<T> {
         return ss.str();
     }
 
+public:
     explicit Variable(const DataType& type, const std::string& expression) :
         ::kontr::Variable::Data<T>(type, expression) {}
 
-public:
     using ::kontr::Variable::Data<T>::variableType;
     using ::kontr::Variable::Data<T>::variableName;
     using ::kontr::Variable::Data<T>::dataType;

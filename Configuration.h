@@ -8,10 +8,11 @@ namespace kontr {
 namespace Configuration {
 
 /// Define configuration
-#define CONFIGURATION(NAME, SESSION, MASTER, UNIT, VARIABLE, LANGUAGE, STORAGE, REPORTING) \
+#define CONFIGURATION(NAME, SESSION, MASTER, UNIT, EXEC, VARIABLE, LANGUAGE, STORAGE, REPORTING) \
 struct NAME { \
         typedef ::kontr::MasterTest::Delegator<NAME> MasterDelegator; \
         typedef ::kontr::UnitTest::Delegator<NAME> UnitDelegator; \
+        typedef ::kontr::Exec::Delegator<NAME> ExecDelegator; \
         typedef ::kontr::Session::Delegator<NAME> SessionDelegator; \
         typedef ::kontr::Variable::Delegator<NAME> VariableDelegator; \
         typedef ::kontr::Language::Delegator<NAME> LanguageDelegator; \
@@ -24,6 +25,7 @@ struct NAME { \
         typedef SESSION<NAME> Session; \
         typedef MASTER<NAME> Master; \
         typedef UNIT<NAME> Unit; \
+        typedef EXEC<NAME> Exec; \
         typedef VARIABLE<NAME> Variable; \
         typedef LANGUAGE<NAME> Language; \
 \

@@ -46,12 +46,22 @@ public:
      * @param filename
      */
     virtual void stage_compiled_student_file(Variable filename) = 0;
+
+    //virtual void addTag(Variable tag) = 0;
+    //virtual void addPoints(Variable name, Variable points) = 0;
+    //virtual Variable work_path() = 0; //string
+    //virtual Variable file_path() = 0; //string
+    //virtual ... compilation() = 0;
+    //virtual Variable extra_compiler_flags() = 0; //string
+    using Execution = typename T::ExecDelegator;
+    virtual Execution* execution() = 0;
 };
 
 /// Empty class (all virtual methods implemented as empty)
 template <typename T>
 class Empty : public Interface<T> {
 public:
+    using typename Interface<T>::Execution;
     using typename Interface<T>::Variable;
 
     virtual void name(const char * name) override { kontr::unused(name); }
@@ -59,6 +69,8 @@ public:
     virtual void stage_compiled_student_file(Variable filename) override { kontr::unused(filename); }
     virtual void stage_file(Variable filename) override { kontr::unused(filename); }
     virtual void stage_student_file(Variable filename) override { kontr::unused(filename); }
+
+    virtual Execution* execution() override { return nullptr; }
 };
 
 /// Delegator class
@@ -76,6 +88,7 @@ public:
     using Function = std::unique_ptr<Delegator> (*)();
 
     using Variable = typename Interface<T>::Variable;
+    using typename Interface<T>::Execution;
 
     virtual void name(const char* name) {
         delegate.name(name);
@@ -95,6 +108,10 @@ public:
 
     virtual void stage_compiled_student_file(Variable filename) {
         delegate.stage_compiled_student_file(filename);
+    }
+
+    virtual Execution* execution() override {
+        return delegate.execution();
     }
 
     /// Get class name of the UnitTest
