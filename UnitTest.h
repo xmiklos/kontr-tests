@@ -51,7 +51,8 @@ public:
     //virtual void addPoints(Variable name, Variable points) = 0;
     //virtual Variable work_path() = 0; //string
     //virtual Variable file_path() = 0; //string
-    //virtual ... compilation() = 0;
+    using Compilation = typename T::CompileDelegator;
+    virtual Compilation* compilation() = 0;
     //virtual Variable extra_compiler_flags() = 0; //string
     using Execution = typename T::ExecDelegator;
     virtual Execution* execution() = 0;
@@ -62,6 +63,7 @@ template <typename T>
 class Empty : public Interface<T> {
 public:
     using typename Interface<T>::Execution;
+    using typename Interface<T>::Compilation;
     using typename Interface<T>::Variable;
 
     virtual void name(const char * name) override { kontr::unused(name); }
@@ -71,6 +73,7 @@ public:
     virtual void stage_student_file(Variable filename) override { kontr::unused(filename); }
 
     virtual Execution* execution() override { return nullptr; }
+    virtual Compilation* compilation() override { return nullptr; }
 };
 
 /// Delegator class
@@ -89,6 +92,7 @@ public:
 
     using Variable = typename Interface<T>::Variable;
     using typename Interface<T>::Execution;
+    using typename Interface<T>::Compilation;
 
     virtual void name(const char* name) {
         delegate.name(name);
@@ -112,6 +116,10 @@ public:
 
     virtual Execution* execution() override {
         return delegate.execution();
+    }
+
+    virtual Compilation* compilation() override {
+        return delegate.compilation();
     }
 
     /// Get class name of the UnitTest

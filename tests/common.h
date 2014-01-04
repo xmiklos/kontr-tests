@@ -14,5 +14,4 @@ CONFIGURATION(Testing,
               ::kontr::Generator::Language,
               ::kontr::Generator::Storage,
               ::kontr::Report::Exception);
-
 #endif // COMMON_H

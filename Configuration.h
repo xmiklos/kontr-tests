@@ -12,7 +12,8 @@ namespace Configuration {
 struct NAME { \
         typedef ::kontr::MasterTest::Delegator<NAME> MasterDelegator; \
         typedef ::kontr::UnitTest::Delegator<NAME> UnitDelegator; \
-        typedef ::kontr::Exec::Delegator<NAME> ExecDelegator; \
+        typedef ::kontr::Exec::Execution::Delegator<NAME> ExecDelegator; \
+        typedef ::kontr::Exec::Compilation::Delegator<NAME> CompileDelegator; \
         typedef ::kontr::Session::Delegator<NAME> SessionDelegator; \
         typedef ::kontr::Variable::Delegator<NAME> VariableDelegator; \
         typedef ::kontr::Language::Delegator<NAME> LanguageDelegator; \
@@ -25,7 +26,8 @@ struct NAME { \
         typedef SESSION<NAME> Session; \
         typedef MASTER<NAME> Master; \
         typedef UNIT<NAME> Unit; \
-        typedef EXEC<NAME> Exec; \
+        typedef EXEC<NAME>::Execution Exec; \
+        typedef EXEC<NAME>::Compilation Compile; \
         typedef VARIABLE<NAME> Variable; \
         typedef LANGUAGE<NAME> Language; \
 \

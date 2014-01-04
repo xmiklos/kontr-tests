@@ -14,9 +14,13 @@ class UnitTest : public ::kontr::UnitTest::Interface<T>  {
 
     using typename ::kontr::UnitTest::Interface<T>::Variable;
     using typename ::kontr::UnitTest::Interface<T>::Execution;
+    using typename ::kontr::UnitTest::Interface<T>::Compilation;
 
-    //Delegator of Generator::Exec
-    Execution executionResult = ::kontr::Generator::Exec<T>("$unit_test->execution");
+    //Delegator of Generator::Exec::Execution
+    Execution executionResult = typename ::kontr::Generator::Exec<T>::Execution("$unit_test->execution");
+
+    //Delegator of Generator::Exec::Compilation
+    Compilation compilationResult = typename ::kontr::Generator::Exec<T>::Compilation("$unit_test->compilation");
 
 public:
     UnitTest() : out(T::instance().session->__getScriptsDir() + "/" +
@@ -51,6 +55,10 @@ public:
 
     virtual Execution* execution() override {
         return &executionResult;
+    }
+
+    virtual Compilation* compilation() override {
+        return &compilationResult;
     }
 
     virtual ~UnitTest() {
