@@ -1,6 +1,8 @@
 #ifndef UNITTEST_H
 #define UNITTEST_H
 
+#include "kontr.h"
+
 namespace kontr {
 namespace UnitTest {
 
@@ -47,15 +49,45 @@ public:
      */
     virtual void stage_compiled_student_file(Variable filename) = 0;
 
-    //virtual void addTag(Variable tag) = 0;
-    //virtual void addPoints(Variable name, Variable points) = 0;
-    //virtual Variable work_path() = 0; //string
-    //virtual Variable file_path() = 0; //string
+    virtual void addTag(Variable tag) = 0;
+    virtual void addPoints(Variable name, Variable points) = 0;
+    virtual Variable work_path() = 0; //string
+    virtual Variable file_path() = 0; //string
     using Compilation = typename T::CompileDelegator;
     virtual Compilation* compilation() = 0;
-    //virtual Variable extra_compiler_flags() = 0; //string
+    virtual Variable extra_compiler_flags() = 0; //string
+    virtual Variable compilation_log_errors() = 0; //bool
     using Execution = typename T::ExecDelegator;
     virtual Execution* execution() = 0;
+    virtual Execution* analysis() = 0;
+    virtual Execution* difference() = 0;
+
+    virtual void compile() = 0;
+    //TODO - not an array?
+    virtual void run(Variable input, std::vector<Variable> args = {}) = 0;
+    virtual void run_grind(Variable input, std::vector<Variable> args = {}) = 0;
+
+    virtual void diff_stdout(Variable mode, Variable file) = 0;
+    virtual void diff_stderr(Variable mode, Variable file) = 0;
+    virtual void diff_generic(Variable mode, Variable file1, Variable file2) = 0;
+
+    virtual void analyze_stdout(Variable desc, Variable cmd) = 0;
+    virtual void analyze_stderr(Variable desc, Variable cmd) = 0;
+    virtual void analyze(Variable desc, Variable input, Variable cmd) = 0;
+
+    //virtual void add_attachment(Variable data, Variable type) = 0; //Is it necessary with kontr-logs?
+    virtual void log(Variable text, Variable type = "both") = 0;
+    virtual void log_file(Variable filename, Variable type = "both") = 0;
+
+    //UNUSED methods:
+    //virtual void log_comit() = 0;
+    //virtual void log_purge() = 0;
+    //virtual void log_mode(Variable comit) = 0;
+
+    virtual void log_run_fail(Variable message) = 0;
+    virtual void log_tag(Variable tag, Variable text, Variable type = "both") = 0;
+    virtual void log_valgrind(Variable tag, Variable text, Variable type = "both") = 0;
+    virtual void subtest(Variable name) = 0;
 };
 
 /// Empty class (all virtual methods implemented as empty)
@@ -72,8 +104,37 @@ public:
     virtual void stage_file(Variable filename) override { kontr::unused(filename); }
     virtual void stage_student_file(Variable filename) override { kontr::unused(filename); }
 
-    virtual Execution* execution() override { return nullptr; }
+    virtual void addTag(Variable tag) override { kontr::unused(tag); }
+    virtual void addPoints(Variable name, Variable points) override { kontr::unused(name, points); }
+    virtual Variable work_path() override { return ""; }
+    virtual Variable file_path() override { return ""; }
     virtual Compilation* compilation() override { return nullptr; }
+    virtual Variable extra_compiler_flags() override { return ""; }
+    virtual Variable compilation_log_errors() override { return false; }
+    virtual Execution* execution() override { return nullptr; }
+    virtual Execution* analysis() override { return nullptr; }
+    virtual Execution* difference() override { return nullptr; }
+
+    virtual void compile() override {}
+
+    virtual void run(Variable input, std::vector<Variable> args = {}) override { kontr::unused(input, args); }
+    virtual void run_grind(Variable input, std::vector<Variable> args = {}) override { kontr::unused(input, args); }
+
+    virtual void diff_stdout(Variable mode, Variable file) override { kontr::unused(mode, file); }
+    virtual void diff_stderr(Variable mode, Variable file) override { kontr::unused(mode, file); }
+    virtual void diff_generic(Variable mode, Variable file1, Variable file2) override { kontr::unused(mode, file1, file2); }
+
+    virtual void analyze_stdout(Variable desc, Variable cmd) override { kontr::unused(desc, cmd); }
+    virtual void analyze_stderr(Variable desc, Variable cmd) override { kontr::unused(desc, cmd); }
+    virtual void analyze(Variable desc, Variable input, Variable cmd) override { kontr::unused(desc, input, cmd); }
+
+    virtual void log(Variable text, Variable type = "both") override { kontr::unused(text, type); }
+    virtual void log_file(Variable filename, Variable type = "both") override { kontr::unused(filename, type); }
+
+    virtual void log_run_fail(Variable message) override { kontr::unused(message); }
+    virtual void log_tag(Variable tag, Variable text, Variable type = "both") override { kontr::unused(tag, text, type); }
+    virtual void log_valgrind(Variable tag, Variable text, Variable type = "both") override { kontr::unused(tag, text, type); }
+    virtual void subtest(Variable name) override { kontr::unused(name); }
 };
 
 /// Delegator class
@@ -114,13 +175,37 @@ public:
         delegate.stage_compiled_student_file(filename);
     }
 
-    virtual Execution* execution() override {
-        return delegate.execution();
-    }
+    virtual void addTag(Variable tag) override { delegate.addTag(tag); }
+    virtual void addPoints(Variable name, Variable points) override { delegate.addPoints(name, points); }
+    virtual Variable work_path() override { return delegate.work_path(); }
+    virtual Variable file_path() override { return delegate.file_path(); }
+    virtual Compilation* compilation() override { return delegate.compilation(); }
+    virtual Variable extra_compiler_flags() override { return delegate.extra_compiler_flags(); }
+    virtual Variable compilation_log_errors() override { return delegate.compilation_log_errors(); }
+    virtual Execution* execution() override { return delegate.execution(); }
+    virtual Execution* analysis() override { return delegate.analysis(); }
+    virtual Execution* difference() override { return delegate.difference(); }
 
-    virtual Compilation* compilation() override {
-        return delegate.compilation();
-    }
+    virtual void compile() override { delegate.compile(); }
+
+    virtual void run(Variable input, std::vector<Variable> args = {}) override { delegate.run(input, args); }
+    virtual void run_grind(Variable input, std::vector<Variable> args = {}) override { delegate.run_grind(input, args); }
+
+    virtual void diff_stdout(Variable mode, Variable file) override { delegate.diff_stdout(mode, file); }
+    virtual void diff_stderr(Variable mode, Variable file) override { delegate.diff_stderr(mode, file); }
+    virtual void diff_generic(Variable mode, Variable file1, Variable file2) override { delegate.diff_generic(mode, file1, file2); }
+
+    virtual void analyze_stdout(Variable desc, Variable cmd) override { delegate.analyze_stdout(desc, cmd); }
+    virtual void analyze_stderr(Variable desc, Variable cmd) override { delegate.analyze_stderr(desc, cmd); }
+    virtual void analyze(Variable desc, Variable input, Variable cmd) override { delegate.analyze(desc, input, cmd); }
+
+    virtual void log(Variable text, Variable type = "both") override { delegate.log(text, type); }
+    virtual void log_file(Variable filename, Variable type = "both") override { delegate.log_file(filename, type); }
+
+    virtual void log_run_fail(Variable message) override { delegate.log_run_fail(message); }
+    virtual void log_tag(Variable tag, Variable text, Variable type = "both") override { delegate.log_tag(tag, text, type); }
+    virtual void log_valgrind(Variable tag, Variable text, Variable type = "both") override { delegate.log_valgrind(tag, text, type); }
+    virtual void subtest(Variable name) override { delegate.subtest(name); }
 
     /// Get class name of the UnitTest
     const char* __getClassName() const {

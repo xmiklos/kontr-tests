@@ -54,6 +54,47 @@ UNIT_TEST(normal) {
     stage_file("data_simple_structure_page2.html");
 }
 
+UNIT_TEST(functions) {
+    name("functions");
+
+    VAR(tmp, "");
+
+    addTag("test");
+    addPoints("points", 1);
+    tmp = work_path();
+    tmp = file_path();
+    tmp = compilation()->result();
+    extra_compiler_flags() = "flag";
+    compilation_log_errors() = true;
+    tmp = execution()->success();
+    tmp = difference()->exit_value() != 0;
+    tmp = analysis()->exit_type() == "normal";
+    compile();
+
+    run("/dev/null");
+    run("file1", {"file2", "-o", "file3"});
+    run_grind("em");
+    run_grind("file1", {"file2", "-o", "file3"});
+
+    diff_stdout("case", "file");
+    diff_stderr("case", "file");
+    diff_generic("case", "file", "file2");
+
+    analyze_stdout("analysis", "cmd");
+    analyze_stderr("analysis", "cmd");
+    analyze("analysis", "input", "cmd");
+
+    log("text both");
+    log("text teacher", "teacher");
+    log("text student", "student");
+
+    log_file("file");
+    log_run_fail("[FAIL]");
+    log_tag("nanecisto", "smula");
+    log_valgrind("valgrind", "Valgrind:");
+    subtest("nekorektni");
+}
+
 SESSION_NAME(tmp, ".", ".", {}, {})
 
 TEST_CASE("master_test") {
@@ -136,4 +177,86 @@ $unit_test->stage_file('data_simple_structure_page2.html');
 
     cerr.rdbuf(old);
 }
+
+TEST_CASE("functions") {
+    Testing& cg = Testing::instance();
+    cg.storage.nextFileName = "session"; //Must be done before inicialization
+    cg.setSession(tmp);
+    ifstream sess("./session.pl");
+    REQUIRE(sess.good());
+
+    stringstream buffer;
+    streambuf* old = cerr.rdbuf(buffer.rdbuf());
+
+    SECTION("Correct test") {
+        auto filename = "./functions.pl";
+        cg.storage.nextFileName = "functions"; //Must be done before inicialization
+
+        auto tmp = cg.UnitTestInstance(functions);
+
+        REQUIRE(tmp->__getClassName() == string("functions"));
+
+        CHECK_NOTHROW(tmp->execute());
+
+        ifstream generated(filename);
+        REQUIRE(generated.good());
+
+        const char* result =
+R"delimiter($unit_test->name('functions');
+$tmp = '';
+$unit_test->addTag('test');
+$unit_test->addPoints('points' => 1);
+$tmp = $unit_test->work_path;
+$tmp = $unit_test->file_path;
+$tmp = $unit_test->compilation->result;
+$unit_test->extra_compiler_flags = 'flag';
+$unit_test->compilation_log_errors = 1;
+$tmp = $unit_test->execution->success;
+$tmp = ($unit_test->difference->exit_value) != 0;
+$tmp = ($unit_test->analysis->exit_type) eq 'normal';
+$unit_test->compile();
+$unit_test->run('/dev/null');
+$unit_test->run('file1', 'file2', '-o', 'file3');
+$unit_test->run_grind('em');
+$unit_test->run_grind('file1', 'file2', '-o', 'file3');
+$unit_test->diff_stdout('case', 'file');
+$unit_test->diff_stderr('case', 'file');
+$unit_test->diff_generic('case', 'file', 'file2');
+$unit_test->analyze_stdout('analysis', 'cmd');
+$unit_test->analyze_stderr('analysis', 'cmd');
+$unit_test->analyze('analysis', 'input', 'cmd');
+$unit_test->log('text both', 'both');
+$unit_test->log('text teacher', 'teacher');
+$unit_test->log('text student', 'student');
+$unit_test->log_file('file', 'both');
+$unit_test->log_run_fail('[FAIL]');
+$unit_test->log_tag('nanecisto', 'smula', 'both');
+$unit_test->log_valgrind('valgrind', 'Valgrind:', 'both');
+$unit_test->subtest('nekorektni');
+)delimiter";
+
+        stringstream buf;
+        buf << result;
+
+        while(generated.good() && buf.good()) {
+            string gen, res;
+            getline(generated, gen);
+            getline(buf, res);
+            CHECK(gen == res);
+        }
+        CHECK(generated.eof());
+        CHECK(buf.eof());
+
+        generated.close();
+        tmp = nullptr;
+        CHECK(remove(filename) == 0);
+    }
+
+    sess.close();
+    cg.session = nullptr;
+    CHECK(remove("./session.pl") == 0);
+
+    cerr.rdbuf(old);
+}
+
 

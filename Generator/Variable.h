@@ -115,7 +115,8 @@ public:
         if (this != &other) {
             if (testOutPtr()) return *this;
             std::ostream& out = *(T::instance().storage.out_ptr);
-            out << '$' << variableName << " = " << other << ";" << std::endl;
+            __generate(out);
+            out << " = " << other << ";" << std::endl;
             this->data = other.data;
             this->dataType = other.dataType;
         }
