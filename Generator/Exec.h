@@ -24,8 +24,8 @@ public:
     GETTER(stderr_path, String)
     GETTER(work_path, String)
     GETTER(success, Bool)
-    GETTER(exit_value, String)
-    GETTER(exit_type, Int)
+    GETTER(exit_type, String)
+    GETTER(exit_value, Int)
 
 
     virtual void log_stdout() override {
