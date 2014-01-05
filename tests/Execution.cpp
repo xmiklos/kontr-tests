@@ -116,7 +116,7 @@ TEST_CASE("compilation") {
     stringstream buffer;
     streambuf* old = cerr.rdbuf(buffer.rdbuf());
 
-    auto filename = "./unit_execution.pl";
+    auto filename = "./unit_compilation.pl";
     cg.storage.nextFileName = "unit_compilation"; //Must be done before inicialization
 
     auto tmp = cg.UnitTestInstance(compilation);
@@ -126,19 +126,19 @@ TEST_CASE("compilation") {
     REQUIRE(generated.good());
 
     const char* result =
-R"delimiter($unit_test->name('unit_execution');
+R"delimiter($unit_test->name('unit_compilation');
 $tmp = '';
-$tmp = $unit_test->execution->cmd;
-$tmp = $unit_test->execution->stdin_path;
-$tmp = $unit_test->execution->stdout_path;
-$tmp = $unit_test->execution->stderr_path;
-$tmp = $unit_test->execution->work_path;
-$tmp = $unit_test->execution->success;
-$tmp = $unit_test->execution->exit_value;
-$tmp = $unit_test->execution->exit_type;
-$tmp = $unit_test->execution->result;
-$unit_test->execution->log_stdout();
-$unit_test->execution->log_stderr();
+$tmp = $unit_test->compilation->cmd;
+$tmp = $unit_test->compilation->stdin_path;
+$tmp = $unit_test->compilation->stdout_path;
+$tmp = $unit_test->compilation->stderr_path;
+$tmp = $unit_test->compilation->work_path;
+$tmp = $unit_test->compilation->success;
+$tmp = $unit_test->compilation->exit_value;
+$tmp = $unit_test->compilation->exit_type;
+$tmp = $unit_test->compilation->result;
+$unit_test->compilation->log_stdout();
+$unit_test->compilation->log_stderr();
 )delimiter";
 
     stringstream buf;
