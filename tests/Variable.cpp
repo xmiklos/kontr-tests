@@ -169,7 +169,7 @@ TEST_CASE("Conversion"){
     CHECK( ss.str() == "$b = $a;\n");
 }
 
-TEST_CASE("Comparison"){
+TEST_CASE("Comparison and logical operators"){
     Testing& cg = Testing::instance();;
     stringstream ss;
     cg.storage.out_ptr = &ss;
@@ -198,6 +198,25 @@ TEST_CASE("Comparison"){
     c = a != b;
     CHECK( ss.str() == "$c = $a ne $b;\n" );
 
+    b = 44;
+    ss.str("");
+    c = a == b;
+    CHECK( ss.str() == "$c = $a eq $b;\n" );
+
+    ss.str("");
+    c = a != b;
+    CHECK( ss.str() == "$c = $a ne $b;\n" );
+
+    b = "4";
+    a = 4;
+    ss.str("");
+    c = a == b;
+    CHECK( ss.str() == "$c = $a eq $b;\n" );
+
+    ss.str("");
+    c = a != b;
+    CHECK( ss.str() == "$c = $a ne $b;\n" );
+
     ss.str("");
     c = !a;
     CHECK( ss.str() == "$c = !$a;\n");
@@ -209,4 +228,38 @@ TEST_CASE("Comparison"){
     ss.str("");
     c = a || b;
     CHECK( ss.str() == "$c = $a || $b;\n");
+}
+
+TEST_CASE("Plus"){
+    Testing& cg = Testing::instance();;
+    stringstream ss;
+    cg.storage.out_ptr = &ss;
+    using Type = Variable::DataType;
+
+    Variable::Delegator<Testing> a("a", "fa");
+    Variable::Delegator<Testing> b("b", "bu");
+    Variable::Delegator<Testing> c("c", 10);
+
+    ss.str("");
+    c = a + b;
+    CHECK( ss.str() == "$c = $a . $b;\n");
+    CHECK( c.__getDelegate().dataType == Type::String);
+
+    b = 0.5;
+    ss.str("");
+    c = a + b;
+    CHECK( ss.str() == "$c = $a . $b;\n");
+    CHECK( c.__getDelegate().dataType == Type::String);
+
+    a = 4;
+    ss.str("");
+    c = a + b;
+    CHECK( ss.str() == "$c = $a + $b;\n");
+    CHECK( c.__getDelegate().dataType == Type::Float);
+
+    b = 3;
+    ss.str("");
+    c = a + b;
+    CHECK( ss.str() == "$c = $a + $b;\n");
+    CHECK( c.__getDelegate().dataType == Type::Int);
 }

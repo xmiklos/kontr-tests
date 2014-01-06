@@ -104,6 +104,7 @@ public:
     virtual Delegator<T> operator! () const = 0;
     virtual Delegator<T> operator&& (const Delegator<T>& other) const = 0;
     virtual Delegator<T> operator|| (const Delegator<T>& other) const = 0;
+    virtual Delegator<T> operator+ (const Delegator<T>& other) const = 0;
 
 };
 
@@ -202,6 +203,7 @@ public:
     virtual Delegator<T> operator! () const { DELEGATE }
     virtual Delegator<T> operator&& (const Delegator<T>&) const { DELEGATE }
     virtual Delegator<T> operator|| (const Delegator<T>&) const { DELEGATE }
+    virtual Delegator<T> operator+ (const Delegator<T>&) const { DELEGATE }
 
 #undef DELEGATE
 
@@ -285,6 +287,10 @@ public:
 
     virtual Delegator<T> operator|| (const Delegator<T>& other) const {
         return delegate || other;
+    }
+
+    virtual Delegator<T> operator+ (const Delegator<T>& other) const {
+        return delegate + other;
     }
 };
 
