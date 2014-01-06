@@ -292,6 +292,19 @@ public:
     virtual Delegator<T> operator+ (const Delegator<T>& other) const {
         return delegate + other;
     }
+
+#define OP_DEL_SINGLE(OP, TYPE) friend Delegator<T> operator OP (TYPE first, const Delegator<T>& other) \
+        { return Delegator<T>(first) OP other; }
+#define OP_DEL(OP) OP_DEL_SINGLE(OP, bool) OP_DEL_SINGLE(OP, int) OP_DEL_SINGLE(OP, double) OP_DEL_SINGLE(OP, const char *)
+
+    OP_DEL(+)
+    OP_DEL(||)
+    OP_DEL(&&)
+    OP_DEL(==)
+    OP_DEL(!=)
+
+#undef OP_DEL_SINGLE
+#undef OP_DEL
 };
 
 } //Variable

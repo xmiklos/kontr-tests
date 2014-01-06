@@ -228,6 +228,25 @@ TEST_CASE("Comparison and logical operators"){
     ss.str("");
     c = a || b;
     CHECK( ss.str() == "$c = $a || $b;\n");
+
+    SECTION("Check with non-variable") {
+        ss.str("");
+        c = false == a;
+        CHECK( ss.str() == "$c = 0 == $a;\n");
+
+        ss.str("");
+        c = 1 == a;
+        CHECK( ss.str() == "$c = 1 == $a;\n");
+
+        ss.str("");
+        c = 1.5 == a;
+        CHECK( ss.str() == "$c = 1.5 == $a;\n");
+
+        ss.str("");
+        c = "nope" == a;
+        CHECK( ss.str() == "$c = 'nope' eq $a;\n");
+    }
+
 }
 
 TEST_CASE("Plus"){
