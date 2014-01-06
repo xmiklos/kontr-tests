@@ -49,12 +49,11 @@ class Variable : public ::kontr::Variable::Data<T> {
     }
 
     void printVariable() const {
-        using namespace std;
         if (testOutPtr()) return;
         std::ostream& out = *(T::instance().storage.out_ptr);
         out << '$' << variableName << " = ";
         printScalar(out);
-        out << ";" << endl;
+        out << ";" << std::endl;
     }
 
     void printScalar(std::ostream& out) const {
@@ -102,6 +101,12 @@ public:
     CONST(double, f)
     CONST(const char*, s)
 #undef CONST
+    Variable(const char* name, const ::kontr::Variable::Delegator<T>& other) :
+        ::kontr::Variable::Data<T>(name, other) {
+        if (testOutPtr()) return;
+        std::ostream& out = *(T::instance().storage.out_ptr);
+        out << '$' << variableName << " = " << other << ';' << std::endl;
+    }
 
     virtual void __generate(std::ostream &out) const {
         switch(variableType) {
@@ -123,61 +128,71 @@ public:
         return *this;
     }
 
+//Return expression
+#define RET_EXP(TYPE, EXP) return ::kontr::Variable::Delegator<T>::__create( Variable(DataType::TYPE, EXP));
     virtual ::kontr::Variable::Delegator<T> toInt() const {
         if (dataType == DataType::Int) {
             return ::kontr::Variable::Delegator<T>::__create(*this);
         }
-        return ::kontr::Variable::Delegator<T>::__create( Variable(DataType::Int, "0 + " + this->__toString(true)) );
+        RET_EXP(Int, "0 + " + this->__toString(true));
     }
 
     virtual ::kontr::Variable::Delegator<T> toFloat() const {
         if (dataType == DataType::Float) {
             return ::kontr::Variable::Delegator<T>::__create(*this);
         }
-        return ::kontr::Variable::Delegator<T>::__create( Variable(DataType::Int, "0.0 + " + this->__toString(true)) );
+        RET_EXP(Float, "0.0 + " + this->__toString(true));
     }
 
     virtual ::kontr::Variable::Delegator<T> toBool() const {
         if (dataType == DataType::Bool) {
             return ::kontr::Variable::Delegator<T>::__create(*this);
         }
-        return ::kontr::Variable::Delegator<T>::__create( Variable(DataType::Int, "!!" + this->__toString(true)) );
+        RET_EXP(Bool, "!!" + this->__toString(true));
     }
 
     virtual ::kontr::Variable::Delegator<T> toString() const {
         if (dataType == DataType::String) {
             return ::kontr::Variable::Delegator<T>::__create(*this);
         }
-        return ::kontr::Variable::Delegator<T>::__create( Variable(DataType::Int, "\"\" . " + this->__toString(true)) );
+        RET_EXP(String, "\"\" . " + this->__toString(true));
     }
 
     virtual ::kontr::Variable::Delegator<T> operator== (const ::kontr::Variable::Delegator<T>& o) const {
         const Variable& other = o.__getDelegate();
         if (this->dataType == DataType::String && other.dataType == DataType::String) {
-            return ::kontr::Variable::Delegator<T>::__create(
-                            Variable(DataType::Bool, this->__toString(true) + " eq " + other.__toString(true))
-                        );
+            RET_EXP(Bool, this->__toString(true) + " eq " + other.__toString(true));
         }
         else {
-            return ::kontr::Variable::Delegator<T>::__create(
-                            Variable(DataType::Bool, this->__toString(true) + " == " + other.__toString(true))
-                        );
+            RET_EXP(Bool, this->__toString(true) + " == " + other.__toString(true));
         }
     }
 
     virtual ::kontr::Variable::Delegator<T> operator!= (const ::kontr::Variable::Delegator<T>& o) const {
         const Variable& other = o.__getDelegate();
         if (this->dataType == DataType::String && other.dataType == DataType::String) {
-            return ::kontr::Variable::Delegator<T>::__create(
-                            Variable(DataType::Bool, this->__toString(true) + " ne " + other.__toString(true))
-                        );
+            RET_EXP(Bool, this->__toString(true) + " ne " + other.__toString(true));
         }
         else {
-            return ::kontr::Variable::Delegator<T>::__create(
-                            Variable(DataType::Bool, this->__toString(true) + " != " + other.__toString(true))
-                        );
+            RET_EXP(Bool, this->__toString(true) + " != " + other.__toString(true));
         }
     }
+
+    virtual ::kontr::Variable::Delegator<T> operator!() const {
+        RET_EXP(Bool, "!" + this->__toString(true));
+    }
+
+    virtual ::kontr::Variable::Delegator<T> operator&& (const ::kontr::Variable::Delegator<T>& o) const {
+        const Variable& other = o.__getDelegate();
+        RET_EXP(Bool, this->__toString(true) + " && " + other.__toString(true));
+    }
+
+    virtual ::kontr::Variable::Delegator<T> operator|| (const ::kontr::Variable::Delegator<T>& o) const {
+        const Variable& other = o.__getDelegate();
+        RET_EXP(Bool, this->__toString(true) + " || " + other.__toString(true));
+    }
+
+#undef RET_EXP
 
 };
 

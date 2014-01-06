@@ -54,6 +54,8 @@ public:
     VARIABLE_CONST(double, f)
     VARIABLE_CONST(const char*, s)
 #undef VARIABLE_CONST
+    Interface(const char* name, const Delegator<T>& other)
+    { ::kontr::unused(name, other); }
 
     virtual ~Interface() {}
 
@@ -90,14 +92,18 @@ public:
      * @brief operator ==
      * @return
      */
-    virtual Delegator<T> operator== (const Delegator<T>&) const = 0;
+    virtual Delegator<T> operator== (const Delegator<T>& other) const = 0;
 
     /**
       Comparison operator
      * @brief operator !=
      * @return
      */
-    virtual Delegator<T> operator!= (const Delegator<T>&) const = 0;
+    virtual Delegator<T> operator!= (const Delegator<T>& other) const = 0;
+
+    virtual Delegator<T> operator! () const = 0;
+    virtual Delegator<T> operator&& (const Delegator<T>& other) const = 0;
+    virtual Delegator<T> operator|| (const Delegator<T>& other) const = 0;
 
 };
 
@@ -166,6 +172,12 @@ public:
     VARIABLE_CONST(const char*, DataType::String, s)
 
 #undef VARIABLE_CONST
+    Data(const char* name, const Delegator<T>& other) :
+        Data(other.__getDelegate()) {
+        //The other can only be Variable or Expression -> convert to Variable
+        this->variableName = name;
+        this->variableType = VariableType::Variable;
+    }
 
     virtual ~Data() = default;
 };
@@ -187,6 +199,9 @@ public:
 
     virtual Delegator<T> operator== (const Delegator<T>&) const { DELEGATE }
     virtual Delegator<T> operator!= (const Delegator<T>&) const { DELEGATE }
+    virtual Delegator<T> operator! () const { DELEGATE }
+    virtual Delegator<T> operator&& (const Delegator<T>&) const { DELEGATE }
+    virtual Delegator<T> operator|| (const Delegator<T>&) const { DELEGATE }
 
 #undef DELEGATE
 
@@ -230,6 +245,10 @@ public:
     DELEGATOR_CONST(const char*, s)
 #undef DELEGATOR_CONST
 
+    Delegator(const char* name, const Delegator<T>& other) :
+        Interface<T>(name, other),
+        delegate(name, other) {}
+
     virtual void __generate(std::ostream& out) const {
         delegate.__generate(out);
     }
@@ -256,6 +275,16 @@ public:
 
     virtual Delegator<T> operator!= (const Delegator<T>& other) const {
         return delegate != other;
+    }
+
+    virtual Delegator<T> operator! () const { return !delegate; }
+
+    virtual Delegator<T> operator&& (const Delegator<T>& other) const {
+        return delegate && other;
+    }
+
+    virtual Delegator<T> operator|| (const Delegator<T>& other) const {
+        return delegate || other;
     }
 };
 

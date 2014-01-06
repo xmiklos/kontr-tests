@@ -99,6 +99,19 @@ TEST_CASE("Variable") {
     CHECK( a.__getDelegate().dataType == Type::String );
     CHECK( a.__getDelegate().data.String == "string" );
     CHECK( a.__getDelegate().variableName == "a" );
+
+    ss.str("");
+    Variable::Delegator<Testing> b("b", a);
+    CHECK( ss.str() == "$b = $a;\n");
+
+    ss.str("");
+    Variable::Delegator<Testing> c("c", a == b);
+    CHECK( ss.str() == "$c = $a eq $b;\n");
+
+    c = b == a;
+    ss.str("");
+    Variable::Delegator<Testing> d("d", c);
+    CHECK( ss.str() == "$d = $c;\n");
 }
 
 TEST_CASE("Conversion"){
@@ -184,4 +197,16 @@ TEST_CASE("Comparison"){
     ss.str("");
     c = a != b;
     CHECK( ss.str() == "$c = $a ne $b;\n" );
+
+    ss.str("");
+    c = !a;
+    CHECK( ss.str() == "$c = !$a;\n");
+
+    ss.str("");
+    c = a && b;
+    CHECK( ss.str() == "$c = $a && $b;\n");
+
+    ss.str("");
+    c = a || b;
+    CHECK( ss.str() == "$c = $a || $b;\n");
 }
