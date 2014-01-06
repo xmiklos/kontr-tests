@@ -214,6 +214,10 @@ public:
 
     /// Code of the unit test will be in this method
     virtual void execute () = 0;
+
+    typename T::SessionDelegatorInstance& session() const {
+        return T::instance().session;
+    }
 };
 
 

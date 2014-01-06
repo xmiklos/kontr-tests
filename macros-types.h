@@ -66,6 +66,7 @@
         using kontr::UnitTest::Delegator<T>::log_tag; \
         using kontr::UnitTest::Delegator<T>::log_valgrind; \
         using kontr::UnitTest::Delegator<T>::subtest; \
+        using kontr::UnitTest::Delegator<T>::session; \
     }; \
     template<typename T> \
     std::unique_ptr<::kontr::UnitTest::Delegator<T>> NAME() { \

@@ -72,6 +72,30 @@ public:
 
     virtual void post_test() {
     }
+
+    using typename ::kontr::Session::Interface<T>::Variable;
+
+    //Getter
+    virtual Variable has_tag(Variable tag) override {
+        std::stringstream ss;
+        ss << tag;
+        return T::VariableDelegator::__create(
+                    ::kontr::Generator::Variable<T>(::kontr::Variable::DataType::Bool, "$session->has_tag(" + ss.str() + ")")
+                    );
+    }
+
+    //Getter
+    virtual Variable run_type() override {
+        return T::VariableDelegator::__create(
+                        ::kontr::Generator::Variable<T>(::kontr::Variable::DataType::String, "$session->run_type")
+                    );
+    }
+
+    //This methods prints to out in instance
+    virtual void add_summary(Variable message) override {
+        std::ostream& out = *(T::instance().storage.out_ptr);
+        out << "$session->add_summary(" << message << ");" << std::endl;
+    }
 };
 
 #if 0

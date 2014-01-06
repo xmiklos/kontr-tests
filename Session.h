@@ -63,6 +63,29 @@ public:
      * @return
      */
     virtual const std::string& __getFilesDir() const = 0;
+
+    using Variable = typename T::VariableDelegator;
+    /**
+      Return run type - string, either student or teacher
+     * @brief run_type
+     * @return
+     */
+    virtual Variable run_type() = 0;
+
+    /**
+      Check whether tag (string) exists (bool)
+     * @brief has_tag
+     * @param tag
+     * @return
+     */
+    virtual Variable has_tag(Variable tag) = 0;
+
+    /**
+      Add summary to email
+     * @brief add_summary
+     * @param message
+     */
+    virtual void add_summary(Variable message) = 0;
 };
 
 /// Stores data for session
@@ -103,6 +126,10 @@ public:
 
     virtual void pre_test() override {}
     virtual void post_test() override {}
+    using typename Interface<T>::Variable;
+    virtual Variable run_type() override { return ""; }
+    virtual Variable has_tag(Variable tag) override { kontr::unused(tag); return false; }
+    virtual void add_summary(Variable message) override { kontr::unused(message); }
 };
 
 /// Delegator class
@@ -147,6 +174,19 @@ public:
 
     virtual const std::string& __getFilesDir() const {
         return delegate.__getFilesDir();
+    }
+
+    using typename Interface<T>::Variable;
+    virtual Variable run_type() override {
+        return delegate.run_type();
+    }
+
+    virtual Variable has_tag(Variable tag) override {
+        return delegate.has_tag(tag);
+    }
+
+    virtual void add_summary(Variable message) override {
+        delegate.add_summary(message);
     }
 };
 

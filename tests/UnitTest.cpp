@@ -93,6 +93,10 @@ UNIT_TEST(functions) {
     log_tag("nanecisto", "smula");
     log_valgrind("valgrind", "Valgrind:");
     subtest("nekorektni");
+
+    tmp = session()->run_type();
+    tmp = session()->has_tag("none");
+    session()->add_summary("done");
 }
 
 SESSION_NAME(tmp, ".", ".", {}, {})
@@ -233,6 +237,9 @@ $unit_test->log_run_fail('[FAIL]');
 $unit_test->log_tag('nanecisto', 'smula', 'both');
 $unit_test->log_valgrind('valgrind', 'Valgrind:', 'both');
 $unit_test->subtest('nekorektni');
+$tmp = $session->run_type;
+$tmp = $session->has_tag('none');
+$session->add_summary('done');
 )delimiter";
 
         stringstream buf;
