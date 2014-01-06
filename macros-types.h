@@ -77,15 +77,17 @@
 
 #undef UF
 
-/// Session with name
-/// Usage: SESSION_NAME(name, "script", "files", {nanecisto}, {naostro}, [&]{ post;} )
-#define SESSION_NAME(NAME, ...) \
+#define SESSION_COMPLETE(NAME, ...) \
     template <typename T> \
     class CLASS(NAME) : public ::kontr::Session::Delegator<T> { \
     public: \
         CLASS(NAME)();\
         using ::kontr::Session::Delegator<T>::pre_test; \
         using ::kontr::Session::Delegator<T>::post_test; \
+        using ::kontr::Session::Delegator<T>::run_type; \
+        using ::kontr::Session::Delegator<T>::has_tag; \
+        using ::kontr::Session::Delegator<T>::add_summary; \
+        using ::kontr::Session::Delegator<T>::get_points; \
     }; \
     template <typename T> \
     std::unique_ptr<::kontr::Session::Delegator<T>> NAME() { \
@@ -97,6 +99,14 @@
         __VA_ARGS__ \
                                      ) \
     {}
+#define SESSION_CALLBACK(NAME, SCRIPTS, FILES, NANECISTO, NAOSTRO, CALLBACK) SESSION_COMPLETE(NAME, SCRIPTS, FILES, NANECISTO, NAOSTRO, [&] { CALLBACK })
+#define GET_8TH_ARG(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, ...) arg8
+#define SESSION_CHOOSER(...) GET_8TH_ARG(__VA_ARGS__, SESSION_COMPLETE, SESSION_CALLBACK)
+
+/// Session with name
+/// Usage: SESSION_NAME(name, "script", "files", {nanecisto}, {naostro}, [&]{ post;} )
+/// or SESSION_NAME(name, "script", "files", {nanecisto}, {naostro}, valgrind, bonus )
+#define SESSION_NAME(...) SESSION_CHOOSER(__VA_ARGS__)(__VA_ARGS__)
 
 /// Global session (named Session)
 /// Usage: SESSION("script", "files", {nanecisto}, {naostro}, [&]{ post;} )
@@ -104,8 +114,8 @@
 
 #define VAR(name, data) typename T::VariableDelegator name(#name, data)
 
-#define IF_NOELSE(cond, if) T::instance().language._if( (cond) , [&] { if } )
-#define IF_ELSE(cond, if, else) T::instance().language._if( (cond) , [&] { if }, [&] { else } )
+#define IF_NOELSE(cond, IF) T::instance().language._if( (cond) , [&] { IF } )
+#define IF_ELSE(cond, IF, ELSE) T::instance().language._if( (cond) , [&] { IF }, [&] { ELSE })
 
 //http://stackoverflow.com/questions/3046889/optional-parameters-with-c-macros
 #define GET_4RD_ARG(arg1, arg2, arg3, arg4, ...) arg4

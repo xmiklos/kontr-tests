@@ -99,7 +99,7 @@ UNIT_TEST(functions) {
     session()->add_summary("done");
 }
 
-SESSION_NAME(tmp, ".", ".", {}, {})
+SESSION_NAME(tmp, ".", ".", {}, {}, false, false)
 
 TEST_CASE("master_test") {
     Testing& cg = Testing::instance();

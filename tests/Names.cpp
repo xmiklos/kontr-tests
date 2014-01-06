@@ -31,9 +31,9 @@ MASTER_TEST(master_naostro) {
     register_unit(unit_2);
 }
 
-SESSION("", "", {}, {})
+SESSION("", "", {}, {}, false, false)
 
-SESSION_NAME(complex, "", "", {master_name}, {master_naostro})
+SESSION_NAME(complex, "", "", {master_name}, {master_naostro}, false, false)
 
 TEST_CASE("Session") {
     CHECK(std::string("session") == Names::get(::Session));

@@ -97,7 +97,8 @@ UNIT_TEST(unit_testing) {
 SESSION(".",
         "files_dir",
         {master_testing},
-        {})
+        {},
+        false, false)
 
 #if 0
 #define CATCH_CONFIG_MAIN

@@ -14,6 +14,8 @@ class Session : public ::kontr::Session::Data<T> {
     using ::kontr::Session::Data<T>::nanecisto;
     using ::kontr::Session::Data<T>::naostro;
     using ::kontr::Session::Data<T>::post;
+    using ::kontr::Session::Data<T>::valgrind;
+    using ::kontr::Session::Data<T>::bonus;
     std::ofstream out;
 public:
     using typename ::kontr::Session::Interface<T>::TMasterTests;
@@ -21,8 +23,19 @@ public:
 
     Session(const char* scripts_dir, const char* files_dir,
             TMasterTests nanecisto, TMasterTests naostro,
-            TPost post = nullptr) :
+            TPost post) :
         ::kontr::Session::Data<T>(scripts_dir, files_dir, nanecisto, naostro, post),
+        out(std::string(scripts_dir) + "/" + T::instance().storage.nextFileName + ".pl")
+    {
+        if (!out.good()) {
+            T::instance().report.create(::kontr::Report::ERROR, "Could not create output file");
+        }
+    }
+
+    Session(const char* scripts_dir, const char* files_dir,
+            TMasterTests nanecisto, TMasterTests naostro,
+            bool valgrind, bool bonus) :
+        ::kontr::Session::Data<T>(scripts_dir, files_dir, nanecisto, naostro, valgrind, bonus),
         out(std::string(scripts_dir) + "/" + T::instance().storage.nextFileName + ".pl")
     {
         if (!out.good()) {
@@ -71,6 +84,7 @@ public:
     }
 
     virtual void post_test() {
+        if (post != nullptr) post();
     }
 
     using typename ::kontr::Session::Interface<T>::Variable;
@@ -95,6 +109,15 @@ public:
     virtual void add_summary(Variable message) override {
         std::ostream& out = *(T::instance().storage.out_ptr);
         out << "$session->add_summary(" << message << ");" << std::endl;
+    }
+
+    //Getter
+    virtual Variable get_points(Variable points) override {
+        std::stringstream ss;
+        ss << points;
+        return T::VariableDelegator::__create(
+                    ::kontr::Generator::Variable<T>(::kontr::Variable::DataType::Bool, "$session->get_points(" + ss.str() + ")")
+                    );
     }
 };
 

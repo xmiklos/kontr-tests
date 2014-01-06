@@ -83,7 +83,7 @@ MASTER_TEST(normal) {
     stage_file("data_simple_structure_page2.html");
 }
 
-SESSION_NAME(tmp, ".", ".", {normal}, {})
+SESSION_NAME(tmp, ".", ".", {normal}, {}, false, false)
 
 TEST_CASE("master_test") {
     Testing& cg = Testing::instance();

@@ -15,7 +15,7 @@ MASTER_TEST(naostro) {
     this->name("naostro");
 }
 
-SESSION_NAME(both, ".", "files", {nanecisto}, {naostro})
+SESSION_NAME(both, ".", "files", {nanecisto}, {naostro}, false, false)
 
 TEST_CASE("master_test") {
     array<const char*, 3> filenames = {"./session.pl", "./nanecisto.pl", "./naostro.pl"};
@@ -73,3 +73,9 @@ TEST_CASE("master_test") {
     REQUIRE(remove(filenames[1]) == 0);
     REQUIRE(remove(filenames[2]) == 0);
 }
+
+SESSION_NAME(post_default, ".", "files", {}, {}, false, false)
+
+SESSION_NAME(post_both, ".", "files", {}, {}, true, true)
+
+SESSION_NAME(post_func, ".", "files", {}, {}, { add_summary("No points"); })

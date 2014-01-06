@@ -45,7 +45,7 @@ UNIT_TEST(compilation) {
     compilation()->log_stderr();
 }
 
-SESSION_NAME(tmp, ".", ".", {}, {})
+SESSION_NAME(tmp, ".", ".", {}, {}, false, false)
 
 TEST_CASE("execution") {
     Testing& cg = Testing::instance();

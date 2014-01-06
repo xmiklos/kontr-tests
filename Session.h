@@ -18,7 +18,7 @@ template<typename T>
 class Interface {
 public:
     using TMasterTests = std::vector< typename T::MasterDelegator::Function > ;
-    typedef std::function<void(const Interface&)> TPost;
+    typedef std::function<void()> TPost;
 
     /**
      * Configure Session
@@ -27,13 +27,29 @@ public:
      * @param files_dir Files dir location
      * @param nanecisto Master tests to be executed "nanecisto"
      * @param naostro Master tests to be executed "naostro" (apart from nanecisto tests)
-     * @param post Optional post method
+     * @param post Post method
      */
     Interface(const char* scripts_dir, const char* files_dir,
              TMasterTests nanecisto, TMasterTests naostro,
-             TPost post = nullptr)
+             TPost post)
     {
         ::kontr::unused(scripts_dir, files_dir, nanecisto, naostro, post);
+    }
+
+    /**
+      Configure Session
+     * @brief Session
+     * @param scripts_dir Scripts dir location
+     * @param files_dir Files dir location
+     * @param nanecisto Master tests to be executed "nanecisto"
+     * @param naostro Master tests to be executed "naostro" (apart from nanecisto tests)
+     * @param valgrind Is Valgrind used?
+     * @param bonus Is bonus used?
+     */
+    Interface(const char *scripts_dir, const char *files_dir,
+              TMasterTests nanecisto, TMasterTests naostro,
+              bool valgrind, bool bonus) {
+        ::kontr::unused(scripts_dir, files_dir, nanecisto, naostro, valgrind, bonus);
     }
 
     virtual ~Interface() {}
@@ -86,6 +102,14 @@ public:
      * @param message
      */
     virtual void add_summary(Variable message) = 0;
+
+    /**
+      Get summary of points
+     * @brief get_points
+     * @param name
+     * @return
+     */
+    virtual Variable get_points(Variable name) = 0;
 };
 
 /// Stores data for session
@@ -100,15 +124,27 @@ public:
     const std::string files_dir;
     const TMasterTests nanecisto;
     const TMasterTests naostro;
+    ///If this is not nullptr, it is a valid callback and valgrind and bonus are false
     const TPost post;
+    const bool valgrind;
+    const bool bonus;
 
     Data(const char* scripts_dir, const char* files_dir,
              TMasterTests nanecisto, TMasterTests naostro,
-             TPost post = nullptr) :
+             TPost post) :
         Interface<T>(scripts_dir, files_dir, nanecisto, naostro, post),
         scripts_dir(scripts_dir), files_dir(files_dir),
         nanecisto(nanecisto), naostro(naostro),
-        post(post)
+        post(post), valgrind(false), bonus(false)
+    {}
+
+    Data(const char *scripts_dir, const char *files_dir,
+            TMasterTests nanecisto, TMasterTests naostro,
+            bool valgrind, bool bonus) :
+        Interface<T>(scripts_dir, files_dir, nanecisto, naostro, valgrind, bonus),
+        scripts_dir(scripts_dir), files_dir(files_dir),
+        nanecisto(nanecisto), naostro(naostro),
+        post(nullptr), valgrind(valgrind), bonus(bonus)
     {}
 
     virtual ~Data() {}
@@ -130,6 +166,7 @@ public:
     virtual Variable run_type() override { return ""; }
     virtual Variable has_tag(Variable tag) override { kontr::unused(tag); return false; }
     virtual void add_summary(Variable message) override { kontr::unused(message); }
+    virtual Variable get_points(Variable points) override { kontr::unused(points); return false; }
 };
 
 /// Delegator class
@@ -149,9 +186,17 @@ public:
 protected:
     Delegator(const char* className, const char* scripts_dir, const char* files_dir,
                      TMasterTests nanecisto, TMasterTests naostro,
-                     TPost post = nullptr) :
+                     TPost post) :
         Interface<T>(scripts_dir, files_dir, nanecisto, naostro, post),
         delegate(scripts_dir, files_dir, nanecisto, naostro, post),
+        className(className)
+    {}
+
+    Delegator(const char* className, const char* scripts_dir, const char* files_dir,
+                     TMasterTests nanecisto, TMasterTests naostro,
+                     bool valgrind, bool bonus) :
+        Interface<T>(scripts_dir, files_dir, nanecisto, naostro, valgrind, bonus),
+        delegate(scripts_dir, files_dir, nanecisto, naostro, valgrind, bonus),
         className(className)
     {}
 public:
@@ -187,6 +232,10 @@ public:
 
     virtual void add_summary(Variable message) override {
         delegate.add_summary(message);
+    }
+
+    virtual Variable get_points(Variable points) override {
+        return delegate.get_points(points);
     }
 };
 
