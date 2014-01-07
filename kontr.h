@@ -8,6 +8,8 @@ namespace kontr {
 
 #include "Reporter.h"
 #include "Configuration.h"
+#include "macros-types.h"
+
 
 #include "Session.h"
 #include "MasterTest.h"
@@ -24,7 +26,5 @@ namespace kontr {
 #include "Generator/Session.h"
 #include "Generator/Language.h"
 #include "Generator/Configuration.h"
-
-#include "macros-types.h"
 
 #endif // KONTR_H

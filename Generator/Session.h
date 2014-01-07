@@ -84,7 +84,43 @@ public:
     }
 
     virtual void post_test() {
-        if (post != nullptr) post();
+        out << "sub post_test {" << std::endl;
+        T::instance().storage.out_ptr = &out;
+        if (post != nullptr) {
+            post();
+        }
+        else {
+            IF(run_type() == "student", {
+                IF(has_tag("nanecisto"), {
+                   add_summary("* test nanecisto neprosel");
+                }, {
+                   add_summary("* test nanecisto prosel");
+                });
+            },
+            {
+                   VAR(points, get_points("points"));
+                   IF (has_tag("nanecisto") || has_tag("naostro"),
+                   {
+                       add_summary("* v testu byla nalezena chyba\n");
+                       add_summary("* pocet bodu je: " + points + "\n");
+                   },
+                   {
+                       add_summary("* test prosel kompletne spravne\n");
+                       add_summary("* pocet bodu za funcionalitu je: " + points + "\n");
+                       if (bonus) {
+                           VAR(bonus, get_points("bonus"));
+                           add_summary("* pocet bodu za bonus je: " + bonus + "\n");
+                       }
+                   });
+                   if (valgrind) {
+                       IF(has_tag("valgrind"),
+                        { add_summary("NEPROSLA kontrola Valgrindem, -1 bod\n"); },
+                        { add_summary("Prosla kontrola Valgrindem.\n"); }
+                       );
+                   }
+            });
+        }
+        out << "}" << std::endl;
     }
 
     using typename ::kontr::Session::Interface<T>::Variable;

@@ -79,3 +79,159 @@ SESSION_NAME(post_default, ".", "files", {}, {}, false, false)
 SESSION_NAME(post_both, ".", "files", {}, {}, true, true)
 
 SESSION_NAME(post_func, ".", "files", {}, {}, { add_summary("No points"); })
+
+TEST_CASE("post_func") {
+    Testing &cg = Testing::instance();
+    cg.storage.names = kontr::Names::getAll(post_func);
+    cg.storage.nextFileName = cg.storage.names.session.c_str();
+    cg.setSession(post_func);
+
+    ifstream session;
+    session.open("./session.pl");
+    REQUIRE(session.good());
+
+    cg.session->post_test();
+    cg.session = nullptr;
+
+    //Check contents
+    const char* result =
+R"delimiter(sub post_test {
+$session->add_summary('No points');
+}
+)delimiter";
+    stringstream buf;
+    buf << result;
+
+    while(session.good() && buf.good()) {
+        string gen, res;
+        getline(session, gen);
+        getline(buf, res);
+        CHECK(gen == res);
+    }
+    CHECK(session.eof());
+    CHECK(buf.eof());
+
+    // Cleanup
+    session.close();
+    REQUIRE(remove("./session.pl") == 0);
+}
+
+TEST_CASE("post_default") {
+    Testing &cg = Testing::instance();
+    cg.storage.names = kontr::Names::getAll(post_default);
+    cg.storage.nextFileName = cg.storage.names.session.c_str();
+    cg.setSession(post_default);
+
+    ifstream session;
+    session.open("./session.pl");
+    REQUIRE(session.good());
+
+    cg.session->post_test();
+    cg.session = nullptr;
+
+    //Check contents
+    const char* result =
+R"delimiter(sub post_test {
+if (($session->run_type) eq 'student') {
+if ($session->has_tag('nanecisto')) {
+$session->add_summary('* test nanecisto neprosel');
+} else {
+$session->add_summary('* test nanecisto prosel');
+}
+} else {
+$points = $session->get_points('points');
+if (($session->has_tag('nanecisto')) || ($session->has_tag('naostro'))) {
+$session->add_summary('* v testu byla nalezena chyba
+');
+$session->add_summary(('* pocet bodu je: ' . $points) . '
+');
+} else {
+$session->add_summary('* test prosel kompletne spravne
+');
+$session->add_summary(('* pocet bodu za funcionalitu je: ' . $points) . '
+');
+}
+}
+}
+)delimiter";
+    stringstream buf;
+    buf << result;
+
+    while(session.good() && buf.good()) {
+        string gen, res;
+        getline(session, gen);
+        getline(buf, res);
+        CHECK(gen == res);
+    }
+    CHECK(session.eof());
+    CHECK(buf.eof());
+
+    // Cleanup
+    session.close();
+    REQUIRE(remove("./session.pl") == 0);
+}
+
+TEST_CASE("post_both") {
+    Testing &cg = Testing::instance();
+    cg.storage.names = kontr::Names::getAll(post_both);
+    cg.storage.nextFileName = cg.storage.names.session.c_str();
+    cg.setSession(post_both);
+
+    ifstream session;
+    session.open("./session.pl");
+    REQUIRE(session.good());
+
+    cg.session->post_test();
+    cg.session = nullptr;
+
+    //Check contents
+    const char* result =
+R"delimiter(sub post_test {
+if (($session->run_type) eq 'student') {
+if ($session->has_tag('nanecisto')) {
+$session->add_summary('* test nanecisto neprosel');
+} else {
+$session->add_summary('* test nanecisto prosel');
+}
+} else {
+$points = $session->get_points('points');
+if (($session->has_tag('nanecisto')) || ($session->has_tag('naostro'))) {
+$session->add_summary('* v testu byla nalezena chyba
+');
+$session->add_summary(('* pocet bodu je: ' . $points) . '
+');
+} else {
+$session->add_summary('* test prosel kompletne spravne
+');
+$session->add_summary(('* pocet bodu za funcionalitu je: ' . $points) . '
+');
+$bonus = $session->get_points('bonus');
+$session->add_summary(('* pocet bodu za bonus je: ' . $bonus) . '
+');
+}
+if ($session->has_tag('valgrind')) {
+$session->add_summary('NEPROSLA kontrola Valgrindem, -1 bod
+');
+} else {
+$session->add_summary('Prosla kontrola Valgrindem.
+');
+}
+}
+}
+)delimiter";
+    stringstream buf;
+    buf << result;
+
+    while(session.good() && buf.good()) {
+        string gen, res;
+        getline(session, gen);
+        getline(buf, res);
+        CHECK(gen == res);
+    }
+    CHECK(session.eof());
+    CHECK(buf.eof());
+
+    // Cleanup
+    session.close();
+    REQUIRE(remove("./session.pl") == 0);
+}
