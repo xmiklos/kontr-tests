@@ -123,5 +123,6 @@
 #define IF(...) IF_CHOOSER(__VA_ARGS__)(__VA_ARGS__)
 #define WHILE(cond, while) T::instance().language._while(cond, [&] { while })
 #define PERL(code) T::instance().language.perl(code)
+#define RETURN T::instance().language._return
 
 #endif // MACROSTYPES_H

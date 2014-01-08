@@ -37,6 +37,11 @@ public:
         std::ostream& out = *(T::instance().storage.out_ptr);
         out << code << std::endl;
     }
+    
+    virtual void _return() {
+		std::ostream& out = *(T::instance().storage.out_ptr);
+        out << "return;" << std::endl;
+	}
 };
 
 } //Generator

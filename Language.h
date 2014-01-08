@@ -38,6 +38,8 @@ public:
      * @param code
      */
     virtual void perl(const char* code) = 0;
+    
+    virtual void _return() = 0;
 };
 
 /// Empty class
@@ -56,6 +58,7 @@ public:
     virtual void perl(const char *code) {
         kontr::unused(code);
     }
+    virtual void _return() {}
 };
 
 /// Delegator class
@@ -77,6 +80,8 @@ public:
     virtual void perl(const char *code) {
         delegate.perl(code);
     }
+    
+    virtual void _return() { delegate._return(); }
 };
 
 } //Language

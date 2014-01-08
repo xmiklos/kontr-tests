@@ -62,3 +62,13 @@ TEST_CASE("while"){
     WHILE( b == 10, a = 20; );
     CHECK(ss.str() == "while ($b == 10) {\n$a = 20;\n}\n");
 }
+
+TEST_CASE("Control fow"){
+    Testing& cg = Testing::instance();
+    using T = Testing;
+    stringstream ss;
+    cg.storage.out_ptr = &ss;
+
+    RETURN();
+    CHECK(ss.str() == "return;\n");
+}
