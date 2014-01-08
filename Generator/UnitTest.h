@@ -26,7 +26,7 @@ class UnitTest : public ::kontr::UnitTest::Interface<T>  {
 
 public:
     UnitTest() : out(T::instance().session->__getScriptsDir() + "/" +
-                       T::instance().storage.nextFileName + ".pl") {
+                       T::instance().storage.nextFileName) {
         if (!out.good()) {
             T::instance().report.create(Report::ERROR, "Could not open file for writing");
         }

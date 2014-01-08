@@ -24,19 +24,19 @@ MASTER_TEST(doublename) {
 */
 
 UNIT_TEST(matrix_2) {
-    name("unit_matrix_test2");
+    name("unit_matrix_test2.pl");
 }
 
 UNIT_TEST(matrix_3) {
-    name("unit_matrix_test3");
+    name("unit_matrix_test3.pl");
 }
 
 UNIT_TEST(parser) {
-    name("unit_parser_test2");
+    name("unit_parser_test2.pl");
 }
 
 MASTER_TEST(normal) {
-    name("master_testing");
+    name("master_testing.pl");
 
     VAR(matrix, "matrix.cpp");
 
@@ -87,7 +87,7 @@ SESSION_NAME(tmp, ".", ".", {normal}, {}, false, false)
 
 TEST_CASE("master_test") {
     Testing& cg = Testing::instance();
-    cg.storage.nextFileName = "session"; //Must be done before inicialization
+    cg.storage.nextFileName = "session.pl"; //Must be done before inicialization
     cg.storage.names = kontr::Names::getAll(tmp);
     cg.setSession(tmp);
     ifstream sess("./session.pl");
@@ -126,7 +126,7 @@ TEST_CASE("master_test") {
 
     SECTION("Correct test") {
         auto filename = "./master_testing.pl";
-        cg.storage.nextFileName = "master_testing"; //Must be done before inicialization
+        cg.storage.nextFileName = "master_testing.pl"; //Must be done before inicialization
 
         auto tmp = cg.MasterTestInstance(normal);
 
@@ -154,7 +154,7 @@ TEST_CASE("master_test") {
 
         //Check contents
         const char* result =
-R"delimiter($master_test->name('master_testing');
+R"delimiter($master_test->name('master_testing.pl');
 $matrix = 'matrix.cpp';
 $master_test->register_unit('unit_matrix_test2.pl');
 $master_test->register_unit('unit_matrix_test3.pl');

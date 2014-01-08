@@ -22,7 +22,7 @@ class MasterTest : public ::kontr::MasterTest::Interface<T>  {
 
 public:
     MasterTest() : out(T::instance().session->__getScriptsDir() + "/" +
-                       T::instance().storage.nextFileName + ".pl") {
+                       T::instance().storage.nextFileName) {
         if (!out.good()) {
             T::instance().report.create(Report::ERROR, "Could not open file for writing");
         }
@@ -45,7 +45,7 @@ public:
             T::instance().report.create(Report::ERROR, "Invalid unit test class name");
         }
 
-        Variable print = (std::get<1>(current) + ".pl").c_str();
+        Variable print = std::get<1>(current).c_str();
         out << variable << "->register_unit(" << print << ");" << std::endl;
 
         //Generate code for unit test

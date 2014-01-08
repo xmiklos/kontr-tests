@@ -11,7 +11,7 @@ using namespace kontr;
 using namespace std;
 
 UNIT_TEST(execution) {
-    name("unit_execution");
+    name("unit_execution.pl");
 
     VAR(tmp, "");
     tmp = execution()->cmd();
@@ -28,7 +28,7 @@ UNIT_TEST(execution) {
 }
 
 UNIT_TEST(compilation) {
-    name("unit_compilation");
+    name("unit_compilation.pl");
 
     VAR(tmp, "");
     tmp = compilation()->cmd();
@@ -49,7 +49,7 @@ SESSION_NAME(tmp, ".", ".", {}, {}, false, false)
 
 TEST_CASE("execution") {
     Testing& cg = Testing::instance();
-    cg.storage.nextFileName = "session"; //Must be done before inicialization
+    cg.storage.nextFileName = "session.pl"; //Must be done before inicialization
     cg.setSession(tmp);
     ifstream sess("./session.pl");
     REQUIRE(sess.good());
@@ -58,7 +58,7 @@ TEST_CASE("execution") {
     streambuf* old = cerr.rdbuf(buffer.rdbuf());
 
     auto filename = "./unit_execution.pl";
-    cg.storage.nextFileName = "unit_execution"; //Must be done before inicialization
+    cg.storage.nextFileName = "unit_execution.pl"; //Must be done before inicialization
 
     auto tmp = cg.UnitTestInstance(execution);
 
@@ -68,7 +68,7 @@ TEST_CASE("execution") {
     REQUIRE(generated.good());
 
     const char* result =
-R"delimiter($unit_test->name('unit_execution');
+R"delimiter($unit_test->name('unit_execution.pl');
 $tmp = '';
 $tmp = $unit_test->execution->cmd;
 $tmp = $unit_test->execution->stdin_path;
@@ -108,7 +108,7 @@ $unit_test->execution->log_stderr();
 
 TEST_CASE("compilation") {
     Testing& cg = Testing::instance();
-    cg.storage.nextFileName = "session"; //Must be done before inicialization
+    cg.storage.nextFileName = "session.pl"; //Must be done before inicialization
     cg.setSession(tmp);
     ifstream sess("./session.pl");
     REQUIRE(sess.good());
@@ -117,7 +117,7 @@ TEST_CASE("compilation") {
     streambuf* old = cerr.rdbuf(buffer.rdbuf());
 
     auto filename = "./unit_compilation.pl";
-    cg.storage.nextFileName = "unit_compilation"; //Must be done before inicialization
+    cg.storage.nextFileName = "unit_compilation.pl"; //Must be done before inicialization
 
     auto tmp = cg.UnitTestInstance(compilation);
     CHECK_NOTHROW(tmp->execute());
@@ -126,7 +126,7 @@ TEST_CASE("compilation") {
     REQUIRE(generated.good());
 
     const char* result =
-R"delimiter($unit_test->name('unit_compilation');
+R"delimiter($unit_test->name('unit_compilation.pl');
 $tmp = '';
 $tmp = $unit_test->compilation->cmd;
 $tmp = $unit_test->compilation->stdin_path;

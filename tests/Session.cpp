@@ -8,11 +8,11 @@
 using namespace std;
 
 MASTER_TEST(nanecisto) {
-    this->name("nanecisto");
+    name("nanecisto.pl");
 }
 
 MASTER_TEST(naostro) {
-    this->name("naostro");
+    name("naostro.pl");
 }
 
 SESSION_NAME(both, ".", "files", {nanecisto}, {naostro}, false, false)

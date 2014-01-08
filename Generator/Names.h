@@ -28,6 +28,10 @@ struct NameStorage {
     All data;
 };
 
+bool has_extension(const std::string& name) {
+	return name.length() > 3 && name.substr(name.length() - 3) == ".pl";
+}
+
 template<typename T>
 class Session : public ::kontr::Session::Empty<T> {
 public:
@@ -60,6 +64,10 @@ public:
     using typename ::kontr::MasterTest::Empty<T>::Unit;
 
     virtual void name(const char* name) {
+		if (!has_extension(name)) {
+			T::instance().report.create(Report::WARNING, 
+				std::string("Master test name does not have .pl extension: ") + name, false);
+		}
         if (T::instance().storage.all) {
             NameStorage& storage = T::instance().storage;
             storage.data.masterTests.push_back(std::make_tuple<std::string, std::string>(storage.className, name));
@@ -85,6 +93,10 @@ template<typename T>
 class UnitTest : public ::kontr::UnitTest::Empty<T> {
 public:
     virtual void name(const char* name) {
+		if (!has_extension(name)) {
+			T::instance().report.create(Report::WARNING, 
+				std::string("Unit test name does not have .pl extension: ") + name, false);
+		}
         if (T::instance().storage.all) {
             NameStorage& storage = T::instance().storage;
             storage.data.unitTests[storage.data.currentMasterIndex].push_back(
@@ -113,7 +125,7 @@ CONFIGURATION(Configuration,
 /// Get filename for Session - always session
 const char* get(Configuration::SessionDelegator::Function f) {
     kontr::unused(f);
-    return "session"; //Constant
+    return "session.pl"; //Constant
 }
 
 /// Get filename for MasterTest

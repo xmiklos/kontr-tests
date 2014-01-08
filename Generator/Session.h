@@ -25,7 +25,7 @@ public:
             TMasterTests nanecisto, TMasterTests naostro,
             TPost post) :
         ::kontr::Session::Data<T>(scripts_dir, files_dir, nanecisto, naostro, post),
-        out(std::string(scripts_dir) + "/" + T::instance().storage.nextFileName + ".pl")
+        out(std::string(scripts_dir) + "/" + T::instance().storage.nextFileName)
     {
         if (!out.good()) {
             T::instance().report.create(::kontr::Report::ERROR, "Could not create output file");
@@ -36,7 +36,7 @@ public:
             TMasterTests nanecisto, TMasterTests naostro,
             bool valgrind, bool bonus) :
         ::kontr::Session::Data<T>(scripts_dir, files_dir, nanecisto, naostro, valgrind, bonus),
-        out(std::string(scripts_dir) + "/" + T::instance().storage.nextFileName + ".pl")
+        out(std::string(scripts_dir) + "/" + T::instance().storage.nextFileName)
     {
         if (!out.good()) {
             T::instance().report.create(::kontr::Report::ERROR, "Could not create output file");
@@ -57,7 +57,7 @@ public:
             if (instance->__getClassName() != std::get<0>(names)) {
                 T::instance().report.create(Report::ERROR, "Invalid master test class name");
             }
-            Variable name = (strName + ".pl").c_str();
+            Variable name = strName.c_str();
             out << "\t$session->register_master(" << name << ");" << std::endl;
             instance->execute();
             ++ s.names.currentMasterIndex;
@@ -73,7 +73,7 @@ public:
                 if (instance->__getClassName() != std::get<0>(names)) {
                     T::instance().report.create(Report::ERROR, "Invalid master test class name");
                 }
-                Variable name = (strName + ".pl").c_str();
+                Variable name = strName.c_str();
                 out << "\t\t$session->register_master(" << name << ");" << std::endl;
                 instance->execute();
                 ++ s.names.currentMasterIndex;

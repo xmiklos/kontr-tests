@@ -11,7 +11,7 @@ using namespace kontr;
 using namespace std;
 
 UNIT_TEST(normal) {
-    name("unit_testing");
+    name("unit_testing.pl");
 
     VAR(matrix, "matrix.cpp");
 
@@ -55,7 +55,7 @@ UNIT_TEST(normal) {
 }
 
 UNIT_TEST(functions) {
-    name("functions");
+    name("functions.pl");
 
     VAR(tmp, "");
 
@@ -103,7 +103,7 @@ SESSION_NAME(tmp, ".", ".", {}, {}, false, false)
 
 TEST_CASE("master_test") {
     Testing& cg = Testing::instance();
-    cg.storage.nextFileName = "session"; //Must be done before inicialization
+    cg.storage.nextFileName = "session.pl"; //Must be done before inicialization
     cg.setSession(tmp);
     ifstream sess("./session.pl");
     REQUIRE(sess.good());
@@ -113,7 +113,7 @@ TEST_CASE("master_test") {
 
     SECTION("Correct test") {
         auto filename = "./unit_testing.pl";
-        cg.storage.nextFileName = "unit_testing"; //Must be done before inicialization
+        cg.storage.nextFileName = "unit_testing.pl"; //Must be done before inicialization
 
         auto tmp = cg.UnitTestInstance(normal);
 
@@ -125,7 +125,7 @@ TEST_CASE("master_test") {
         REQUIRE(generated.good());
 
         const char* result =
-R"delimiter($unit_test->name('unit_testing');
+R"delimiter($unit_test->name('unit_testing.pl');
 $matrix = 'matrix.cpp';
 $unit_test->stage_compiled_student_file($matrix);
 $unit_test->stage_compiled_student_file('pagerank.cpp');
@@ -184,7 +184,7 @@ $unit_test->stage_file('data_simple_structure_page2.html');
 
 TEST_CASE("functions") {
     Testing& cg = Testing::instance();
-    cg.storage.nextFileName = "session"; //Must be done before inicialization
+    cg.storage.nextFileName = "session.pl"; //Must be done before inicialization
     cg.setSession(tmp);
     ifstream sess("./session.pl");
     REQUIRE(sess.good());
@@ -194,7 +194,7 @@ TEST_CASE("functions") {
 
     SECTION("Correct test") {
         auto filename = "./functions.pl";
-        cg.storage.nextFileName = "functions"; //Must be done before inicialization
+        cg.storage.nextFileName = "functions.pl"; //Must be done before inicialization
 
         auto tmp = cg.UnitTestInstance(functions);
 
@@ -206,7 +206,7 @@ TEST_CASE("functions") {
         REQUIRE(generated.good());
 
         const char* result =
-R"delimiter($unit_test->name('functions');
+R"delimiter($unit_test->name('functions.pl');
 $tmp = '';
 $unit_test->addTag('test');
 $unit_test->addPoints('points' => 1);
