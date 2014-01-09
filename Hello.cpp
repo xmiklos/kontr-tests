@@ -40,7 +40,7 @@ UNIT_TEST(unit_diff) {
     diff_stdout("casespace", "output2");
     IF (difference()->exit_value() != 0 && fail != 0,
         {
-            log_tag("nanecisto","");
+            log_tag("nanecisto","Neshodny vystup");
             add_tag("different_output");
             RETURN();
         });
