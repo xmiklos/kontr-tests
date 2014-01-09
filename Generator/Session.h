@@ -1,7 +1,7 @@
 #ifndef GENERATOR_SESSION_H
 #define GENERATOR_SESSION_H
 
-#include "../kontr.h"
+#include "../kontr-internal.h"
 #include <tuple>
 
 namespace kontr {

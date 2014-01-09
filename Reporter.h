@@ -1,7 +1,7 @@
 #ifndef REPORTER_H
 #define REPORTER_H
 
-#include "kontr.h"
+#include "kontr-internal.h"
 
 namespace kontr {
 namespace Report {

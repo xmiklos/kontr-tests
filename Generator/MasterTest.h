@@ -1,7 +1,7 @@
 #ifndef GENERATOR_MASTERTEST_H
 #define GENERATOR_MASTERTEST_H
 
-#include "../kontr.h"
+#include "../kontr-internal.h"
 
 namespace kontr {
 namespace Generator {

@@ -1,7 +1,7 @@
 #ifndef CONFIGURATION_H
 #define CONFIGURATION_H
 
-#include "kontr.h"
+#include "kontr-internal.h"
 
 namespace kontr {
 namespace Configuration {

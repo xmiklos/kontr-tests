@@ -1,7 +1,7 @@
 #ifndef GENERATOR_UNITTEST_H
 #define GENERATOR_UNITTEST_H
 
-#include "../kontr.h"
+#include "../kontr-internal.h"
 
 namespace kontr {
 namespace Generator {
@@ -56,11 +56,11 @@ public:
     }
 
 
-    virtual void addTag(Variable tag) override {
-        out << variable << "->addTag(" << tag << ");" << std::endl;
+    virtual void add_tag(Variable tag) override {
+        out << variable << "->add_tag(" << tag << ");" << std::endl;
     }
-    virtual void addPoints(Variable name, Variable points) override {
-        out << variable << "->addPoints(" << name << " => " << points << ");" << std::endl;
+    virtual void add_points(Variable name, Variable points) override {
+        out << variable << "->add_points(" << name << " => " << points << ");" << std::endl;
     }
 
 #define GETTER(NAME, TYPE) virtual Variable NAME() override {\

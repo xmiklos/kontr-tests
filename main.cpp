@@ -1,6 +1,6 @@
 //Main for testing only
 #include <iostream>
-#include "kontr.h"
+#include "kontr-internal.h"
 
 MASTER_TEST(master_testing) {
     name("master_testing");

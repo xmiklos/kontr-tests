@@ -59,8 +59,8 @@ UNIT_TEST(functions) {
 
     VAR(tmp, "");
 
-    addTag("test");
-    addPoints("points", 1);
+    add_tag("test");
+    add_points("points", 1);
     tmp = work_path();
     tmp = file_path();
     tmp = compilation()->result();
@@ -208,8 +208,8 @@ TEST_CASE("functions") {
         const char* result =
 R"delimiter($unit_test->name('functions.pl');
 $tmp = '';
-$unit_test->addTag('test');
-$unit_test->addPoints('points' => 1);
+$unit_test->add_tag('test');
+$unit_test->add_points('points' => 1);
 $tmp = $unit_test->work_path;
 $tmp = $unit_test->file_path;
 $tmp = $unit_test->compilation->result;

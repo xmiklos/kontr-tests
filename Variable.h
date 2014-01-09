@@ -1,7 +1,7 @@
 #ifndef VARIABLE_H
 #define VARIABLE_H
 
-#include "kontr.h"
+#include "kontr-internal.h"
 
 namespace kontr {
 namespace Variable {

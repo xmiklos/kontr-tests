@@ -1,7 +1,7 @@
 #ifndef MASTERTEST_H
 #define MASTERTEST_H
 
-#include "kontr.h"
+#include "kontr-internal.h"
 
 namespace kontr {
 namespace MasterTest {

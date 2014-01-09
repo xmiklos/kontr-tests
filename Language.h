@@ -1,7 +1,7 @@
 #ifndef LANGUAGE_H
 #define LANGUAGE_H
 
-#include "kontr.h"
+#include "kontr-internal.h"
 
 namespace kontr {
 namespace Language {

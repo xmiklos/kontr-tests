@@ -1,62 +1,32 @@
 #ifndef KONTR_H
 #define KONTR_H
 
-namespace kontr {
-    /// Method for not printing unused parameters in interfaces' constructors
-    template<class... T> void unused(T&&...) {}
+/// File to be used by tests
+/// Contains all kontr files, main and macros against using C control flow methods
+
+#include "kontr-internal.h"
+
+#define MAIN \
+int main(void) { \
+    using namespace std; \
+    using namespace kontr; \
+    cout << "Kontr Tests Generator & Verificator" << endl << endl; \
+\
+    Generator::Configuration &cg = Generator::Configuration::instance(); \
+\
+    cout << "Getting names of tests... "; \
+    cg.storage.names = Names::getAll(::Session); \
+    cout << "done!" << endl; \
+\
+    cg.storage.nextFileName = cg.storage.names.session.c_str(); \
+\
+    cout << "Generating... "; \
+    cg.setSession(::Session); \
+    cg.session->pre_test(); \
+    cg.session->post_test(); \
+    cout << "done!" << endl; \
+\
+    cout << "Output scripts directory: " << cg.session->__getScriptsDir() << endl; \
 }
-
-// Includes
-#include <vector>
-#include <functional>
-#include <iostream>
-#include <memory>
-#include <string>
-#include <tuple>
-#include <set>
-#include <map>
-#include <utility>
-#include <cstdlib>
-#include <type_traits>
-#include <fstream>
-#include <algorithm>
-#include <sstream>
-
-#ifdef BACKTRACEXX
-#include "backtracexx/backtracexx.hpp"
-#endif
-
-// Declarations
-namespace kontr {
-
-namespace Session {
-
-template<typename T>
-class Delegator;
-
-} //Session
-
-} //kontr
-
-
-#include "Reporter.h"
-#include "Configuration.h"
-#include "macros-types.h"
-
-#include "Variable.h"
-#include "Exec.h"
-#include "UnitTest.h"
-#include "MasterTest.h"
-#include "Session.h"
-#include "Language.h"
-
-#include "Generator/Names.h"
-#include "Generator/MasterTest.h"
-#include "Generator/Variable.h"
-#include "Generator/Exec.h"
-#include "Generator/UnitTest.h"
-#include "Generator/Session.h"
-#include "Generator/Language.h"
-#include "Generator/Configuration.h"
 
 #endif // KONTR_H

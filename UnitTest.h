@@ -1,7 +1,7 @@
 #ifndef UNITTEST_H
 #define UNITTEST_H
 
-#include "kontr.h"
+#include "kontr-internal.h"
 
 namespace kontr {
 namespace UnitTest {
@@ -51,8 +51,8 @@ public:
      */
     virtual void stage_compiled_student_file(Variable filename) = 0;
 
-    virtual void addTag(Variable tag) = 0;
-    virtual void addPoints(Variable name, Variable points) = 0;
+    virtual void add_tag(Variable tag) = 0;
+    virtual void add_points(Variable name, Variable points) = 0;
     virtual Variable work_path() = 0; //string
     virtual Variable file_path() = 0; //string
 
@@ -105,8 +105,8 @@ public:
     virtual void stage_file(Variable filename) override { kontr::unused(filename); }
     virtual void stage_student_file(Variable filename) override { kontr::unused(filename); }
 
-    virtual void addTag(Variable tag) override { kontr::unused(tag); }
-    virtual void addPoints(Variable name, Variable points) override { kontr::unused(name, points); }
+    virtual void add_tag(Variable tag) override { kontr::unused(tag); }
+    virtual void add_points(Variable name, Variable points) override { kontr::unused(name, points); }
     virtual Variable work_path() override { return ""; }
     virtual Variable file_path() override { return ""; }
     virtual Compilation* compilation() override { return nullptr; }
@@ -176,8 +176,8 @@ public:
         delegate.stage_compiled_student_file(filename);
     }
 
-    virtual void addTag(Variable tag) override { delegate.addTag(tag); }
-    virtual void addPoints(Variable name, Variable points) override { delegate.addPoints(name, points); }
+    virtual void add_tag(Variable tag) override { delegate.add_tag(tag); }
+    virtual void add_points(Variable name, Variable points) override { delegate.add_points(name, points); }
     virtual Variable work_path() override { return delegate.work_path(); }
     virtual Variable file_path() override { return delegate.file_path(); }
     virtual Compilation* compilation() override { return delegate.compilation(); }

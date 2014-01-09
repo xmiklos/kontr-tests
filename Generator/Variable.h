@@ -1,7 +1,7 @@
 #ifndef GENERATOR_VARIABLE_H
 #define GENERATOR_VARIABLE_H
 
-#include "../kontr.h"
+#include "../kontr-internal.h"
 #include <iostream>
 
 

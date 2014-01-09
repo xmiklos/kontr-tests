@@ -10,7 +10,7 @@
     template<typename T> \
     class CLASS(NAME) : public ::kontr::MasterTest::Delegator<T> { \
     public: \
-        CLASS(NAME)() : kontr::MasterTest::Delegator<T>(#NAME) {} \
+        CLASS(NAME)() : ::kontr::MasterTest::Delegator<T>(#NAME) {} \
         virtual void execute () override; \
         using kontr::MasterTest::Delegator<T>::name; \
         using kontr::MasterTest::Delegator<T>::register_unit; \
@@ -43,8 +43,8 @@
         using kontr::UnitTest::Delegator<T>::stage_student_file; \
         using kontr::UnitTest::Delegator<T>::execution; \
         using kontr::UnitTest::Delegator<T>::compilation; \
-        using kontr::UnitTest::Delegator<T>::addTag; \
-        using kontr::UnitTest::Delegator<T>::addPoints; \
+        using kontr::UnitTest::Delegator<T>::add_tag; \
+        using kontr::UnitTest::Delegator<T>::add_points; \
         using kontr::UnitTest::Delegator<T>::work_path; \
         using kontr::UnitTest::Delegator<T>::file_path; \
         using kontr::UnitTest::Delegator<T>::extra_compiler_flags; \

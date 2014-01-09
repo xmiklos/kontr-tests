@@ -1,7 +1,7 @@
 #ifndef GENERATOR_LANGUAGE_H
 #define GENERATOR_LANGUAGE_H
 
-#include "../kontr.h"
+#include "../kontr-internal.h"
 
 namespace kontr {
 namespace Generator {
