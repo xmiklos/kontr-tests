@@ -2,7 +2,6 @@
 #define CONFIGURATION_H
 
 #include "kontr.h"
-#include <type_traits>
 
 namespace kontr {
 namespace Configuration {

@@ -2,7 +2,6 @@
 #define MASTERTEST_H
 
 #include "kontr.h"
-#include <memory>
 
 namespace kontr {
 namespace MasterTest {
@@ -12,8 +11,8 @@ template<typename T>
 class Interface {
 public:
     /// Parameter type
-    using Variable = typename T::VariableDelegator;
-    using Unit = typename T::UnitDelegator::Function;
+    using Variable = typename ::kontr::Variable::Delegator<T>;
+    using Unit = typename ::kontr::UnitTest::Delegator<T>::Function;
 
     virtual ~Interface() {}
 

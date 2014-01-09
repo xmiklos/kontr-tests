@@ -44,7 +44,7 @@ public:
     }
 
     virtual void pre_test() {
-        using Variable = const typename T::VariableDelegator&;
+        using Variable = const typename ::kontr::Variable::Delegator<T>&;
         auto &s = T::instance().storage; //::kontr::Generator::Storage
         s.names.currentMasterIndex = 0;
 
@@ -129,14 +129,14 @@ public:
     virtual Variable has_tag(Variable tag) override {
         std::stringstream ss;
         ss << tag;
-        return T::VariableDelegator::__create(
+        return ::kontr::Variable::Delegator<T>::__create(
                     ::kontr::Generator::Variable<T>(::kontr::Variable::DataType::Bool, "$session->has_tag(" + ss.str() + ")")
                     );
     }
 
     //Getter
     virtual Variable run_type() override {
-        return T::VariableDelegator::__create(
+        return ::kontr::Variable::Delegator<T>::__create(
                         ::kontr::Generator::Variable<T>(::kontr::Variable::DataType::String, "$session->run_type")
                     );
     }
@@ -151,7 +151,7 @@ public:
     virtual Variable get_points(Variable points) override {
         std::stringstream ss;
         ss << points;
-        return T::VariableDelegator::__create(
+        return ::kontr::Variable::Delegator<T>::__create(
                     ::kontr::Generator::Variable<T>(::kontr::Variable::DataType::Bool, "$session->get_points(" + ss.str() + ")")
                     );
     }

@@ -3,9 +3,6 @@
 /// Get filename for given Session/MasterTest
 
 #include "../kontr.h"
-#include <vector>
-#include <tuple>
-#include <map>
 
 namespace kontr {
 namespace Names {

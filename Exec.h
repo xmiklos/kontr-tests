@@ -11,7 +11,7 @@ namespace Execution {
 template<typename T>
 class Interface {
 public:
-    using Variable = typename T::VariableDelegator;
+    using Variable = typename ::kontr::Variable::Delegator<T>;
 
     /**
       Return cmd

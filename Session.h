@@ -2,12 +2,6 @@
 #define SESSION_H
 
 #include "kontr.h"
-#include <vector>
-#include <functional>
-#include <iostream>
-#include <memory>
-#include <string>
-#include <tuple>
 
 namespace kontr {
 namespace Session {
@@ -17,7 +11,8 @@ namespace Session {
 template<typename T>
 class Interface {
 public:
-    using TMasterTests = std::vector< typename T::MasterDelegator::Function > ;
+    using TMasterTests = std::vector< typename ::kontr::MasterTest::Delegator<T>::Function > ;
+    using Variable = typename ::kontr::Variable::Delegator<T>;
     typedef std::function<void()> TPost;
 
     /**
@@ -80,7 +75,6 @@ public:
      */
     virtual const std::string& __getFilesDir() const = 0;
 
-    using Variable = typename T::VariableDelegator;
     /**
       Return run type - string, either student or teacher
      * @brief run_type

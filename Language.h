@@ -2,7 +2,6 @@
 #define LANGUAGE_H
 
 #include "kontr.h"
-#include <functional>
 
 namespace kontr {
 namespace Language {
@@ -12,7 +11,7 @@ template<typename T>
 class Interface {
 public:
     /// Parameter type
-    using Variable = const typename T::VariableDelegator&;
+    using Variable = typename ::kontr::Variable::Delegator<T>;
     using Callback = std::function<void()>;
 
     /**

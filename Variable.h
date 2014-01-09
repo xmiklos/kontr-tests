@@ -2,7 +2,6 @@
 #define VARIABLE_H
 
 #include "kontr.h"
-#include <string>
 
 namespace kontr {
 namespace Variable {

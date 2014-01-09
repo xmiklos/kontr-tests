@@ -3,11 +3,6 @@
 
 #include "../kontr.h"
 
-#include <iostream>
-#include <fstream>
-#include <memory>
-#include <cassert>
-
 namespace kontr {
 namespace Generator {
 

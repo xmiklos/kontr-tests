@@ -2,13 +2,6 @@
 #define REPORTER_H
 
 #include "kontr.h"
-#include <string>
-#include <functional>
-#include <set>
-#include <utility>
-#include <iostream>
-#include "backtracexx/backtracexx.hpp"
-#include <cstdlib>
 
 namespace kontr {
 namespace Report {

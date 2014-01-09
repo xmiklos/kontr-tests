@@ -64,7 +64,7 @@ public:
     }
 
 #define GETTER(NAME, TYPE) virtual Variable NAME() override {\
-        return T::VariableDelegator::__create(::kontr::Generator::Variable<T>(::kontr::Variable::DataType::TYPE, variable + "->" #NAME));\
+        return ::kontr::Variable::Delegator<T>::__create(::kontr::Generator::Variable<T>(::kontr::Variable::DataType::TYPE, variable + "->" #NAME));\
     }
     GETTER(work_path, String)
     GETTER(file_path, String)

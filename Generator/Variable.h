@@ -3,8 +3,7 @@
 
 #include "../kontr.h"
 #include <iostream>
-#include <algorithm>
-#include <sstream>
+
 
 namespace kontr {
 namespace Generator {

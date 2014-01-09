@@ -10,8 +10,10 @@ namespace UnitTest {
 template<typename T>
 class Interface {
 public:
-    /// Parameter type
-    using Variable = typename T::VariableDelegator;
+    /// Parameter types
+    using Variable = typename ::kontr::Variable::Delegator<T>;
+    using Compilation = typename ::kontr::Exec::Compilation::Delegator<T>;
+    using Execution = typename ::kontr::Exec::Execution::Delegator<T>;
 
     virtual ~Interface() {}
 
@@ -53,11 +55,10 @@ public:
     virtual void addPoints(Variable name, Variable points) = 0;
     virtual Variable work_path() = 0; //string
     virtual Variable file_path() = 0; //string
-    using Compilation = typename T::CompileDelegator;
+
     virtual Compilation* compilation() = 0;
     virtual Variable extra_compiler_flags() = 0; //string
     virtual Variable compilation_log_errors() = 0; //bool
-    using Execution = typename T::ExecDelegator;
     virtual Execution* execution() = 0;
     virtual Execution* analysis() = 0;
     virtual Execution* difference() = 0;
@@ -215,7 +216,7 @@ public:
     /// Code of the unit test will be in this method
     virtual void execute () = 0;
 
-    typename T::SessionDelegatorInstance& session() const {
+    typename std::unique_ptr<::kontr::Session::Delegator<T>>& session() const {
         return T::instance().session;
     }
 };

@@ -15,7 +15,7 @@ public:
     using typename ::kontr::Exec::Execution::Interface<T>::Variable;
 
 #define GETTER(NAME, TYPE) virtual Variable NAME() override {\
-        return T::VariableDelegator::__create(::kontr::Generator::Variable<T>(::kontr::Variable::DataType::TYPE, prefix + "->" #NAME));\
+        return ::kontr::Variable::Delegator<T>::__create(::kontr::Generator::Variable<T>(::kontr::Variable::DataType::TYPE, prefix + "->" #NAME));\
     }
     GETTER(cmd, String)
     GETTER(output_path, String)
