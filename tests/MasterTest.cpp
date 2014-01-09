@@ -155,7 +155,7 @@ TEST_CASE("master_test") {
         //Check contents
         const char* result =
 R"delimiter($master_test->name('master_testing.pl');
-$matrix = 'matrix.cpp';
+my $matrix = 'matrix.cpp';
 $master_test->register_unit('unit_matrix_test2.pl');
 $master_test->register_unit('unit_matrix_test3.pl');
 $master_test->register_unit('unit_parser_test2.pl');

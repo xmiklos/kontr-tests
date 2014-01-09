@@ -126,7 +126,7 @@ TEST_CASE("master_test") {
 
         const char* result =
 R"delimiter($unit_test->name('unit_testing.pl');
-$matrix = 'matrix.cpp';
+my $matrix = 'matrix.cpp';
 $unit_test->stage_compiled_student_file($matrix);
 $unit_test->stage_compiled_student_file('pagerank.cpp');
 $unit_test->stage_compiled_student_file('parser.cpp');
@@ -207,7 +207,7 @@ TEST_CASE("functions") {
 
         const char* result =
 R"delimiter($unit_test->name('functions.pl');
-$tmp = '';
+my $tmp = '';
 $unit_test->add_tag('test');
 $unit_test->add_points('points' => 1);
 $tmp = $unit_test->work_path;

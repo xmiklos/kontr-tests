@@ -74,7 +74,7 @@ TEST_CASE("Variable") {
     cg.storage.out_ptr = &ss;
 
     Variable::Delegator<Testing> a("a", 10);
-    CHECK( ss.str() == "$a = 10;\n");
+    CHECK( ss.str() == "my $a = 10;\n");
     ss.str("");
 
     CHECK( a.__getDelegate().variableType == Variable::VariableType::Variable);
@@ -86,7 +86,7 @@ TEST_CASE("Variable") {
     ss.str("");
 
     Variable::Delegator<Testing> other("other", "string");
-    CHECK( ss.str() == "$other = \'string\';\n");
+    CHECK( ss.str() == "my $other = \'string\';\n");
     ss.str("");
 
     a = other;
@@ -102,16 +102,16 @@ TEST_CASE("Variable") {
 
     ss.str("");
     Variable::Delegator<Testing> b("b", a);
-    CHECK( ss.str() == "$b = $a;\n");
+    CHECK( ss.str() == "my $b = $a;\n");
 
     ss.str("");
     Variable::Delegator<Testing> c("c", a == b);
-    CHECK( ss.str() == "$c = $a eq $b;\n");
+    CHECK( ss.str() == "my $c = $a eq $b;\n");
 
     c = b == a;
     ss.str("");
     Variable::Delegator<Testing> d("d", c);
-    CHECK( ss.str() == "$d = $c;\n");
+    CHECK( ss.str() == "my $d = $c;\n");
 }
 
 TEST_CASE("Conversion"){

@@ -139,7 +139,7 @@ $session->add_summary('* test nanecisto neprosel');
 $session->add_summary('* test nanecisto prosel');
 }
 } else {
-$points = $session->get_points('points');
+my $points = $session->get_points('points');
 if (($session->has_tag('nanecisto')) || ($session->has_tag('naostro'))) {
 $session->add_summary('* v testu byla nalezena chyba
 ');
@@ -194,7 +194,7 @@ $session->add_summary('* test nanecisto neprosel');
 $session->add_summary('* test nanecisto prosel');
 }
 } else {
-$points = $session->get_points('points');
+my $points = $session->get_points('points');
 if (($session->has_tag('nanecisto')) || ($session->has_tag('naostro'))) {
 $session->add_summary('* v testu byla nalezena chyba
 ');
@@ -205,7 +205,7 @@ $session->add_summary('* test prosel kompletne spravne
 ');
 $session->add_summary(('* pocet bodu za funcionalitu je: ' . $points) . '
 ');
-$bonus = $session->get_points('bonus');
+my $bonus = $session->get_points('bonus');
 $session->add_summary(('* pocet bodu za bonus je: ' . $bonus) . '
 ');
 }

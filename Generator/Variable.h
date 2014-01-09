@@ -50,7 +50,7 @@ class Variable : public ::kontr::Variable::Data<T> {
     void printVariable() const {
         if (testOutPtr()) return;
         std::ostream& out = *(T::instance().storage.out_ptr);
-        out << '$' << variableName << " = ";
+        out << "my $" << variableName << " = ";
         printScalar(out);
         out << ";" << std::endl;
     }
@@ -104,7 +104,7 @@ public:
         ::kontr::Variable::Data<T>(name, other) {
         if (testOutPtr()) return;
         std::ostream& out = *(T::instance().storage.out_ptr);
-        out << '$' << variableName << " = " << other << ';' << std::endl;
+        out << "my $" << variableName << " = " << other << ';' << std::endl;
     }
 
     virtual void __generate(std::ostream &out) const {

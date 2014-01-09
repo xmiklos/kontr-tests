@@ -69,7 +69,7 @@ TEST_CASE("execution") {
 
     const char* result =
 R"delimiter($unit_test->name('unit_execution.pl');
-$tmp = '';
+my $tmp = '';
 $tmp = $unit_test->execution->cmd;
 $tmp = $unit_test->execution->stdin_path;
 $tmp = $unit_test->execution->stdout_path;
@@ -127,7 +127,7 @@ TEST_CASE("compilation") {
 
     const char* result =
 R"delimiter($unit_test->name('unit_compilation.pl');
-$tmp = '';
+my $tmp = '';
 $tmp = $unit_test->compilation->cmd;
 $tmp = $unit_test->compilation->stdin_path;
 $tmp = $unit_test->compilation->stdout_path;
