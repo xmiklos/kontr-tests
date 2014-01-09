@@ -67,7 +67,9 @@ public:
         }
         else {
             print_report_text(cerr, severity, type);
+#ifdef BACKTRACEXX
             cerr << backtracexx::scan() << endl;
+#endif
             if (T::instance().ReportConfiguration.report[severity] == Reporting::ERR_ABORT) {
                 abort();
             }

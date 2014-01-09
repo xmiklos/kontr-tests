@@ -16,12 +16,15 @@ namespace kontr {
 #include <set>
 #include <map>
 #include <utility>
-#include "backtracexx/backtracexx.hpp"
 #include <cstdlib>
 #include <type_traits>
 #include <fstream>
 #include <algorithm>
 #include <sstream>
+
+#ifdef BACKTRACEXX
+#include "backtracexx/backtracexx.hpp"
+#endif
 
 // Declarations
 namespace kontr {
@@ -34,6 +37,7 @@ class Delegator;
 } //Session
 
 } //kontr
+
 
 #include "Reporter.h"
 #include "Configuration.h"
