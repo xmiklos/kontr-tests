@@ -132,8 +132,8 @@ sub pre_test {
 ### Post-test
 There are now to options to create a post test. First one is **generic** and is prefered for the usual tests, and the other is **custom**.
 
-The generic is as the name states - it should be used if you are creating a normal tests. There are options to include results for Valgrind (5) and bonus (6). You can see the full source code for it [here](https://github.com/xbrukner/kontr-tests/blob/master/Generator/Session.h#L93).
+The **generic** is as the name states - it should be used if you are creating a normal test. There are options to include results for Valgrind (5) and bonus (6). You can see the full source code for it [here](https://github.com/xbrukner/kontr-tests/blob/master/Generator/Session.h#L93). (*Note - the text is in Czech.*)
 
-But if you have completely different test (for example with only full tests), you can provide your own post test. That is the option (7) and it can be seen in use in the (Hello World!)[https://github.com/xbrukner/kontr-tests/blob/master/Hello.cpp] example.
+But if you have completely different test (for example with only full tests), you can provide **your own post test**. That is the option (7) and it can be seen in use in the [Hello World!](https://github.com/xbrukner/kontr-tests/blob/master/Hello.cpp) example.
 
-**Important:** the prefered way is the generic post-test (it is easier to check). So if you can use that, use it. If you want to change the text there, write an email to the creators.
+**Important:** the prefered way is the generic post-test (it is easier to check). So if you can use that, use it.
