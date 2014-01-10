@@ -29,4 +29,7 @@ int main(void) { \
     cout << "Output scripts directory: " << cg.session->__getScriptsDir() << endl; \
 }
 
+//Has to be the last one
+#include "warnings.h"
+
 #endif // KONTR_H

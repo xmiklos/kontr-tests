@@ -1,7 +1,7 @@
 #ifndef COMMON_H
 #define COMMON_H
 
-#include "kontr.h"
+#include "kontr-internal.h"
 
 using namespace std;
 

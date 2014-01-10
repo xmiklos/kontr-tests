@@ -35,13 +35,17 @@ struct NAME { \
         SessionDelegatorInstance session = nullptr; \
 \
         void setSession(SessionDelegator::Function f) { \
-            this->session = f(); \
+            f(this->session); \
         }\
         static MasterDelegatorInstance MasterTestInstance(MasterDelegator::Function f) { \
-            return f(); \
+            MasterDelegatorInstance r = nullptr; \
+            f(r); \
+            return r; \
         } \
         static UnitDelegatorInstance UnitTestInstance(UnitDelegator::Function f) { \
-            return f(); \
+            UnitDelegatorInstance r = nullptr; \
+            f(r); \
+            return r; \
         } \
 \
         REPORTING ReportConfiguration; \

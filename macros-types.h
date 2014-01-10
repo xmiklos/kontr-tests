@@ -20,8 +20,8 @@
         using kontr::MasterTest::Delegator<T>::stage_student_file; \
     }; \
     template<typename T> \
-    std::unique_ptr<::kontr::MasterTest::Delegator<T>> NAME() { \
-        return std::unique_ptr<::kontr::MasterTest::Delegator<T>> (new CLASS(NAME)<T>()); \
+    void NAME (std::unique_ptr<::kontr::MasterTest::Delegator<T>>& ret) { \
+        ret = std::unique_ptr<::kontr::MasterTest::Delegator<T>> (new CLASS(NAME)<T>()); \
     } \
     template<typename T> \
     void CLASS(NAME)<T>::execute ()
@@ -69,8 +69,8 @@
         using kontr::UnitTest::Delegator<T>::session; \
     }; \
     template<typename T> \
-    std::unique_ptr<::kontr::UnitTest::Delegator<T>> NAME() { \
-        return std::unique_ptr<::kontr::UnitTest::Delegator<T>> (new CLASS(NAME)<T>()); \
+    void NAME (std::unique_ptr<::kontr::UnitTest::Delegator<T>>& ret) { \
+        ret = std::unique_ptr<::kontr::UnitTest::Delegator<T>> (new CLASS(NAME)<T>()); \
     } \
     template<typename T> \
     void CLASS(NAME)<T>::execute ()
@@ -90,8 +90,8 @@
         using ::kontr::Session::Delegator<T>::get_points; \
     }; \
     template <typename T> \
-    std::unique_ptr<::kontr::Session::Delegator<T>> NAME() { \
-        return std::unique_ptr<::kontr::Session::Delegator<T>> (new CLASS(NAME)<T>()); \
+    void NAME (std::unique_ptr<::kontr::Session::Delegator<T>>& ret) { \
+        ret = std::unique_ptr<::kontr::Session::Delegator<T>> (new CLASS(NAME)<T>()); \
     } \
     template <typename T> \
     CLASS(NAME)<T>::CLASS(NAME)() : \
