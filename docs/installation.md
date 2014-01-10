@@ -22,6 +22,7 @@ To install the full version:
 git clone https://github.com/xbrukner/kontr-tests.git
 cd kontr-tests
 git submodule init
+git submodule update
 cmake .
 make
 make test
