@@ -124,5 +124,7 @@
 #define WHILE(cond, while) T::instance().language._while(cond, [&] { while })
 #define PERL(code) T::instance().language.perl(code)
 #define RETURN T::instance().language._return
+#define BREAK T::instance().language._break
+#define CONTINUE T::instance().language._continue
 
 #endif // MACROSTYPES_H

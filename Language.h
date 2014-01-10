@@ -39,6 +39,10 @@ public:
     virtual void perl(const char* code) = 0;
     
     virtual void _return() = 0;
+
+    virtual void _break() = 0;
+
+    virtual void _continue() = 0;
 };
 
 /// Empty class
@@ -58,6 +62,8 @@ public:
         kontr::unused(code);
     }
     virtual void _return() {}
+    virtual void _break() {}
+    virtual void _continue() {}
 };
 
 /// Delegator class
@@ -81,6 +87,8 @@ public:
     }
     
     virtual void _return() { delegate._return(); }
+    virtual void _break() { delegate._break(); }
+    virtual void _continue() { delegate._continue(); }
 };
 
 } //Language

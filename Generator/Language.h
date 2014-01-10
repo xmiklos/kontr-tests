@@ -42,6 +42,16 @@ public:
 		std::ostream& out = *(T::instance().storage.out_ptr);
         out << "return;" << std::endl;
 	}
+
+    virtual void _break() {
+        std::ostream& out = *(T::instance().storage.out_ptr);
+        out << "break;" << std::endl;
+    }
+
+    virtual void _continue() {
+        std::ostream& out = *(T::instance().storage.out_ptr);
+        out << "continue;" << std::endl;
+    }
 };
 
 } //Generator

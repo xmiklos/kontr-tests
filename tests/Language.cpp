@@ -69,6 +69,15 @@ TEST_CASE("Control fow"){
     stringstream ss;
     cg.storage.out_ptr = &ss;
 
+    ss.str("");
     RETURN();
     CHECK(ss.str() == "return;\n");
+
+    ss.str("");
+    BREAK();
+    CHECK(ss.str() == "break;\n");
+
+    ss.str("");
+    CONTINUE();
+    CHECK(ss.str() == "continue;\n");
 }

@@ -67,7 +67,7 @@ mine = "10";
 
 You can use these variables in most of the calls (there are some implementation exceptions, `name()` and `register_unit()`). A small note - since this is C++, use only double quotes (") for strings.
 
-### If
+### If/While
 This is a bit more unnatural, but with correct formatting it is not hard to get used to it:
 
 ```C++
@@ -80,6 +80,9 @@ IF(mine != 40,
 		// "ELSE" part
 		log("correct");
 	});
+//or for one-liners
+WHILE(cond,
+	{ block; });
 ```
 
 ### Return and others
@@ -87,6 +90,8 @@ These are now all macros, which are calls:
 
 ```C++
 RETURN();
+BREAK();
+CONTINUE();
 ```
 
 Note - the brackets are mandatory (otherwise it will not compile).
