@@ -20,7 +20,7 @@ SESSION_NAME(both, ".", "files", {nanecisto}, {naostro}, false, false)
 TEST_CASE("master_test") {
     array<const char*, 3> filenames = {"./session.pl", "./nanecisto.pl", "./naostro.pl"};
     Testing &cg = Testing::instance();
-    cg.storage.names = kontr::Names::getAll(both);
+    cg.storage.names = kontr::Names::getAll(both, cg);
     cg.storage.nextFileName = cg.storage.names.session.c_str();
     cg.setSession(both);
 
@@ -82,7 +82,7 @@ SESSION_NAME(post_func, ".", "files", {}, {}, { add_summary("No points"); })
 
 TEST_CASE("post_func") {
     Testing &cg = Testing::instance();
-    cg.storage.names = kontr::Names::getAll(post_func);
+    cg.storage.names = kontr::Names::getAll(post_func, cg);
     cg.storage.nextFileName = cg.storage.names.session.c_str();
     cg.setSession(post_func);
 
@@ -118,7 +118,7 @@ $session->add_summary('No points');
 
 TEST_CASE("post_default") {
     Testing &cg = Testing::instance();
-    cg.storage.names = kontr::Names::getAll(post_default);
+    cg.storage.names = kontr::Names::getAll(post_default, cg);
     cg.storage.nextFileName = cg.storage.names.session.c_str();
     cg.setSession(post_default);
 
@@ -173,7 +173,7 @@ $session->add_summary(('* pocet bodu za funcionalitu je: ' . $points) . '
 
 TEST_CASE("post_both") {
     Testing &cg = Testing::instance();
-    cg.storage.names = kontr::Names::getAll(post_both);
+    cg.storage.names = kontr::Names::getAll(post_both, cg);
     cg.storage.nextFileName = cg.storage.names.session.c_str();
     cg.setSession(post_both);
 

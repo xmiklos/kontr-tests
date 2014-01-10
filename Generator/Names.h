@@ -23,6 +23,7 @@ struct NameStorage {
     bool all;
     const char* className;
     All data;
+    ::kontr::Report::Reporting warnings;
 };
 
 bool has_extension(const std::string& name) {
@@ -62,8 +63,9 @@ public:
 
     virtual void name(const char* name) {
 		if (!has_extension(name)) {
-			T::instance().report.create(Report::WARNING, 
-				std::string("Master test name does not have .pl extension: ") + name, false);
+            T::instance().report._create(Report::WARNING,
+                std::string("Master test name does not have .pl extension: ") + name,
+                                         T::instance().storage.warnings, false);
 		}
         if (T::instance().storage.all) {
             NameStorage& storage = T::instance().storage;
@@ -91,8 +93,9 @@ class UnitTest : public ::kontr::UnitTest::Empty<T> {
 public:
     virtual void name(const char* name) {
 		if (!has_extension(name)) {
-			T::instance().report.create(Report::WARNING, 
-				std::string("Unit test name does not have .pl extension: ") + name, false);
+            T::instance().report._create(Report::WARNING,
+                std::string("Unit test name does not have .pl extension: ") + name,
+                                        T::instance().storage.warnings, false);
 		}
         if (T::instance().storage.all) {
             NameStorage& storage = T::instance().storage;
@@ -120,13 +123,18 @@ CONFIGURATION(Configuration,
              );
 
 /// Get filename for Session - always session
-const char* get(Configuration::SessionDelegator::Function f) {
-    kontr::unused(f);
+template <typename T>
+const char* get(Configuration::SessionDelegator::Function f, const T& Conf) {
+    kontr::unused(f, Conf);
     return "session.pl"; //Constant
 }
 
 /// Get filename for MasterTest
-const char* get(Configuration::MasterDelegator::Function f) {
+template <typename T>
+const char* get(Configuration::MasterDelegator::Function f, const T& Conf) {
+    Configuration::instance().report.suppressMacroWarnings(true);
+    Configuration::instance().storage.warnings = Conf.ReportConfiguration.report[Report::WARNING];
+
     Configuration::instance().storage.all = false;
     try {
         auto test = Configuration::MasterTestInstance(f);
@@ -135,12 +143,17 @@ const char* get(Configuration::MasterDelegator::Function f) {
     catch (Stop) {
         return Configuration::instance().storage.name;
     }
-    Configuration::instance().report.create(Report::ERROR, "No name found", false);
+    Configuration::instance().report._create(Report::ERROR, "No name found",
+                                            Conf.ReportConfiguration.report[Report::ERROR], false);
     return nullptr;
 }
 
 /// Get filename for UnitTest
-const char* get(Configuration::UnitDelegator::Function f) {
+template <typename T>
+const char* get(Configuration::UnitDelegator::Function f, const T& Conf) {
+    Configuration::instance().report.suppressMacroWarnings(true);
+    Configuration::instance().storage.warnings = Conf.ReportConfiguration.report[Report::WARNING];
+
     Configuration::instance().storage.all = false;
     try {
         auto test = Configuration::UnitTestInstance(f);
@@ -149,14 +162,19 @@ const char* get(Configuration::UnitDelegator::Function f) {
     catch (Stop) {
         return Configuration::instance().storage.name;
     }
-    Configuration::instance().report.create(Report::ERROR, "No name found", false);
+
+    Configuration::instance().report._create(Report::ERROR, "No name found",
+                                            Conf.ReportConfiguration.report[Report::ERROR], false);
     return nullptr;
 }
 
-
-All getAll(Configuration::SessionDelegator::Function f) {
+/// Get all names
+template <typename T>
+All getAll(Configuration::SessionDelegator::Function f, const T& Conf) {
     Configuration &cg = Configuration::instance();
-    cg.storage.data.session = get(f);
+    cg.report.suppressMacroWarnings(true);
+
+    cg.storage.data.session = get(f, Conf);
     cg.storage.all = true;
     cg.storage.data.currentMasterIndex = 0;
     cg.setSession(f);

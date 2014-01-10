@@ -88,7 +88,7 @@ SESSION_NAME(tmp, ".", ".", {normal}, {}, false, false)
 TEST_CASE("master_test") {
     Testing& cg = Testing::instance();
     cg.storage.nextFileName = "session.pl"; //Must be done before inicialization
-    cg.storage.names = kontr::Names::getAll(tmp);
+    cg.storage.names = kontr::Names::getAll(tmp, cg);
     cg.setSession(tmp);
     ifstream sess("./session.pl");
     REQUIRE(sess.good());

@@ -53,6 +53,7 @@ template<typename T>
 class Reporter
 {
     std::set<std::pair<Severity, std::string>> suppressed;
+    bool macroWarnings = true;
 public:
     /**
      * @brief Create a report
@@ -60,6 +61,10 @@ public:
      * @param type
      */
     void create(const Severity severity, const std::string& type, bool suppressable = true) {
+        _create(severity, type, T::instance().ReportConfiguration.report[severity], suppressable);
+    }
+
+    void _create(const Severity severity, const std::string& type, const Reporting& reporting, bool suppressable = true) {
         using namespace std;
         auto it = suppressed.find(make_pair(severity, type));
         if (suppressable && it != suppressed.end()) {
@@ -70,10 +75,10 @@ public:
 #ifdef BACKTRACEXX
             cerr << backtracexx::scan() << endl;
 #endif
-            if (T::instance().ReportConfiguration.report[severity] == Reporting::ERR_ABORT) {
+            if (reporting == Reporting::ERR_ABORT) {
                 abort();
             }
-            if (T::instance().ReportConfiguration.report[severity] == Reporting::ERR_EXCEPTION) {
+            if (reporting == Reporting::ERR_EXCEPTION) {
                 switch(severity) {
                     case NOTICE: throw ReportNotice(type.c_str());
                     case WARNING: throw ReportWarning(type.c_str());
@@ -81,6 +86,11 @@ public:
                 }
             }
         }
+    }
+
+    void createMacroWarning(const char* type) {
+        if (!macroWarnings) return;
+        create(WARNING, type);
     }
 
     void suppress(const Severity& severity, const std::string& type, std::function<void(void)> F) {
@@ -106,6 +116,12 @@ public:
             suppressed.erase(it);
         }
     }
+
+    /// Suppress warning by macros (warnings.h)
+    void suppressMacroWarnings(bool on) {
+        macroWarnings = !on;
+    }
+
 };
 
 /// Default error reporting configuration - print notices and warnings, abort on error

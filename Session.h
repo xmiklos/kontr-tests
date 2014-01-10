@@ -175,7 +175,7 @@ public:
     using typename Interface<T>::TPost;
 
     /// Type of a function returning unique pointer to this delegator type
-    using Function = std::unique_ptr<Delegator> (*)();
+    using Function = void (*)(std::unique_ptr<Delegator>&);
 
 protected:
     Delegator(const char* className, const char* scripts_dir, const char* files_dir,

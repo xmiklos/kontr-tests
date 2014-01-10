@@ -150,7 +150,7 @@ protected:
 
 public:
     /// Type of a function returning unique pointer to this delegator type
-    using Function = std::unique_ptr<Delegator> (*)();
+    using Function = void (*)(std::unique_ptr<Delegator>&);
 
     using Variable = typename Interface<T>::Variable;
     using typename Interface<T>::Execution;

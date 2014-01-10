@@ -45,16 +45,16 @@ SESSION_NAME(complex, "", "", {master_name}, {master_naostro}, false, false)
 
 
 TEST_CASE("Session") {
-    CHECK(std::string("session.pl") == Names::get(::Session));
+    CHECK(std::string("session.pl") == Names::get(::Session, Testing::instance()));
 }
 
 TEST_CASE("Master test") {
-    CHECK(std::string("name.pl") == Names::get(master_name));
+    CHECK(std::string("name.pl") == Names::get(master_name, Testing::instance()));
 
     SECTION("no name") {
         stringstream buffer;
         streambuf* old = cerr.rdbuf(buffer.rdbuf());
-        CHECK_THROWS_AS(Names::get(master_empty), Report::ReportError);
+        CHECK_THROWS_AS(Names::get(master_empty, Testing::instance()), Report::ReportError);
 
         stringstream err;
         Report::print_report_text(err, Report::ERROR, string("No name found"));
@@ -67,7 +67,7 @@ TEST_CASE("Master test") {
     SECTION("no extension") {
         stringstream buffer;
         streambuf* old = cerr.rdbuf(buffer.rdbuf());
-        CHECK_THROWS_AS(Names::get(m_nopl), Report::ReportWarning);
+        CHECK_THROWS_AS(Names::get(m_nopl, Testing::instance()), Report::ReportWarning);
 
         stringstream err;
         Report::print_report_text(err, Report::WARNING, 
@@ -80,12 +80,12 @@ TEST_CASE("Master test") {
 }
 
 TEST_CASE("Unit test") {
-    CHECK(std::string("unit_one.pl") == Names::get(unit_1));
+    CHECK(std::string("unit_one.pl") == Names::get(unit_1, Testing::instance()));
 
     SECTION("no name") {
         stringstream buffer;
         streambuf* old = cerr.rdbuf(buffer.rdbuf());
-        CHECK_THROWS_AS(Names::get(master_empty), Report::ReportError);
+        CHECK_THROWS_AS(Names::get(master_empty, Testing::instance()), Report::ReportError);
 
         stringstream err;
         Report::print_report_text(err, Report::ERROR, string("No name found"));
@@ -98,7 +98,7 @@ TEST_CASE("Unit test") {
     SECTION("no extension") {
         stringstream buffer;
         streambuf* old = cerr.rdbuf(buffer.rdbuf());
-        CHECK_THROWS_AS(Names::get(u_nopl), Report::ReportWarning);
+        CHECK_THROWS_AS(Names::get(u_nopl, Testing::instance()), Report::ReportWarning);
 
         stringstream err;
         Report::print_report_text(err, Report::WARNING, 
@@ -111,7 +111,7 @@ TEST_CASE("Unit test") {
 }
 
 TEST_CASE("Complex") {
-    ::kontr::Names::All res = Names::getAll(complex);
+    ::kontr::Names::All res = Names::getAll(complex, Testing::instance());
     CHECK(res.session == "session.pl");
     CHECK(res.masterTests.size() == 2);
 

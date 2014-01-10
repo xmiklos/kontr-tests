@@ -15,7 +15,7 @@ int main(void) { \
     Generator::Configuration &cg = Generator::Configuration::instance(); \
 \
     cout << "Getting names of tests... "; \
-    cg.storage.names = Names::getAll(::Session); \
+    cg.storage.names = Names::getAll(::Session, cg); \
     cout << "done!" << endl; \
 \
     cg.storage.nextFileName = cg.storage.names.session.c_str(); \
