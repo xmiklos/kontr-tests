@@ -1,5 +1,9 @@
 include_directories("../")
 
+if(NOT EXISTS ${CMAKE_CURRENT_LIST_DIR}/bin)
+	file(MAKE_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin)
+endif()
+
 add_executable(bin/MasterTest MasterTest.cpp)
 target_link_libraries(bin/MasterTest ${LIBRARIES})
 add_test(MasterTest bin/MasterTest)

@@ -15,6 +15,10 @@ foreach (src ${SRC_LIST})
         target_link_libraries(bin/${executable} ${LIBRARIES})
 endforeach(src)
 
+if(NOT EXISTS bin/)
+	file(MAKE_DIRECTORY bin/)
+endif()
+
 # Tests
 ENABLE_TESTING()
 add_subdirectory("tests/")
