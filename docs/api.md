@@ -1,7 +1,7 @@
 # API
 There are some minor changes to the way you use kontr. These changes are because of the way you now describe a test, but usually **everything is just delegated to the original [kontr](https://github.com/HappyCerberus/kontr)**.
 
-## There are no "$master_test" nor "$unit_test".
+## There are no "$master_test" nor "$unit_test"
 Let's you want to stage a file. In the original, you would write something like this:
 
     $master_test->stage_file("file");
@@ -16,7 +16,7 @@ stage_file("file");
 this->stage_file("file");
 ```
 
-But, if you want to use session in the unit test (for example for `has_tag`), you have to specify it (also see the next rule Everything is a call):
+But, if you want to use session in the unit test (for example for `has_tag`), you have to specify it (also see the next rule *Everything is a call*):
 
 ```C++
 session()->has_tag("nanecisto");
@@ -47,9 +47,11 @@ But this is completely legal and will compile (and work) without any problems.
 ## No methods with variable arguments
 This is an implementation limit and may change in the future. But for now, if method took variable count of arguments, it is changed:
 
-* Run and run_grind: `run("input", {"arguments", "for", "the", "binary"}); //same for run_grind`
-* add_tag now only takes one parameter (this may change in the future).
-* add_points now takes two parameters - name and points: `add_points("points", 1);`
+* `run` and `run_grind`: `run("stdin", {"arguments", "for", "the", "binary"}); //same for run_grind`
+* `add_tag` now only takes one parameter (this may change in the future).
+* `add_points` now takes two parameters - name and points: `add_points("points", 1);`
+
+This should all be hinted to you by your editor. (See [Installation](installation.md).)
 
 ## Control flow
 In order to make the translation work, I needed to create a new way to control flow of the program. If try to use the C++ keyword, **a warning will be issued**.
@@ -92,7 +94,7 @@ Note - the brackets are mandatory (otherwise it will not compile).
 ## Session is different
 In the original kontr, there was a lot of options how to create a session file. These options have now been limited in order to make the usage easier and less error-prone.
 
-The result is one macro declaration in the following format ( `(number)` is for explanation, it is not part of the code):
+The result is one macro declaration in the following format (`(number)` is for explanation, it is not part of the code):
 
 ```c++
 SESSION("scripts/" (1), "files/" (2), {master_basic} (3), {master_full} (4), false (5), false (6) )
@@ -132,3 +134,5 @@ The **generic** is as the name states - it should be used if you are creating a 
 But if you have completely different test (for example with only full tests), you can provide **your own post test**. That is the option `(7)` and it can be seen in use in the [Hello World!](https://github.com/xbrukner/kontr-tests/blob/master/Hello.cpp) example.
 
 **Important:** the prefered way is the generic post-test (it is easier to check). So if you can use that, use it.
+
+You finished reading here? Good! Start working on your tests now :-)
