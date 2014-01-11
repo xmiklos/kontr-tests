@@ -96,6 +96,16 @@ CONTINUE();
 
 Note - the brackets are mandatory (otherwise it will not compile).
 
+### Direct perl code
+
+Since the tests are still compiled to Perl, it is possible to have a raw Perl code generated:
+
+```C++
+PERL("raw code");
+```
+
+However, this code *cannot be verified*.
+
 ## Session is different
 In the original kontr, there was a lot of options how to create a session file. These options have now been limited in order to make the usage easier and less error-prone.
 
