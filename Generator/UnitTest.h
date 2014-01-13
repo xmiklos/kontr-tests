@@ -15,6 +15,7 @@ class UnitTest : public ::kontr::UnitTest::Interface<T>  {
     using typename ::kontr::UnitTest::Interface<T>::Variable;
     using typename ::kontr::UnitTest::Interface<T>::Execution;
     using typename ::kontr::UnitTest::Interface<T>::Compilation;
+    using typename ::kontr::UnitTest::Interface<T>::Valgrind;
 
     //Delegator of Generator::Exec::Execution
     Execution executionResult = typename ::kontr::Generator::Exec<T>::Execution("$unit_test->execution");
@@ -23,6 +24,9 @@ class UnitTest : public ::kontr::UnitTest::Interface<T>  {
 
     //Delegator of Generator::Exec::Compilation
     Compilation compilationResult = typename ::kontr::Generator::Exec<T>::Compilation("$unit_test->compilation");
+
+    //Delegator of Generator::Exec::Valgrind
+    Valgrind valgrindResult = typename ::kontr::Generator::Exec<T>::Valgrind("$unit_test->valgrind");
 
 public:
     UnitTest() : out(T::instance().session->__getScriptsDir() + "/" +
@@ -76,6 +80,7 @@ public:
     virtual Execution* execution() override { return &executionResult; }
     virtual Execution* analysis() override { return &analysisResult; }
     virtual Execution* difference() override { return &differenceResult; }
+    virtual Valgrind* valgrind() override { return &valgrindResult; }
 
     virtual void compile() override {
         out << variable << "->compile();" << std::endl;

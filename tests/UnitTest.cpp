@@ -97,6 +97,11 @@ UNIT_TEST(functions) {
     tmp = session()->run_type();
     tmp = session()->has_tag("none");
     session()->add_summary("done");
+
+    IF(valgrind()->grind_errors(),
+       {
+           log_valgrind("valgrind", "[VALGRIND] Chyba pri kontrole Valgrindem:");
+       });
 }
 
 SESSION_NAME(tmp, ".", ".", {}, {}, false, false)
@@ -240,6 +245,9 @@ $unit_test->subtest('nekorektni');
 $tmp = $session->run_type;
 $tmp = $session->has_tag('none');
 $session->add_summary('done');
+if ($unit_test->valgrind->grind_errors) {
+$unit_test->log_valgrind('valgrind', '[VALGRIND] Chyba pri kontrole Valgrindem:', 'both');
+}
 )delimiter";
 
         stringstream buf;

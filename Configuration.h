@@ -13,6 +13,7 @@ struct NAME { \
         typedef ::kontr::UnitTest::Delegator<NAME> UnitDelegator; \
         typedef ::kontr::Exec::Execution::Delegator<NAME> ExecDelegator; \
         typedef ::kontr::Exec::Compilation::Delegator<NAME> CompileDelegator; \
+        typedef ::kontr::Exec::Valgrind::Delegator<NAME> ValgrindDelegator; \
         typedef ::kontr::Session::Delegator<NAME> SessionDelegator; \
         typedef ::kontr::Variable::Delegator<NAME> VariableDelegator; \
         typedef ::kontr::Language::Delegator<NAME> LanguageDelegator; \
@@ -27,6 +28,7 @@ struct NAME { \
         typedef UNIT<NAME> Unit; \
         typedef EXEC<NAME>::Execution Exec; \
         typedef EXEC<NAME>::Compilation Compile; \
+        typedef EXEC<NAME>::Valgrind Valgrind; \
         typedef VARIABLE<NAME> Variable; \
         typedef LANGUAGE<NAME> Language; \
 \

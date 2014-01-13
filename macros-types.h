@@ -26,8 +26,6 @@
     template<typename T> \
     void CLASS(NAME)<T>::execute ()
 
-#define UF(NAME) using kontr::UnitTest::Delegator<T>::NAME
-
 /// Unit test
 /// Usage: UNIT_TEST(name) { code; }
 #define UNIT_TEST(NAME) \
@@ -51,6 +49,7 @@
         using kontr::UnitTest::Delegator<T>::compilation_log_errors; \
         using kontr::UnitTest::Delegator<T>::analysis; \
         using kontr::UnitTest::Delegator<T>::difference; \
+        using kontr::UnitTest::Delegator<T>::valgrind; \
         using kontr::UnitTest::Delegator<T>::compile; \
         using kontr::UnitTest::Delegator<T>::run; \
         using kontr::UnitTest::Delegator<T>::run_grind; \
@@ -74,8 +73,6 @@
     } \
     template<typename T> \
     void CLASS(NAME)<T>::execute ()
-
-#undef UF
 
 #define SESSION_COMPLETE(NAME, ...) \
     template <typename T> \

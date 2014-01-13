@@ -76,6 +76,48 @@ public:
     virtual void log_stderr() override { exec.log_stderr(); }
 
     GETTER(result, String)
+};
+
+template<typename T>
+class Valgrind: public ::kontr::Exec::Valgrind::Interface<T> {
+    std::string prefix;
+    Execution<T> exec;
+public:
+    Valgrind(std::string prefix) : prefix(prefix), exec(prefix) {}
+
+    using typename ::kontr::Exec::Execution::Interface<T>::Variable;
+
+    /* //When compilator comes to senses, this should work (works in Empty, but not here)
+    using Execution<T>::cmd;
+    using Execution<T>::output_path;
+    using Execution<T>::stdin_path;
+    using Execution<T>::stdout_path;
+    using Execution<T>::stderr_path;
+    using Execution<T>::work_path;
+    using Execution<T>::success;
+    using Execution<T>::exit_value;
+    using Execution<T>::exit_type;
+    using Execution<T>::log_stdout;
+    using Execution<T>::log_stderr;
+    */
+#define DELEGATE(NAME) virtual Variable NAME() override { return exec.NAME(); }
+    DELEGATE(cmd)
+    DELEGATE(output_path)
+    DELEGATE(stdin_path)
+    DELEGATE(stdout_path)
+    DELEGATE(stderr_path)
+    DELEGATE(work_path)
+    DELEGATE(success)
+    DELEGATE(exit_value)
+    DELEGATE(exit_type)
+#undef DELEGATE
+    virtual void log_stdout() override { exec.log_stdout(); }
+    virtual void log_stderr() override { exec.log_stderr(); }
+
+    GETTER(grind_errors, Bool)
+    GETTER(grind_data, String)
+    GETTER(grind_user, String)
+    GETTER(grind_path, String)
 #undef GETTER
 };
 
@@ -83,6 +125,7 @@ template<typename T>
 struct Exec {
     using Execution = ::kontr::Generator::Execution<T>;
     using Compilation = ::kontr::Generator::Compilation<T>;
+    using Valgrind = ::kontr::Generator::Valgrind<T>;
 };
 
 } //Generator

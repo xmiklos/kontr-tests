@@ -14,6 +14,7 @@ public:
     using Variable = typename ::kontr::Variable::Delegator<T>;
     using Compilation = typename ::kontr::Exec::Compilation::Delegator<T>;
     using Execution = typename ::kontr::Exec::Execution::Delegator<T>;
+    using Valgrind = typename ::kontr::Exec::Valgrind::Delegator<T>;
 
     virtual ~Interface() {}
 
@@ -62,6 +63,7 @@ public:
     virtual Execution* execution() = 0;
     virtual Execution* analysis() = 0;
     virtual Execution* difference() = 0;
+    virtual Valgrind* valgrind() = 0;
 
     virtual void compile() = 0;
     //TODO - not an array?
@@ -97,6 +99,7 @@ class Empty : public Interface<T> {
 public:
     using typename Interface<T>::Execution;
     using typename Interface<T>::Compilation;
+    using typename Interface<T>::Valgrind;
     using typename Interface<T>::Variable;
 
     virtual void name(const char * name) override { kontr::unused(name); }
@@ -115,6 +118,7 @@ public:
     virtual Execution* execution() override { return nullptr; }
     virtual Execution* analysis() override { return nullptr; }
     virtual Execution* difference() override { return nullptr; }
+    virtual Valgrind* valgrind() override { return nullptr; }
 
     virtual void compile() override {}
 
@@ -155,6 +159,7 @@ public:
     using Variable = typename Interface<T>::Variable;
     using typename Interface<T>::Execution;
     using typename Interface<T>::Compilation;
+    using typename Interface<T>::Valgrind;
 
     virtual void name(const char* name) {
         delegate.name(name);
@@ -186,6 +191,7 @@ public:
     virtual Execution* execution() override { return delegate.execution(); }
     virtual Execution* analysis() override { return delegate.analysis(); }
     virtual Execution* difference() override { return delegate.difference(); }
+    virtual Valgrind* valgrind() override { return delegate.valgrind(); }
 
     virtual void compile() override { delegate.compile(); }
 
