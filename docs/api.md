@@ -96,6 +96,15 @@ CONTINUE();
 
 Note - the brackets are mandatory (otherwise it will not compile).
 
+### File checks
+You can check for file existence, emptiness and size with these calls:
+
+```C++
+FILE_EXISTS("filename"); //Returns bool
+FILE_EMPTY("filename"); //Returns bool
+FILE_SIZE("filename"); //Returns int
+```
+
 ### Direct perl code
 
 Since the tests are still compiled to Perl, it is possible to have a raw Perl code generated:

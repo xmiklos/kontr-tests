@@ -123,5 +123,8 @@
 #define RETURN T::instance().language._return
 #define BREAK T::instance().language._break
 #define CONTINUE T::instance().language._continue
+#define FILE_EXISTS(file) T::instance().language.file_exists(file)
+#define FILE_EMPTY(file) T::instance().language.file_empty(file)
+#define FILE_SIZE(file) T::instance().language.file_size(file)
 
 #endif // MACROSTYPES_H

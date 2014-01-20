@@ -43,6 +43,30 @@ public:
     virtual void _break() = 0;
 
     virtual void _continue() = 0;
+
+    /**
+      Does file exists? (boolean)
+     * @brief file_exists
+     * @param file
+     * @return
+     */
+    virtual Variable file_exists(Variable file) = 0;
+
+    /**
+      Is file empty? (boolean)
+     * @brief file_empty
+     * @param file
+     * @return
+     */
+    virtual Variable file_empty(Variable file) = 0;
+
+    /**
+      Return size of file (int)
+     * @brief file_size
+     * @param file
+     * @return
+     */
+    virtual Variable file_size(Variable file) = 0;
 };
 
 /// Empty class
@@ -64,6 +88,9 @@ public:
     virtual void _return() {}
     virtual void _break() {}
     virtual void _continue() {}
+    virtual Variable file_exists(Variable) { return false; }
+    virtual Variable file_empty(Variable) { return false; }
+    virtual Variable file_size(Variable) { return 0; }
 };
 
 /// Delegator class
@@ -89,6 +116,9 @@ public:
     virtual void _return() { delegate._return(); }
     virtual void _break() { delegate._break(); }
     virtual void _continue() { delegate._continue(); }
+    virtual Variable file_exists(Variable file) { return delegate.file_exists(file); }
+    virtual Variable file_empty(Variable file) { return delegate.file_empty(file); }
+    virtual Variable file_size(Variable file) { return delegate.file_size(file); }
 };
 
 } //Language

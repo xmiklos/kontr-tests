@@ -63,7 +63,7 @@ TEST_CASE("while"){
     CHECK(ss.str() == "while ($b == 10) {\n$a = 20;\n}\n");
 }
 
-TEST_CASE("Control fow"){
+TEST_CASE("Control flow"){
     Testing& cg = Testing::instance();
     using T = Testing;
     stringstream ss;
@@ -80,4 +80,31 @@ TEST_CASE("Control fow"){
     ss.str("");
     CONTINUE();
     CHECK(ss.str() == "continue;\n");
+}
+
+TEST_CASE("Files"){
+    Testing& cg = Testing::instance();
+    using T = Testing;
+    stringstream ss;
+    cg.storage.out_ptr = &ss;
+
+    Variable::Delegator<Testing> a("a", 10);
+
+    ss.str("");
+    a = FILE_EXISTS("tmp");
+    CHECK(ss.str() == "$a = -e 'tmp';\n");
+
+    a = "tmp";
+    ss.str("");
+    a = FILE_EXISTS(a + ".tmp");
+    CHECK(ss.str() == "$a = -e ($a . '.tmp');\n");
+
+    ss.str("");
+    a = FILE_EMPTY("tmp");
+    CHECK(ss.str() == "$a = -z 'tmp';\n");
+
+    ss.str("");
+    a = FILE_SIZE("tmp");
+    CHECK(ss.str() == "$a = -s 'tmp';\n");
+
 }

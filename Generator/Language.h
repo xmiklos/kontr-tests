@@ -52,6 +52,19 @@ public:
         std::ostream& out = *(T::instance().storage.out_ptr);
         out << "continue;" << std::endl;
     }
+
+//Return expression
+#define RET_EXP(TYPE, EXP) return ::kontr::Variable::Delegator<T>::__create( ::kontr::Generator::Variable<T>(DataType::TYPE, EXP));
+    virtual Variable file_exists(Variable file) {
+        RET_EXP(Bool, "-e " + file.__getDelegate().__toString(true));
+    }
+    virtual Variable file_empty(Variable file) {
+        RET_EXP(Bool, "-z " + file.__getDelegate().__toString(true));
+    }
+    virtual Variable file_size(Variable file) {
+        RET_EXP(Int, "-s " + file.__getDelegate().__toString(true));
+    }
+#undef RET_EXP
 };
 
 } //Generator

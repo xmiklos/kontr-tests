@@ -64,6 +64,7 @@ class Variable : public ::kontr::Variable::Data<T> {
         }
     }
 
+public:
     /// Convert to string. Add parentheses if it is an expression
     std::string __toString(bool parentheses) const {
         std::stringstream ss;
@@ -79,7 +80,6 @@ class Variable : public ::kontr::Variable::Data<T> {
         return ss.str();
     }
 
-public:
     explicit Variable(const DataType& type, const std::string& expression) :
         ::kontr::Variable::Data<T>(type, expression) {}
 
