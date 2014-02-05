@@ -119,6 +119,7 @@
 #define IF_CHOOSER(...) GET_4RD_ARG(__VA_ARGS__, IF_ELSE, IF_NOELSE)
 #define IF(...) IF_CHOOSER(__VA_ARGS__)(__VA_ARGS__)
 #define WHILE(cond, while) T::instance().language._while(cond, [&] { while })
+#define FOREACH(iter, arr, foreach) T::instance().language._foreach(iter, arr, [&] { foreach })
 #define PERL(code) T::instance().language.perl(code)
 #define RETURN T::instance().language._return
 #define BREAK T::instance().language._break

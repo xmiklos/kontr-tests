@@ -32,6 +32,15 @@ public:
     virtual void _while(Variable cond, Callback _cycle) = 0;
 
     /**
+      FOREACH statement
+     * @brief _foreach
+     * @param iter
+     * @param array
+     * @param _cycle
+     */
+    virtual void _foreach(Variable iter, Variable array, Callback _cycle) = 0;
+
+    /**
       Raw perl code
      * @brief perl
      * @param code
@@ -82,6 +91,9 @@ public:
     virtual void _while(Variable cond, Callback _cycle) {
         kontr::unused(cond, _cycle);
     }
+    virtual void _foreach(Variable iter, Variable array, Callback _cycle) {
+        kontr::unused(iter, array, _cycle);
+    }
     virtual void perl(const char *code) {
         kontr::unused(code);
     }
@@ -107,6 +119,10 @@ public:
 
     virtual void _while(Variable cond, Callback _cycle) {
         delegate._while(cond, _cycle);
+    }
+
+    virtual void _foreach(Variable iter, Variable array, Callback _cycle) {
+        delegate._foreach(iter, array, _cycle);
     }
 
     virtual void perl(const char *code) {

@@ -63,6 +63,19 @@ TEST_CASE("while"){
     CHECK(ss.str() == "while ($b == 10) {\n$a = 20;\n}\n");
 }
 
+TEST_CASE("foreach"){
+    Testing& cg = Testing::instance();
+    using T = Testing;
+    stringstream ss;
+    cg.storage.out_ptr = &ss;
+    Variable::Delegator<Testing> a("a", 10);
+    Variable::Delegator<Testing> b("b", {"first", "second"});
+
+    ss.str("");
+    FOREACH( a, b, { a = 20; } );
+    CHECK(ss.str() == "foreach $a ($b) {\n$a = 20;\n}\n");
+}
+
 TEST_CASE("Control flow"){
     Testing& cg = Testing::instance();
     using T = Testing;

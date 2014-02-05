@@ -33,6 +33,13 @@ public:
         out << "}" << std::endl;
     }
 
+    virtual void _foreach(Variable iter, Variable array, Callback _cycle) {
+        std::ostream& out = *(T::instance().storage.out_ptr);
+        out << "foreach " << iter << " (" << array << ") {" << std::endl;
+        _cycle();
+        out << "}" << std::endl;
+    }
+
     virtual void perl(const char *code) {
         std::ostream& out = *(T::instance().storage.out_ptr);
         out << code << std::endl;
