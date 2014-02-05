@@ -10,6 +10,7 @@ struct Storage {
     std::ostream* out_ptr = nullptr;
     const char* nextFileName = nullptr;
     Names::All names;
+    bool inArrayGenerating = true;
 };
 
 CONFIGURATION(Configuration,

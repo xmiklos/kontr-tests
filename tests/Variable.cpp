@@ -282,3 +282,42 @@ TEST_CASE("Plus"){
     CHECK( ss.str() == "$c = $a + $b;\n");
     CHECK( c.__getDelegate().dataType == Type::Int);
 }
+
+TEST_CASE("Array"){
+    Testing& cg = Testing::instance();;
+    stringstream ss;
+    cg.storage.out_ptr = &ss;
+
+    Variable::Delegator<Testing> a("a", {10, 10, 10});
+    CHECK( ss.str() == "my $a = {10, 10, 10};\n");
+
+    ss.str("");
+    Variable::Delegator<Testing> b("b", {0.3, 0.4, -5.2});
+    CHECK( ss.str() == "my $b = {0.3, 0.4, -5.2};\n");
+
+    ss.str("");
+    Variable::Delegator<Testing> c("c", {false, true, false});
+    CHECK( ss.str() == "my $c = {0, 1, 0};\n");
+
+    ss.str("");
+    Variable::Delegator<Testing> d("d", {"a", "b", "c"});
+    CHECK( ss.str() == "my $d = {'a', 'b', 'c'};\n");
+
+    ss.str("");
+    a = { {b, c}, 50 };
+    CHECK( ss.str() == "$a = {{$b, $c}, 50};\n");
+
+    SECTION("Subscript") {
+        ss.str("");
+        c = a[10];
+        CHECK( ss.str() == "$c = $a[10];\n");
+
+        ss.str("");
+        c = b[a];
+        CHECK( ss.str() == "$c = $b[$a];\n");
+
+        ss.str("");
+        c = a[0] + 25;
+        CHECK( ss.str() == "$c = ($a[0]) + 25;\n");
+    }
+}

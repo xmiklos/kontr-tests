@@ -20,7 +20,8 @@ enum class DataType {
     Int,
     Bool,
     Float,
-    String
+    String,
+    Array
 };
 static const unsigned int DATA_TYPE_LENGTH = 4;
 
@@ -52,6 +53,7 @@ public:
     VARIABLE_CONST(bool, b)
     VARIABLE_CONST(double, f)
     VARIABLE_CONST(const char*, s)
+    VARIABLE_CONST(std::initializer_list<Delegator<T>>, array)
 #undef VARIABLE_CONST
     Interface(const char* name, const Delegator<T>& other)
     { ::kontr::unused(name, other); }
@@ -105,6 +107,14 @@ public:
     virtual Delegator<T> operator|| (const Delegator<T>& other) const = 0;
     virtual Delegator<T> operator+ (const Delegator<T>& other) const = 0;
 
+    /**
+      Array subscript
+     * @brief operator []
+     * @param other
+     * @return
+     */
+    virtual Delegator<T> operator[] (const Delegator<T>& other) const = 0;
+
 };
 
 /// Data storing version of Interface
@@ -120,11 +130,13 @@ public:
         double Float;
         std::string String;
         std::string Expression;
+        std::vector<Delegator<T>> Array;
 
         Storage(int i) : Int(i) {}
         Storage(bool b) : Bool(b) {}
         Storage(double f) : Float(f) {}
         Storage(const char* c) : String(c) {}
+        Storage(std::initializer_list<Delegator<T>> a) : Array(a) {}
         explicit Storage(const std::string& e) :
             Expression(e) {}
     };
@@ -170,6 +182,7 @@ public:
     VARIABLE_CONST(bool, DataType::Bool, b)
     VARIABLE_CONST(double, DataType::Float, f)
     VARIABLE_CONST(const char*, DataType::String, s)
+    VARIABLE_CONST(std::initializer_list<Delegator<T>>, DataType::Array, a)
 
 #undef VARIABLE_CONST
     Data(const char* name, const Delegator<T>& other) :
@@ -203,6 +216,7 @@ public:
     virtual Delegator<T> operator&& (const Delegator<T>&) const { DELEGATE }
     virtual Delegator<T> operator|| (const Delegator<T>&) const { DELEGATE }
     virtual Delegator<T> operator+ (const Delegator<T>&) const { DELEGATE }
+    virtual Delegator<T> operator[] (const Delegator<T>&) const { DELEGATE }
 
 #undef DELEGATE
 
@@ -244,6 +258,7 @@ public:
     DELEGATOR_CONST(bool, b)
     DELEGATOR_CONST(double, f)
     DELEGATOR_CONST(const char*, s)
+    DELEGATOR_CONST(std::initializer_list<Delegator<T>>, a)
 #undef DELEGATOR_CONST
 
     Delegator(const char* name, const Delegator<T>& other) :
@@ -292,6 +307,10 @@ public:
         return delegate + other;
     }
 
+    virtual Delegator<T> operator[] (const Delegator<T>& other) const {
+        return delegate[other];
+    }
+
 #define OP_DEL_SINGLE(OP, TYPE) friend Delegator<T> operator OP (TYPE first, const Delegator<T>& other) \
         { return Delegator<T>(first) OP other; }
 #define OP_DEL(OP) OP_DEL_SINGLE(OP, bool) OP_DEL_SINGLE(OP, int) OP_DEL_SINGLE(OP, double) OP_DEL_SINGLE(OP, const char *)
@@ -304,6 +323,8 @@ public:
 
 #undef OP_DEL_SINGLE
 #undef OP_DEL
+
+
 };
 
 } //Variable

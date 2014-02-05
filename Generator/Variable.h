@@ -61,6 +61,15 @@ class Variable : public ::kontr::Variable::Data<T> {
         case DataType::Float: out << data.Float; return;
         case DataType::Bool: out << data.Bool; return;
         case DataType::String: printString(out, data.String); return;
+        case DataType::Array:
+            out << '{';
+            bool first = true;
+            for (const ::kontr::Variable::Delegator<T>& i : data.Array) {
+                if (!first) out << ", ";
+                i.__generate(out);
+                first = false;
+            }
+            out << '}';
         }
     }
 
@@ -99,6 +108,7 @@ public:
     CONST(bool, b)
     CONST(double, f)
     CONST(const char*, s)
+    CONST(std::initializer_list<::kontr::Variable::Delegator<T>>, a)
 #undef CONST
     Variable(const char* name, const ::kontr::Variable::Delegator<T>& other) :
         ::kontr::Variable::Data<T>(name, other) {
@@ -118,11 +128,20 @@ public:
     Variable& operator=(const Variable& other) {
         if (this != &other) {
             if (testOutPtr()) return *this;
-            std::ostream& out = *(T::instance().storage.out_ptr);
-            __generate(out);
-            out << " = " << other << ";" << std::endl;
+            if (T::instance().storage.inArrayGenerating) {
+                std::ostream& out = *(T::instance().storage.out_ptr);
+                __generate(out);
+                out << " = " << other << ";" << std::endl;
+            }
+
+            bool inArray = T::instance().storage.inArrayGenerating;
+            T::instance().storage.inArrayGenerating = false;
+            //The operator= may print something if the type is an array
+
             this->data = other.data;
             this->dataType = other.dataType;
+
+            T::instance().storage.inArrayGenerating = inArray;
         }
         return *this;
     }
@@ -205,6 +224,11 @@ public:
         else { //Possibly error?
             RET_EXP(Bool, this->__toString(true) + " + " + other.__toString(true));
         }
+    }
+
+    virtual ::kontr::Variable::Delegator<T> operator[] (const ::kontr::Variable::Delegator<T>& o) const {
+        const Variable& other = o.__getDelegate();
+        RET_EXP(Bool, this->__toString(true) + "[" + other.__toString(true) + "]");
     }
 
 #undef RET_EXP
