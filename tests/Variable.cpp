@@ -289,35 +289,72 @@ TEST_CASE("Array"){
     cg.storage.out_ptr = &ss;
 
     Variable::Delegator<Testing> a("a", {10, 10, 10});
-    CHECK( ss.str() == "my $a = {10, 10, 10};\n");
+    CHECK( ss.str() == "my @a = (10, 10, 10);\n");
 
     ss.str("");
     Variable::Delegator<Testing> b("b", {0.3, 0.4, -5.2});
-    CHECK( ss.str() == "my $b = {0.3, 0.4, -5.2};\n");
+    CHECK( ss.str() == "my @b = (0.3, 0.4, -5.2);\n");
 
     ss.str("");
     Variable::Delegator<Testing> c("c", {false, true, false});
-    CHECK( ss.str() == "my $c = {0, 1, 0};\n");
+    CHECK( ss.str() == "my @c = (0, 1, 0);\n");
 
     ss.str("");
     Variable::Delegator<Testing> d("d", {"a", "b", "c"});
-    CHECK( ss.str() == "my $d = {'a', 'b', 'c'};\n");
+    CHECK( ss.str() == "my @d = ('a', 'b', 'c');\n");
 
     ss.str("");
-    a = { {b, c}, 50 };
-    CHECK( ss.str() == "$a = {{$b, $c}, 50};\n");
+    d = {};
+    CHECK( ss.str() == "@d = ();\n");
+
+    ss.str("");
+    d = {1, 1, 1, 2, 3};
+    CHECK( ss.str() == "@d = (1, 1, 1, 2, 3);\n");
+
+    ss.str("");
+    d = c;
+    CHECK( ss.str() == "@d = @c;\n");
+
+
+    SECTION("Array in array") {
+        stringstream buffer;
+        streambuf* old = cerr.rdbuf(buffer.rdbuf());
+        CHECK_THROWS_AS(a = { {b} }, Report::ReportError);
+
+        stringstream err;
+        Report::print_report_text(err, Report::ERROR, string("Array of arrays is not valid"));
+
+        CHECK(err.str() == buffer.str().substr(0, err.str().size()));
+
+        cerr.rdbuf(old);
+    }
+
+    SECTION("Multiple types") {
+        stringstream buffer;
+        streambuf* old = cerr.rdbuf(buffer.rdbuf());
+        CHECK_THROWS_AS((a = { 1, 2, 3, "bla" }), Report::ReportError);
+
+        stringstream err;
+        Report::print_report_text(err, Report::ERROR, string("Element number 4 has different type then the first element"));
+
+        CHECK(err.str() == buffer.str().substr(0, err.str().size()));
+
+        cerr.rdbuf(old);
+    }
 
     SECTION("Subscript") {
         ss.str("");
-        c = a[10];
-        CHECK( ss.str() == "$c = $a[10];\n");
+        c = a[1];
+        CHECK( ss.str() == "$c = $a[1];\n");
+
+        a = 10;
 
         ss.str("");
         c = b[a];
         CHECK( ss.str() == "$c = $b[$a];\n");
 
         ss.str("");
-        c = a[0] + 25;
-        CHECK( ss.str() == "$c = ($a[0]) + 25;\n");
+        c = d[0] + 25;
+        CHECK( ss.str() == "$c = ($d[0]) + 25;\n");
     }
 }

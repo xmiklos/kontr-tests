@@ -73,7 +73,7 @@ TEST_CASE("foreach"){
 
     ss.str("");
     FOREACH( a, b, { a = 20; } );
-    CHECK(ss.str() == "foreach $a ($b) {\n$a = 20;\n}\n");
+    CHECK(ss.str() == "foreach $a (@b) {\n$a = 20;\n}\n");
 }
 
 TEST_CASE("Control flow"){

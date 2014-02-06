@@ -50,7 +50,8 @@ class Variable : public ::kontr::Variable::Data<T> {
     void printVariable() const {
         if (testOutPtr()) return;
         std::ostream& out = *(T::instance().storage.out_ptr);
-        out << "my $" << variableName << " = ";
+        out << "my " << (dataType == DataType::Array ? '@' : '$')
+            << variableName << " = ";
         printScalar(out);
         out << ";" << std::endl;
     }
@@ -62,14 +63,35 @@ class Variable : public ::kontr::Variable::Data<T> {
         case DataType::Bool: out << data.Bool; return;
         case DataType::String: printString(out, data.String); return;
         case DataType::Array:
-            out << '{';
+            out << '(';
             bool first = true;
             for (const ::kontr::Variable::Delegator<T>& i : data.Array) {
                 if (!first) out << ", ";
                 i.__generate(out);
                 first = false;
             }
-            out << '}';
+            out << ')';
+        }
+    }
+private:
+    void checkArray(const std::initializer_list < ::kontr::Variable::Delegator<T> >& arr) const {
+        unsigned counter = 1;
+        DataType type;
+        for (const ::kontr::Variable::Delegator<T>& i : arr) {
+            if (i.__getDelegate().dataType == DataType::Array) {
+                T::instance().report.create(Report::ERROR,
+                                            "Array of arrays is not valid");
+            }
+            if (counter == 1) {
+                type = i.__getDelegate().dataType;
+            }
+            else {
+                if (i.__getDelegate().dataType != type) {
+                    T::instance().report.create(Report::ERROR,
+                                                "Element number " + std::to_string(counter) + " has different type then the first element");
+                }
+            }
+            ++ counter;
         }
     }
 
@@ -108,19 +130,32 @@ public:
     CONST(bool, b)
     CONST(double, f)
     CONST(const char*, s)
-    CONST(std::initializer_list<::kontr::Variable::Delegator<T>>, a)
 #undef CONST
+    //Array constructor has to check the type
+    Variable(std::initializer_list< ::kontr::Variable::Delegator<T> > arr) :
+        ::kontr::Variable::Data<T>(arr) {
+        checkArray(arr);
+    }
+
+    Variable(const char* name, std::initializer_list< ::kontr::Variable::Delegator<T> > arr) :
+        ::kontr::Variable::Data<T>(name, arr) {
+        checkArray(arr);
+        printVariable();
+    }
+
     Variable(const char* name, const ::kontr::Variable::Delegator<T>& other) :
         ::kontr::Variable::Data<T>(name, other) {
         if (testOutPtr()) return;
         std::ostream& out = *(T::instance().storage.out_ptr);
-        out << "my $" << variableName << " = " << other << ';' << std::endl;
+        out << "my " << (other.__getDelegate().dataType == DataType::Array ? '@' : '$')
+            << variableName << " = " << other << ';' << std::endl;
     }
 
     virtual void __generate(std::ostream &out) const {
         switch(variableType) {
         case VariableType::Constant: printScalar(out); return;
-        case VariableType::Variable: out << '$' << variableName; return;
+        case VariableType::Variable: out << (dataType == DataType::Array ? '@' : '$')
+                                         << variableName; return;
         case VariableType::Expression: out << data.Expression; return;
         }
     }
@@ -130,13 +165,18 @@ public:
             if (testOutPtr()) return *this;
             if (T::instance().storage.inArrayGenerating) {
                 std::ostream& out = *(T::instance().storage.out_ptr);
-                __generate(out);
+                if (variableType == VariableType::Variable) {
+                    out << (other.dataType == DataType::Array ? '@' : '$') << variableName;
+                }
+                else {
+                    __generate(out);
+                }
                 out << " = " << other << ";" << std::endl;
             }
 
             bool inArray = T::instance().storage.inArrayGenerating;
             T::instance().storage.inArrayGenerating = false;
-            //The operator= may print something if the type is an array
+            //The operator= will print something if the array is not empty
 
             this->data = other.data;
             this->dataType = other.dataType;
@@ -228,6 +268,16 @@ public:
 
     virtual ::kontr::Variable::Delegator<T> operator[] (const ::kontr::Variable::Delegator<T>& o) const {
         const Variable& other = o.__getDelegate();
+        if (other.dataType == DataType::Int &&
+                variableType == VariableType::Variable &&
+                dataType == DataType::Array &&
+                data.Array.size()) {
+            //The elements have all the same type, so it is the first one
+            return ::kontr::Variable::Delegator<T>::__create(
+                        Variable(data.Array[0].__getDelegate().dataType, std::string("$") + variableName + "[" + other.__toString(true) + "]")
+                    );
+        }
+        //Error
         RET_EXP(Bool, this->__toString(true) + "[" + other.__toString(true) + "]");
     }
 
