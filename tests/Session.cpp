@@ -141,15 +141,11 @@ $session->add_summary('* test nanecisto prosel');
 } else {
 my $points = $session->get_points('points');
 if (($session->has_tag('nanecisto')) || ($session->has_tag('naostro'))) {
-$session->add_summary('* v testu byla nalezena chyba
-');
-$session->add_summary(('* pocet bodu je: ' . $points) . '
-');
+$session->add_summary("* v testu byla nalezena chyba\n");
+$session->add_summary(('* pocet bodu je: ' . $points) . "\n");
 } else {
-$session->add_summary('* test prosel kompletne spravne
-');
-$session->add_summary(('* pocet bodu za funcionalitu je: ' . $points) . '
-');
+$session->add_summary("* test prosel kompletne spravne\n");
+$session->add_summary(('* pocet bodu za funcionalitu je: ' . $points) . "\n");
 }
 }
 }
@@ -196,25 +192,18 @@ $session->add_summary('* test nanecisto prosel');
 } else {
 my $points = $session->get_points('points');
 if (($session->has_tag('nanecisto')) || ($session->has_tag('naostro'))) {
-$session->add_summary('* v testu byla nalezena chyba
-');
-$session->add_summary(('* pocet bodu je: ' . $points) . '
-');
+$session->add_summary("* v testu byla nalezena chyba\n");
+$session->add_summary(('* pocet bodu je: ' . $points) . "\n");
 } else {
-$session->add_summary('* test prosel kompletne spravne
-');
-$session->add_summary(('* pocet bodu za funcionalitu je: ' . $points) . '
-');
+$session->add_summary("* test prosel kompletne spravne\n");
+$session->add_summary(('* pocet bodu za funcionalitu je: ' . $points) . "\n");
 my $bonus = $session->get_points('bonus');
-$session->add_summary(('* pocet bodu za bonus je: ' . $bonus) . '
-');
+$session->add_summary(('* pocet bodu za bonus je: ' . $bonus) . "\n");
 }
 if ($session->has_tag('valgrind')) {
-$session->add_summary('NEPROSLA kontrola Valgrindem, -1 bod
-');
+$session->add_summary("NEPROSLA kontrola Valgrindem, -1 bod\n");
 } else {
-$session->add_summary('Prosla kontrola Valgrindem.
-');
+$session->add_summary("Prosla kontrola Valgrindem.\n");
 }
 }
 }

@@ -65,6 +65,9 @@ TEST_CASE("Generator") {
     testGenerate ("both '\"\" quotes", "'both \\'\"\" quotes'");
 
     testGenerate ("escape \\", "'escape \\'");
+
+    testGenerate ("\ta\t", "\"\\ta\\t\"");
+    testGenerate ("\nb\n", "\"\\nb\\n\"");
 }
 
 TEST_CASE("Variable") {

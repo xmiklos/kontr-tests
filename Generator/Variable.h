@@ -16,20 +16,38 @@ class Variable : public ::kontr::Variable::Data<T> {
 
     static void printString(std::ostream& out, const std::string& str) {
         using namespace std;
-        size_t s = count(str.begin(), str.end(), '\''); //Number of single quotes
-        if (s == 0) {
-            out << '\'' << str << '\'';
-            return;
+        const char * chars = "\t\n";
+        std::map<char, string> replace;
+        replace['\t'] = "\\t"; replace['\n'] = "\\n";
+        bool specialChars = false;
+        char delimiter;
+        if (find_first_of(str.begin(), str.end(), &chars[0], &chars[2]) != str.end()) {
+            specialChars = true;
+            delimiter = '"';
         }
-        size_t d = count(str.begin(), str.end(), '\"'); //Number of double quotes
-        if (d == 0) {
-            out << '"' << str << '"';
-            return;
+        else {
+            size_t s = count(str.begin(), str.end(), '\''); //Number of single quotes
+            if (s == 0) {
+                out << '\'' << str << '\'';
+                return;
+            }
+            size_t d = count(str.begin(), str.end(), '\"'); //Number of double quotes
+            if (d == 0) {
+                out << '"' << str << '"';
+                return;
+            }
+            //There are both, choose the one with less occurences
+            delimiter = (s <= d ? '\'' : '"');
         }
-        //There are both, choose the one with less occurences
-        const char delimiter = (s <= d ? '\'' : '"');
         out << delimiter;
         for (const char c : str) {
+            if (specialChars) {
+                auto it = replace.find(c);
+                if (it != replace.end()) {
+                    out << it->second;
+                    continue;
+                }
+            }
             if (c == delimiter || c == '\\') {
                 out << '\\';
             }
