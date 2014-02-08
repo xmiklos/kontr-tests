@@ -277,8 +277,33 @@ public:
                         Variable(data.Array[0].__getDelegate().dataType, std::string("$") + variableName + "[" + other.__toString(true) + "]")
                     );
         }
+        else if (dataType == DataType::String) {
+            return substr(o, 1);
+        }
         //Error
         RET_EXP(Bool, this->__toString(true) + "[" + other.__toString(true) + "]");
+    }
+
+    virtual ::kontr::Variable::Delegator<T> size() const {
+        if (dataType == DataType::Array) {
+            RET_EXP(Int, "scalar " + this->__toString(true));
+        }
+        else if (dataType == DataType::String) {
+            RET_EXP(Int, "length " + this->__toString(true));
+        }
+        //Error
+        return toInt();
+    }
+
+    virtual ::kontr::Variable::Delegator<T> substr (
+            const ::kontr::Variable::Delegator<T> &from,
+            const ::kontr::Variable::Delegator<T> &to) const {
+        const Variable& f = from.__getDelegate(), &t = to.__getDelegate();
+        if (dataType == DataType::String) {
+            RET_EXP(String, "substr " + this->__toString(true) + ", " + f.__toString(true) + ", " + t.__toString(true));
+        }
+        //Error
+        return ::kontr::Variable::Delegator<T>::__create(*this);
     }
 
 #undef RET_EXP

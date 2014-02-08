@@ -357,4 +357,29 @@ TEST_CASE("Array"){
         c = d[0] + 25;
         CHECK( ss.str() == "$c = ($d[0]) + 25;\n");
     }
+
+    ss.str("");
+    a = d.size();
+    CHECK( ss.str() == "$a = scalar @d;\n");
+}
+
+TEST_CASE("Strings") {
+    Testing& cg = Testing::instance();;
+    stringstream ss;
+    cg.storage.out_ptr = &ss;
+
+    Variable::Delegator<Testing> a("a", "fsfstr");
+    Variable::Delegator<Testing> b("b", 0);
+
+    ss.str("");
+    b = a[4];
+    CHECK( ss.str() == "$b = substr $a, 4, 1;\n");
+
+    ss.str("");
+    b = a.substr(2, 5);
+    CHECK( ss.str() == "$b = substr $a, 2, 5;\n");
+
+    ss.str("");
+    b = a.size();
+    CHECK( ss.str() == "$b = length $a;\n");
 }

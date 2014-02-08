@@ -108,12 +108,29 @@ public:
     virtual Delegator<T> operator+ (const Delegator<T>& other) const = 0;
 
     /**
-      Array subscript
+      Array subscript and string character
      * @brief operator []
      * @param other
      * @return
      */
     virtual Delegator<T> operator[] (const Delegator<T>& other) const = 0;
+
+    /**
+      Get the size of an array or string
+     * @brief size
+     * @return
+     */
+    virtual Delegator<T> size() const = 0;
+
+    /**
+      Substring of a string
+     * @brief substr
+     * @param from
+     * @param to
+     * @return
+     */
+    virtual Delegator<T> substr(const Delegator<T>& from, const Delegator<T>& to) const = 0;
+
 
 };
 
@@ -218,6 +235,9 @@ public:
     virtual Delegator<T> operator+ (const Delegator<T>&) const { DELEGATE }
     virtual Delegator<T> operator[] (const Delegator<T>&) const { DELEGATE }
 
+    virtual Delegator<T> size() const { DELEGATE }
+    virtual Delegator<T> substr(const Delegator<T> &, const Delegator<T> &) const { DELEGATE }
+
 #undef DELEGATE
 
 };
@@ -309,6 +329,14 @@ public:
 
     virtual Delegator<T> operator[] (const Delegator<T>& other) const {
         return delegate[other];
+    }
+
+    virtual Delegator<T> size() const {
+        return delegate.size();
+    }
+
+    virtual Delegator<T> substr(const Delegator<T> &from, const Delegator<T> &to) const {
+        return delegate.substr(from, to);
     }
 
 #define OP_DEL_SINGLE(OP, TYPE) friend Delegator<T> operator OP (TYPE first, const Delegator<T>& other) \
