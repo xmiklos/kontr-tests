@@ -52,12 +52,12 @@ public:
 
     virtual void _break() {
         std::ostream& out = *(T::instance().storage.out_ptr);
-        out << "break;" << std::endl;
+        out << "last;" << std::endl;
     }
 
     virtual void _continue() {
         std::ostream& out = *(T::instance().storage.out_ptr);
-        out << "continue;" << std::endl;
+        out << "next;" << std::endl;
     }
 
 //Return expression

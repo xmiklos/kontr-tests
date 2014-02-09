@@ -88,11 +88,11 @@ TEST_CASE("Control flow"){
 
     ss.str("");
     BREAK();
-    CHECK(ss.str() == "break;\n");
+    CHECK(ss.str() == "last;\n");
 
     ss.str("");
     CONTINUE();
-    CHECK(ss.str() == "continue;\n");
+    CHECK(ss.str() == "next;\n");
 }
 
 TEST_CASE("Files"){
