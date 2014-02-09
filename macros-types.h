@@ -109,7 +109,7 @@
 /// Usage: SESSION("script", "files", {nanecisto}, {naostro}, [&]{ post;} )
 #define SESSION(...) SESSION_NAME(Session, __VA_ARGS__)
 
-#define VAR(name, data) typename T::VariableDelegator name(#name, data)
+#define VAR(name, ...) typename ::kontr::Variable::Delegator<T> name(#name, __VA_ARGS__)
 
 #define IF_NOELSE(cond, IF) T::instance().language._if( (cond) , [&] { IF } )
 #define IF_ELSE(cond, IF, ELSE) T::instance().language._if( (cond) , [&] { IF }, [&] { ELSE })
