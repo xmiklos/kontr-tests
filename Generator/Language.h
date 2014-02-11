@@ -71,6 +71,13 @@ public:
     virtual Variable file_size(Variable file) {
         RET_EXP(Int, "-s " + file.__getDelegate().__toString(true));
     }
+    virtual Variable range(Variable from, Variable to) {
+	::kontr::Generator::Variable<T> res(DataType::Array, 
+	    from.__getDelegate().__toString(true) + " .. " + to.__getDelegate().__toString(true));
+	res.data.Array.push_back(from);
+	res.data.Array.push_back(to);
+	return ::kontr::Variable::Delegator<T>::__create(res);
+    }
 #undef RET_EXP
 };
 

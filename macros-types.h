@@ -127,5 +127,6 @@
 #define FILE_EXISTS(file) T::instance().language.file_exists(file)
 #define FILE_EMPTY(file) T::instance().language.file_empty(file)
 #define FILE_SIZE(file) T::instance().language.file_size(file)
+#define RANGE(from, to) T::instance().language.range(from, to)
 
 #endif // MACROSTYPES_H

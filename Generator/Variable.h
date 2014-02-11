@@ -287,7 +287,6 @@ public:
     virtual ::kontr::Variable::Delegator<T> operator[] (const ::kontr::Variable::Delegator<T>& o) const {
         const Variable& other = o.__getDelegate();
         if (other.dataType == DataType::Int &&
-                variableType == VariableType::Variable &&
                 dataType == DataType::Array &&
                 data.Array.size()) {
             //The elements have all the same type, so it is the first one

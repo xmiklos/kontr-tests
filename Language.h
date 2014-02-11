@@ -76,6 +76,8 @@ public:
      * @return
      */
     virtual Variable file_size(Variable file) = 0;
+    
+    virtual Variable range(Variable from, Variable to) = 0;
 };
 
 /// Empty class
@@ -103,6 +105,7 @@ public:
     virtual Variable file_exists(Variable) { return false; }
     virtual Variable file_empty(Variable) { return false; }
     virtual Variable file_size(Variable) { return 0; }
+    virtual Variable range(Variable from, Variable to) { return {from, to}; }
 };
 
 /// Delegator class
@@ -135,6 +138,7 @@ public:
     virtual Variable file_exists(Variable file) { return delegate.file_exists(file); }
     virtual Variable file_empty(Variable file) { return delegate.file_empty(file); }
     virtual Variable file_size(Variable file) { return delegate.file_size(file); }
+    virtual Variable range(Variable from, Variable to) { return delegate.range(from, to); }
 };
 
 } //Language

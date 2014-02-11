@@ -119,5 +119,30 @@ TEST_CASE("Files"){
     ss.str("");
     a = FILE_SIZE("tmp");
     CHECK(ss.str() == "$a = -s 'tmp';\n");
+}
 
+TEST_CASE("Range"){
+    Testing& cg = Testing::instance();
+    using T = Testing;
+    stringstream ss;
+    cg.storage.out_ptr = &ss;
+
+    Variable::Delegator<Testing> a("a", 10);
+    Variable::Delegator<Testing> b("b", 10);
+    
+    ss.str("");
+    a = RANGE(0, 10);
+    CHECK(ss.str() == "@a = 0 .. 10;\n");
+
+    ss.str("");
+    b = a[0];
+    CHECK(ss.str() == "$b = $a[0];\n");
+    
+    CHECK( b.__getDelegate().dataType == Variable::DataType::Int );
+
+    SECTION("Foreach") {
+        ss.str("");
+	FOREACH(a, RANGE(b, 5), {});
+	CHECK(ss.str() == "foreach @a ($b .. 5) {\n}\n");
+    }
 }
