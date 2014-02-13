@@ -27,23 +27,23 @@ TEST_CASE("if/else"){
 
     ss.str("");
     IF( b == 10, { a = 20; } );
-    CHECK(ss.str() == "if ($b == 10) {\n$a = 20;\n}\n");
+    CHECK(ss.str() == "if ($b == 10) {\n\t$a = 20;\n}\n");
 
     ss.str("");
     IF( b == 10, a = 20; );
-    CHECK(ss.str() == "if ($b == 10) {\n$a = 20;\n}\n");
+    CHECK(ss.str() == "if ($b == 10) {\n\t$a = 20;\n}\n");
 
     ss.str("");
     IF( b == 10, { a = 20; }, { a = 30; } );
-    CHECK(ss.str() == "if ($b == 10) {\n$a = 20;\n} else {\n$a = 30;\n}\n");
+    CHECK(ss.str() == "if ($b == 10) {\n\t$a = 20;\n} else {\n\t$a = 30;\n}\n");
 
     ss.str("");
     IF( b == 10, { a = 20; }, a = 30; );
-    CHECK(ss.str() == "if ($b == 10) {\n$a = 20;\n} else {\n$a = 30;\n}\n");
+    CHECK(ss.str() == "if ($b == 10) {\n\t$a = 20;\n} else {\n\t$a = 30;\n}\n");
 
     ss.str("");
     IF( b == 10, a = 20; , a = 30; );
-    CHECK(ss.str() == "if ($b == 10) {\n$a = 20;\n} else {\n$a = 30;\n}\n");
+    CHECK(ss.str() == "if ($b == 10) {\n\t$a = 20;\n} else {\n\t$a = 30;\n}\n");
 }
 
 TEST_CASE("while"){
@@ -56,11 +56,11 @@ TEST_CASE("while"){
 
     ss.str("");
     WHILE( b == 10, { a = 20; } );
-    CHECK(ss.str() == "while ($b == 10) {\n$a = 20;\n}\n");
+    CHECK(ss.str() == "while ($b == 10) {\n\t$a = 20;\n}\n");
 
     ss.str("");
     WHILE( b == 10, a = 20; );
-    CHECK(ss.str() == "while ($b == 10) {\n$a = 20;\n}\n");
+    CHECK(ss.str() == "while ($b == 10) {\n\t$a = 20;\n}\n");
 }
 
 TEST_CASE("foreach"){
@@ -73,7 +73,7 @@ TEST_CASE("foreach"){
 
     ss.str("");
     FOREACH( a, b, { a = 20; } );
-    CHECK(ss.str() == "foreach $a (@b) {\n$a = 20;\n}\n");
+    CHECK(ss.str() == "foreach $a (@b) {\n\t$a = 20;\n}\n");
 }
 
 TEST_CASE("Control flow"){

@@ -87,9 +87,12 @@ public:
         out << "sub post_test {" << std::endl;
         T::instance().storage.out_ptr = &out;
         if (post != nullptr) {
+            T::instance().storage.addIndent();
             post();
+            T::instance().storage.removeIndent();
         }
         else {
+            T::instance().storage.addIndent();
             IF(run_type() == "student", {
                 IF(has_tag("nanecisto"), {
                    add_summary("* test nanecisto neprosel");
@@ -119,6 +122,7 @@ public:
                        );
                    }
             });
+            T::instance().storage.removeIndent();
         }
         out << "}" << std::endl;
     }
@@ -144,7 +148,8 @@ public:
     //This methods prints to out in instance
     virtual void add_summary(Variable message) override {
         std::ostream& out = *(T::instance().storage.out_ptr);
-        out << "$session->add_summary(" << message << ");" << std::endl;
+        std::string& indent = T::instance().storage.indent; 
+        out << indent << "$session->add_summary(" << message << ");" << std::endl;
     }
 
     //Getter

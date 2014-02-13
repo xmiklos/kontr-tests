@@ -30,12 +30,14 @@ public:
 
     virtual void log_stdout() override {
         std::ostream& out = *(T::instance().storage.out_ptr);
-        out << prefix << "->log_stdout();" << std::endl;
+        std::string& indent = T::instance().storage.indent;
+        out << indent << prefix << "->log_stdout();" << std::endl;
     }
 
     virtual void log_stderr() override {
         std::ostream& out = *(T::instance().storage.out_ptr);
-        out << prefix << "->log_stderr();" << std::endl;
+        std::string& indent = T::instance().storage.indent;
+        out << indent << prefix << "->log_stderr();" << std::endl;
     }
 };
 

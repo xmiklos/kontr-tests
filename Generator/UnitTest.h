@@ -40,31 +40,38 @@ public:
 
     virtual void name(const char* name) {
         Variable print = name;
-        out << variable << "->name(" << print << ");" << std::endl;
+        std::string& indent = T::instance().storage.indent;
+        out << indent << variable << "->name(" << print << ");" << std::endl;
     }
 
     virtual void stage_file(Variable filename) {
-        out << variable << "->stage_file(" << filename << ");" << std::endl;
+        std::string& indent = T::instance().storage.indent;
+        out << indent << variable << "->stage_file(" << filename << ");" << std::endl;
     }
 
     virtual void stage_compiled_file(Variable filename) {
-        out << variable << "->stage_compiled_file(" << filename << ");" << std::endl;
+        std::string& indent = T::instance().storage.indent;
+        out << indent << variable << "->stage_compiled_file(" << filename << ");" << std::endl;
     }
 
     virtual void stage_student_file(Variable filename) {
-        out << variable << "->stage_student_file(" << filename << ");" << std::endl;
+        std::string& indent = T::instance().storage.indent;
+        out << indent << variable << "->stage_student_file(" << filename << ");" << std::endl;
     }
 
     virtual void stage_compiled_student_file(Variable filename) {
-        out << variable << "->stage_compiled_student_file(" << filename << ");" << std::endl;
+        std::string& indent = T::instance().storage.indent;
+        out << indent << variable << "->stage_compiled_student_file(" << filename << ");" << std::endl;
     }
 
 
     virtual void add_tag(Variable tag) override {
-        out << variable << "->add_tag(" << tag << ");" << std::endl;
+        std::string& indent = T::instance().storage.indent;
+        out << indent << variable << "->add_tag(" << tag << ");" << std::endl;
     }
     virtual void add_points(Variable name, Variable points) override {
-        out << variable << "->add_points(" << name << " => " << points << ");" << std::endl;
+        std::string& indent = T::instance().storage.indent;
+        out << indent << variable << "->add_points(" << name << " => " << points << ");" << std::endl;
     }
 
 #define GETTER(NAME, TYPE) virtual Variable NAME() override {\
@@ -83,58 +90,73 @@ public:
     virtual Valgrind* valgrind() override { return &valgrindResult; }
 
     virtual void compile() override {
-        out << variable << "->compile();" << std::endl;
+        std::string& indent = T::instance().storage.indent;
+        out << indent << variable << "->compile();" << std::endl;
     }
 
     virtual void run(Variable input, std::vector<Variable> args = {}) override {
-        out << variable << "->run(" << input;
+        std::string& indent = T::instance().storage.indent;
+        out << indent << variable << "->run(" << input;
         for (Variable v : args) { out << ", " << v; }
         out << ");" << std::endl;
     }
     virtual void run_grind(Variable input, std::vector<Variable> args = {}) override {
-        out << variable << "->run_grind(" << input;
+        std::string& indent = T::instance().storage.indent;
+        out << indent << variable << "->run_grind(" << input;
         for (Variable v : args) { out << ", " << v; }
         out << ");" << std::endl;
     }
 
     virtual void diff_stdout(Variable mode, Variable file) override {
-        out << variable << "->diff_stdout(" << mode << ", " << file << ");" << std::endl;
+        std::string& indent = T::instance().storage.indent;
+        out << indent << variable << "->diff_stdout(" << mode << ", " << file << ");" << std::endl;
     }
     virtual void diff_stderr(Variable mode, Variable file) override {
-        out << variable << "->diff_stderr(" << mode << ", " << file << ");" << std::endl;
+        std::string& indent = T::instance().storage.indent;
+        out << indent << variable << "->diff_stderr(" << mode << ", " << file << ");" << std::endl;
     }
     virtual void diff_generic(Variable mode, Variable file1, Variable file2) override {
-        out << variable << "->diff_generic(" << mode << ", " << file1 << ", " << file2 << ");" << std::endl;
+        std::string& indent = T::instance().storage.indent;
+        out << indent << variable << "->diff_generic(" << mode << ", " << file1 << ", " << file2 << ");" << std::endl;
     }
 
     virtual void analyze_stdout(Variable desc, Variable cmd) override {
-        out << variable << "->analyze_stdout(" << desc << ", " << cmd << ");" << std::endl;
+        std::string& indent = T::instance().storage.indent;
+        out << indent << variable << "->analyze_stdout(" << desc << ", " << cmd << ");" << std::endl;
     }
     virtual void analyze_stderr(Variable desc, Variable cmd) override {
-        out << variable << "->analyze_stderr(" << desc << ", " << cmd << ");" << std::endl;
+        std::string& indent = T::instance().storage.indent;
+        out << indent << variable << "->analyze_stderr(" << desc << ", " << cmd << ");" << std::endl;
     }
     virtual void analyze(Variable desc, Variable input, Variable cmd) override {
-        out << variable << "->analyze(" << desc << ", " << input << ", " << cmd << ");" << std::endl;
+        std::string& indent = T::instance().storage.indent;
+        out << indent << variable << "->analyze(" << desc << ", " << input << ", " << cmd << ");" << std::endl;
     }
 
     virtual void log(Variable text, Variable type = "both") override {
-        out << variable << "->log(" << text << ", " << type << ");" << std::endl;
+        std::string& indent = T::instance().storage.indent;
+        out << indent << variable << "->log(" << text << ", " << type << ");" << std::endl;
     }
     virtual void log_file(Variable filename, Variable type = "both") override {
-        out << variable << "->log_file(" << filename << ", " << type << ");" << std::endl;
+        std::string& indent = T::instance().storage.indent;
+        out << indent << variable << "->log_file(" << filename << ", " << type << ");" << std::endl;
     }
 
     virtual void log_run_fail(Variable message) override {
-        out << variable << "->log_run_fail(" << message << ");" << std::endl;
+        std::string& indent = T::instance().storage.indent;
+        out << indent << variable << "->log_run_fail(" << message << ");" << std::endl;
     }
     virtual void log_tag(Variable tag, Variable text, Variable type = "both") override {
-        out << variable << "->log_tag(" << tag << ", " << text << ", " << type << ");" << std::endl;
+        std::string& indent = T::instance().storage.indent;
+        out << indent << variable << "->log_tag(" << tag << ", " << text << ", " << type << ");" << std::endl;
     }
     virtual void log_valgrind(Variable tag, Variable text, Variable type = "both") override {
-        out << variable << "->log_valgrind(" << tag << ", " << text << ", " << type << ");" << std::endl;
+        std::string& indent = T::instance().storage.indent;
+        out << indent << variable << "->log_valgrind(" << tag << ", " << text << ", " << type << ");" << std::endl;
     }
     virtual void subtest(Variable name) override {
-        out << variable << "->subtest(" << name << ");" << std::endl;
+        std::string& indent = T::instance().storage.indent;
+        out << indent << variable << "->subtest(" << name << ");" << std::endl;
     }
 #undef GETTER
 

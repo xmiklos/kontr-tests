@@ -27,7 +27,8 @@ public:
 
     virtual void name(const char* name) {
         Variable print = name;
-        out << variable << "->name(" << print << ");" << std::endl;
+        std::string& indent = T::instance().storage.indent;
+        out << indent << variable << "->name(" << print << ");" << std::endl;
     }
 
     virtual void register_unit(Unit unit) {
@@ -41,26 +42,31 @@ public:
         }
 
         Variable print = std::get<1>(current).c_str();
-        out << variable << "->register_unit(" << print << ");" << std::endl;
+        std::string& indent = T::instance().storage.indent;
+        out << indent << variable << "->register_unit(" << print << ");" << std::endl;
 
         //Generate code for unit test
         instance->execute();
     }
 
     virtual void stage_file(Variable filename) {
-        out << variable << "->stage_file(" << filename << ");" << std::endl;
+        std::string& indent = T::instance().storage.indent;
+        out << indent << variable << "->stage_file(" << filename << ");" << std::endl;
     }
 
     virtual void stage_compiled_file(Variable filename) {
-        out << variable << "->stage_compiled_file(" << filename << ");" << std::endl;
+        std::string& indent = T::instance().storage.indent;
+        out << indent << variable << "->stage_compiled_file(" << filename << ");" << std::endl;
     }
 
     virtual void stage_student_file(Variable filename) {
-        out << variable << "->stage_student_file(" << filename << ");" << std::endl;
+        std::string& indent = T::instance().storage.indent;
+        out << indent << variable << "->stage_student_file(" << filename << ");" << std::endl;
     }
 
     virtual void stage_compiled_student_file(Variable filename) {
-        out << variable << "->stage_compiled_student_file(" << filename << ");" << std::endl;
+        std::string& indent = T::instance().storage.indent;
+        out << indent << variable << "->stage_compiled_student_file(" << filename << ");" << std::endl;
     }
 
     virtual ~MasterTest() {

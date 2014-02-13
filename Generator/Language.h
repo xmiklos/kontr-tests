@@ -14,50 +14,65 @@ public:
 
     virtual void _if(Variable cond, Callback _if, Callback _else = nullptr) {
         std::ostream& out = *(T::instance().storage.out_ptr);
-        out << "if (" << cond << ") {" << std::endl;
+        std::string& indent = T::instance().storage.indent;
+        out << indent << "if (" << cond << ") {" << std::endl;
+        T::instance().storage.addIndent();
         _if();
+        T::instance().storage.removeIndent();
         if (_else == nullptr) {
-            out << "}" << std::endl;
+            out << indent << "}" << std::endl;
         }
         else {
-            out << "} else {" << std::endl;
+            out << indent << "} else {" << std::endl;
+            T::instance().storage.addIndent();
             _else();
-            out << "}" << std::endl;
+            T::instance().storage.removeIndent();
+            out << indent << "}" << std::endl;
         }
     }
 
     virtual void _while(Variable cond, Callback _cycle) {
         std::ostream& out = *(T::instance().storage.out_ptr);
-        out << "while (" << cond << ") {" << std::endl;
+        std::string& indent = T::instance().storage.indent;
+        out << indent << "while (" << cond << ") {" << std::endl;
+        T::instance().storage.addIndent();
         _cycle();
-        out << "}" << std::endl;
+        T::instance().storage.removeIndent();
+        out << indent << "}" << std::endl;
     }
 
     virtual void _foreach(Variable iter, Variable array, Callback _cycle) {
         std::ostream& out = *(T::instance().storage.out_ptr);
-        out << "foreach " << iter << " (" << array << ") {" << std::endl;
+        std::string& indent = T::instance().storage.indent;
+        out << indent << "foreach " << iter << " (" << array << ") {" << std::endl;
+        T::instance().storage.addIndent();
         _cycle();
-        out << "}" << std::endl;
+        T::instance().storage.removeIndent();
+        out << indent << "}" << std::endl;
     }
 
     virtual void perl(const char *code) {
         std::ostream& out = *(T::instance().storage.out_ptr);
-        out << code << std::endl;
+        std::string& indent = T::instance().storage.indent;
+        out << indent << code << std::endl;
     }
     
     virtual void _return() {
 		std::ostream& out = *(T::instance().storage.out_ptr);
-        out << "return;" << std::endl;
+        std::string& indent = T::instance().storage.indent;
+        out << indent << "return;" << std::endl;
 	}
 
     virtual void _break() {
         std::ostream& out = *(T::instance().storage.out_ptr);
-        out << "last;" << std::endl;
+        std::string& indent = T::instance().storage.indent;
+        out << indent << "last;" << std::endl;
     }
 
     virtual void _continue() {
         std::ostream& out = *(T::instance().storage.out_ptr);
-        out << "next;" << std::endl;
+        std::string& indent = T::instance().storage.indent;
+        out << indent << "next;" << std::endl;
     }
 
 //Return expression

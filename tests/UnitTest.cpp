@@ -246,7 +246,7 @@ $tmp = $session->run_type;
 $tmp = $session->has_tag('none');
 $session->add_summary('done');
 if ($unit_test->valgrind->grind_errors) {
-$unit_test->log_valgrind('valgrind', '[VALGRIND] Chyba pri kontrole Valgrindem:', 'both');
+	$unit_test->log_valgrind('valgrind', '[VALGRIND] Chyba pri kontrole Valgrindem:', 'both');
 }
 )delimiter";
 

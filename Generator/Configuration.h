@@ -11,6 +11,10 @@ struct Storage {
     const char* nextFileName = nullptr;
     Names::All names;
     bool inArrayGenerating = true;
+    std::string indent;
+
+    void addIndent() { indent.push_back('\t'); }
+    void removeIndent() { indent.pop_back(); }
 };
 
 CONFIGURATION(Configuration,

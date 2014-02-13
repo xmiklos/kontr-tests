@@ -68,7 +68,8 @@ class Variable : public ::kontr::Variable::Data<T> {
     void printVariable() const {
         if (testOutPtr()) return;
         std::ostream& out = *(T::instance().storage.out_ptr);
-        out << "my " << (dataType == DataType::Array ? '@' : '$')
+        std::string& indent = T::instance().storage.indent;
+        out << indent << "my " << (dataType == DataType::Array ? '@' : '$')
             << variableName << " = ";
         printScalar(out);
         out << ";" << std::endl;
@@ -165,7 +166,8 @@ public:
         ::kontr::Variable::Data<T>(name, other) {
         if (testOutPtr()) return;
         std::ostream& out = *(T::instance().storage.out_ptr);
-        out << "my " << (other.__getDelegate().dataType == DataType::Array ? '@' : '$')
+        std::string& indent = T::instance().storage.indent;
+        out << indent << "my " << (other.__getDelegate().dataType == DataType::Array ? '@' : '$')
             << variableName << " = " << other << ';' << std::endl;
     }
 
@@ -183,8 +185,9 @@ public:
             if (testOutPtr()) return *this;
             if (T::instance().storage.inArrayGenerating) {
                 std::ostream& out = *(T::instance().storage.out_ptr);
+                std::string& indent = T::instance().storage.indent;
                 if (variableType == VariableType::Variable) {
-                    out << (other.dataType == DataType::Array ? '@' : '$') << variableName;
+                    out << indent << (other.dataType == DataType::Array ? '@' : '$') << variableName;
                 }
                 else {
                     __generate(out);

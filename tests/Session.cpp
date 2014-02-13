@@ -96,7 +96,7 @@ TEST_CASE("post_func") {
     //Check contents
     const char* result =
 R"delimiter(sub post_test {
-$session->add_summary('No points');
+	$session->add_summary('No points');
 }
 )delimiter";
     stringstream buf;
@@ -132,22 +132,22 @@ TEST_CASE("post_default") {
     //Check contents
     const char* result =
 R"delimiter(sub post_test {
-if (($session->run_type) eq 'student') {
-if ($session->has_tag('nanecisto')) {
-$session->add_summary('* test nanecisto neprosel');
-} else {
-$session->add_summary('* test nanecisto prosel');
-}
-} else {
-my $points = $session->get_points('points');
-if (($session->has_tag('nanecisto')) || ($session->has_tag('naostro'))) {
-$session->add_summary("* v testu byla nalezena chyba\n");
-$session->add_summary(('* pocet bodu je: ' . $points) . "\n");
-} else {
-$session->add_summary("* test prosel kompletne spravne\n");
-$session->add_summary(('* pocet bodu za funcionalitu je: ' . $points) . "\n");
-}
-}
+	if (($session->run_type) eq 'student') {
+		if ($session->has_tag('nanecisto')) {
+			$session->add_summary('* test nanecisto neprosel');
+		} else {
+			$session->add_summary('* test nanecisto prosel');
+		}
+	} else {
+		my $points = $session->get_points('points');
+		if (($session->has_tag('nanecisto')) || ($session->has_tag('naostro'))) {
+			$session->add_summary("* v testu byla nalezena chyba\n");
+			$session->add_summary(('* pocet bodu je: ' . $points) . "\n");
+		} else {
+			$session->add_summary("* test prosel kompletne spravne\n");
+			$session->add_summary(('* pocet bodu za funcionalitu je: ' . $points) . "\n");
+		}
+	}
 }
 )delimiter";
     stringstream buf;
@@ -183,29 +183,29 @@ TEST_CASE("post_both") {
     //Check contents
     const char* result =
 R"delimiter(sub post_test {
-if (($session->run_type) eq 'student') {
-if ($session->has_tag('nanecisto')) {
-$session->add_summary('* test nanecisto neprosel');
-} else {
-$session->add_summary('* test nanecisto prosel');
-}
-} else {
-my $points = $session->get_points('points');
-if (($session->has_tag('nanecisto')) || ($session->has_tag('naostro'))) {
-$session->add_summary("* v testu byla nalezena chyba\n");
-$session->add_summary(('* pocet bodu je: ' . $points) . "\n");
-} else {
-$session->add_summary("* test prosel kompletne spravne\n");
-$session->add_summary(('* pocet bodu za funcionalitu je: ' . $points) . "\n");
-my $bonus = $session->get_points('bonus');
-$session->add_summary(('* pocet bodu za bonus je: ' . $bonus) . "\n");
-}
-if ($session->has_tag('valgrind')) {
-$session->add_summary("NEPROSLA kontrola Valgrindem, -1 bod\n");
-} else {
-$session->add_summary("Prosla kontrola Valgrindem.\n");
-}
-}
+	if (($session->run_type) eq 'student') {
+		if ($session->has_tag('nanecisto')) {
+			$session->add_summary('* test nanecisto neprosel');
+		} else {
+			$session->add_summary('* test nanecisto prosel');
+		}
+	} else {
+		my $points = $session->get_points('points');
+		if (($session->has_tag('nanecisto')) || ($session->has_tag('naostro'))) {
+			$session->add_summary("* v testu byla nalezena chyba\n");
+			$session->add_summary(('* pocet bodu je: ' . $points) . "\n");
+		} else {
+			$session->add_summary("* test prosel kompletne spravne\n");
+			$session->add_summary(('* pocet bodu za funcionalitu je: ' . $points) . "\n");
+			my $bonus = $session->get_points('bonus');
+			$session->add_summary(('* pocet bodu za bonus je: ' . $bonus) . "\n");
+		}
+		if ($session->has_tag('valgrind')) {
+			$session->add_summary("NEPROSLA kontrola Valgrindem, -1 bod\n");
+		} else {
+			$session->add_summary("Prosla kontrola Valgrindem.\n");
+		}
+	}
 }
 )delimiter";
     stringstream buf;
