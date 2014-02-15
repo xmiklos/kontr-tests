@@ -221,6 +221,7 @@ public:
     using ::kontr::Exec::Execution::Empty<T>::log_stdout;
     using ::kontr::Exec::Execution::Empty<T>::log_stderr;
     */
+    virtual Variable cmd() override { return ""; }
     virtual Variable output_path() override { return ""; }
     virtual Variable stdin_path() override { return ""; }
     virtual Variable stdout_path() override { return ""; }
