@@ -25,6 +25,8 @@ UNIT_TEST(execution) {
 
     execution()->log_stdout();
     execution()->log_stderr();
+    execution()->log_stdout("teacher");
+    execution()->log_stderr("teacher");
 }
 
 UNIT_TEST(compilation) {
@@ -78,8 +80,10 @@ $tmp = $unit_test->execution->work_path;
 $tmp = $unit_test->execution->success;
 $tmp = $unit_test->execution->exit_value;
 $tmp = $unit_test->execution->exit_type;
-$unit_test->execution->log_stdout();
-$unit_test->execution->log_stderr();
+$unit_test->execution->log_stdout('both');
+$unit_test->execution->log_stderr('both');
+$unit_test->execution->log_stdout('teacher');
+$unit_test->execution->log_stderr('teacher');
 )delimiter";
 
     stringstream buf;
@@ -137,8 +141,8 @@ $tmp = $unit_test->compilation->success;
 $tmp = $unit_test->compilation->exit_value;
 $tmp = $unit_test->compilation->exit_type;
 $tmp = $unit_test->compilation->result;
-$unit_test->compilation->log_stdout();
-$unit_test->compilation->log_stderr();
+$unit_test->compilation->log_stdout('both');
+$unit_test->compilation->log_stderr('both');
 )delimiter";
 
     stringstream buf;

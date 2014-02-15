@@ -28,16 +28,16 @@ public:
     GETTER(exit_value, Int)
 
 
-    virtual void log_stdout() override {
+    virtual void log_stdout(Variable type = "both") override {
         std::ostream& out = *(T::instance().storage.out_ptr);
         std::string& indent = T::instance().storage.indent;
-        out << indent << prefix << "->log_stdout();" << std::endl;
+        out << indent << prefix << "->log_stdout(" << type << ");" << std::endl;
     }
 
-    virtual void log_stderr() override {
+    virtual void log_stderr(Variable type = "both") override {
         std::ostream& out = *(T::instance().storage.out_ptr);
         std::string& indent = T::instance().storage.indent;
-        out << indent << prefix << "->log_stderr();" << std::endl;
+        out << indent << prefix << "->log_stderr(" << type << ");" << std::endl;
     }
 };
 
@@ -74,8 +74,8 @@ public:
     DELEGATE(exit_value)
     DELEGATE(exit_type)
 #undef DELEGATE
-    virtual void log_stdout() override { exec.log_stdout(); }
-    virtual void log_stderr() override { exec.log_stderr(); }
+    virtual void log_stdout(Variable type = "both") override { exec.log_stdout(type); }
+    virtual void log_stderr(Variable type = "both") override { exec.log_stderr(type); }
 
     GETTER(result, String)
 };
@@ -113,8 +113,8 @@ public:
     DELEGATE(exit_value)
     DELEGATE(exit_type)
 #undef DELEGATE
-    virtual void log_stdout() override { exec.log_stdout(); }
-    virtual void log_stderr() override { exec.log_stderr(); }
+    virtual void log_stdout(Variable type = "both") override { exec.log_stdout(type); }
+    virtual void log_stderr(Variable type = "both") override { exec.log_stderr(type); }
 
     GETTER(grind_errors, Bool)
     GETTER(grind_data, String)

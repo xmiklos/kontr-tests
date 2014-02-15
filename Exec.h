@@ -32,8 +32,8 @@ public:
     virtual Variable exit_type() = 0; //string
     virtual Variable exit_value() = 0; //int
 
-    virtual void log_stdout() = 0;
-    virtual void log_stderr() = 0;
+    virtual void log_stdout(Variable type = "both") = 0;
+    virtual void log_stderr(Variable type = "both") = 0;
 };
 
 template<typename T>
@@ -52,8 +52,8 @@ public:
     virtual Variable exit_type() override { return ""; }
     virtual Variable exit_value() override { return 0; }
 
-    virtual void log_stdout() override {}
-    virtual void log_stderr() override {}
+    virtual void log_stdout(Variable type = "both") override { ::kontr::unused(type); }
+    virtual void log_stderr(Variable type = "both") override { ::kontr::unused(type); }
 };
 
 template<typename T>
@@ -75,11 +75,11 @@ public:
     virtual Variable exit_value() override { return delegate.exit_value(); }
     virtual Variable exit_type() override { return delegate.exit_type(); }
 
-    virtual void log_stdout() override {
-        delegate.log_stdout();
+    virtual void log_stdout(Variable type = "both") override {
+        delegate.log_stdout(type);
     }
-    virtual void log_stderr() override {
-        delegate.log_stderr();
+    virtual void log_stderr(Variable type = "both") override {
+        delegate.log_stderr(type);
     }
 };
 
@@ -127,8 +127,8 @@ public:
     virtual Variable exit_type() override { return ""; }
     virtual Variable exit_value() override { return 0; }
 
-    virtual void log_stdout() override {}
-    virtual void log_stderr() override {}
+    virtual void log_stdout(Variable type = "both") override { ::kontr::unused(type); }
+    virtual void log_stderr(Variable type = "both") override { ::kontr::unused(type); }
 
     /**
       Result of compilation (string = clean, warning, errors)
@@ -157,11 +157,11 @@ public:
     virtual Variable exit_value() override { return delegate.exit_value(); }
     virtual Variable exit_type() override { return delegate.exit_type(); }
 
-    virtual void log_stdout() override {
-        delegate.log_stdout();
+    virtual void log_stdout(Variable type = "both") override {
+        delegate.log_stdout(type);
     }
-    virtual void log_stderr() override {
-        delegate.log_stderr();
+    virtual void log_stderr(Variable type = "both") override {
+        delegate.log_stderr(type);
     }
 
     virtual Variable result() override { return delegate.result(); }
@@ -232,8 +232,8 @@ public:
     virtual Variable exit_type() override { return ""; }
     virtual Variable exit_value() override { return 0; }
 
-    virtual void log_stdout() override {}
-    virtual void log_stderr() override {}
+    virtual void log_stdout(Variable type = "both") override { ::kontr::unused(type); }
+    virtual void log_stderr(Variable type = "both") override { ::kontr::unused(type); }
 
     virtual Variable grind_errors() override { return false; }
     virtual Variable grind_data() override { return ""; }
@@ -260,11 +260,11 @@ public:
     virtual Variable exit_value() override { return delegate.exit_value(); }
     virtual Variable exit_type() override { return delegate.exit_type(); }
 
-    virtual void log_stdout() override {
-        delegate.log_stdout();
+    virtual void log_stdout(Variable type = "both") override {
+        delegate.log_stdout(type);
     }
-    virtual void log_stderr() override {
-        delegate.log_stderr();
+    virtual void log_stderr(Variable type = "both") override {
+        delegate.log_stderr(type);
     }
 
     virtual Variable grind_errors() override { return delegate.grind_errors(); }
