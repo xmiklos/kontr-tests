@@ -89,6 +89,7 @@ UNIT_TEST(functions) {
     log("text student", "student");
 
     log_file("file");
+    add_attachment("file");
     log_run_fail("[FAIL]");
     log_tag("nanecisto", "smula");
     log_valgrind("valgrind", "Valgrind:");
@@ -239,6 +240,7 @@ $unit_test->log('text both', 'both');
 $unit_test->log('text teacher', 'teacher');
 $unit_test->log('text student', 'student');
 $unit_test->log_file('file', 'both');
+$unit_test->add_attachment('file', 'both');
 $unit_test->log_run_fail('[FAIL]');
 $unit_test->log_tag('nanecisto', 'smula', 'both');
 $unit_test->log_valgrind('valgrind', 'Valgrind:', 'both');

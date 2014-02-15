@@ -61,6 +61,7 @@
         using kontr::UnitTest::Delegator<T>::analyze; \
         using kontr::UnitTest::Delegator<T>::log; \
         using kontr::UnitTest::Delegator<T>::log_file; \
+        using kontr::UnitTest::Delegator<T>::add_attachment; \
         using kontr::UnitTest::Delegator<T>::log_run_fail; \
         using kontr::UnitTest::Delegator<T>::log_tag; \
         using kontr::UnitTest::Delegator<T>::log_valgrind; \

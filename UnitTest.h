@@ -78,9 +78,9 @@ public:
     virtual void analyze_stderr(Variable desc, Variable cmd) = 0;
     virtual void analyze(Variable desc, Variable input, Variable cmd) = 0;
 
-    //virtual void add_attachment(Variable data, Variable type) = 0; //Is it necessary with kontr-logs?
     virtual void log(Variable text, Variable type = "both") = 0;
     virtual void log_file(Variable filename, Variable type = "both") = 0;
+    virtual void add_attachment(Variable filename, Variable type = "both") = 0;
 
     //UNUSED methods:
     //virtual void log_comit() = 0;
@@ -90,7 +90,7 @@ public:
     virtual void log_run_fail(Variable message) = 0;
     virtual void log_tag(Variable tag, Variable text, Variable type = "both") = 0;
     virtual void log_valgrind(Variable tag, Variable text, Variable type = "both") = 0;
-    virtual void subtest(Variable name) = 0;
+    virtual void subtest(Variable name) = 0;    
 };
 
 /// Empty class (all virtual methods implemented as empty)
@@ -135,6 +135,7 @@ public:
 
     virtual void log(Variable text, Variable type = "both") override { kontr::unused(text, type); }
     virtual void log_file(Variable filename, Variable type = "both") override { kontr::unused(filename, type); }
+    virtual void add_attachment(Variable filename, Variable type = "both") override { kontr::unused(filename, type); }
 
     virtual void log_run_fail(Variable message) override { kontr::unused(message); }
     virtual void log_tag(Variable tag, Variable text, Variable type = "both") override { kontr::unused(tag, text, type); }
@@ -208,6 +209,7 @@ public:
 
     virtual void log(Variable text, Variable type = "both") override { delegate.log(text, type); }
     virtual void log_file(Variable filename, Variable type = "both") override { delegate.log_file(filename, type); }
+    virtual void add_attachment(Variable filename, Variable type = "both") override { delegate.add_attachment(filename, type); }
 
     virtual void log_run_fail(Variable message) override { delegate.log_run_fail(message); }
     virtual void log_tag(Variable tag, Variable text, Variable type = "both") override { delegate.log_tag(tag, text, type); }

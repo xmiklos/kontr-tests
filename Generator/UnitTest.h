@@ -141,6 +141,10 @@ public:
         std::string& indent = T::instance().storage.indent;
         out << indent << variable << "->log_file(" << filename << ", " << type << ");" << std::endl;
     }
+    virtual void add_attachment(Variable filename, Variable type = "both") override {
+        std::string& indent = T::instance().storage.indent;
+        out << indent << variable << "->add_attachment(" << filename << ", " << type << ");" << std::endl;
+    }
 
     virtual void log_run_fail(Variable message) override {
         std::string& indent = T::instance().storage.indent;
