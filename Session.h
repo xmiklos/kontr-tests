@@ -104,6 +104,14 @@ public:
      * @return
      */
     virtual Variable get_points(Variable name) = 0;
+
+    /**
+      Is this file available?
+     * @brief available_file
+     * @param name
+     * @return
+     */
+    virtual Variable available_file(const char* name) = 0;
 };
 
 /// Stores data for session
@@ -161,6 +169,7 @@ public:
     virtual Variable has_tag(Variable tag) override { kontr::unused(tag); return false; }
     virtual void add_summary(Variable message) override { kontr::unused(message); }
     virtual Variable get_points(Variable points) override { kontr::unused(points); return false; }
+    virtual Variable available_file(const char *name) override { kontr::unused(name); return false; }
 };
 
 /// Delegator class
@@ -230,6 +239,10 @@ public:
 
     virtual Variable get_points(Variable points) override {
         return delegate.get_points(points);
+    }
+
+    virtual Variable available_file(const char *name) override {
+        return delegate.available_file(name);
     }
 };
 

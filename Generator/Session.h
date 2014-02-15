@@ -160,6 +160,20 @@ public:
                     ::kontr::Generator::Variable<T>(::kontr::Variable::DataType::Bool, "$session->get_points(" + ss.str() + ")")
                     );
     }
+
+    virtual Variable available_file(const char* name) override {
+        std::stringstream ss;
+        std::set<char> quote = {'\\', '/', '.', '+', '*', '^', '$', '?', '(', ')', '[', ']', '{', '}', '|'};
+        for(unsigned i = 0; name[i] != 0; ++i) {
+            if (quote.find(name[i]) != quote.end()) {
+                ss << '\\';
+            }
+            ss << name[i];
+        }
+        return ::kontr::Variable::Delegator<T>::__create(
+                    ::kontr::Generator::Variable<T>(::kontr::Variable::DataType::String, "$session->available_file( sub { /" + ss.str() + "/ } )")
+                    );
+    }
 };
 
 #if 0

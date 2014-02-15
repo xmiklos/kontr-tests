@@ -97,6 +97,7 @@ UNIT_TEST(functions) {
     tmp = session()->run_type();
     tmp = session()->has_tag("none");
     session()->add_summary("done");
+    tmp = session()->available_file("bonus.txt");
 
     IF(valgrind()->grind_errors(),
        {
@@ -245,6 +246,7 @@ $unit_test->subtest('nekorektni');
 $tmp = $session->run_type;
 $tmp = $session->has_tag('none');
 $session->add_summary('done');
+$tmp = $session->available_file( sub { /bonus\.txt/ } );
 if ($unit_test->valgrind->grind_errors) {
 	$unit_test->log_valgrind('valgrind', '[VALGRIND] Chyba pri kontrole Valgrindem:', 'both');
 }
