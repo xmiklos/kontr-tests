@@ -154,9 +154,9 @@ public:
         std::string& indent = T::instance().storage.indent;
         out << indent << variable << "->log_tag(" << tag << ", " << text << ", " << type << ");" << std::endl;
     }
-    virtual void log_valgrind(Variable tag, Variable text, Variable type = "both") override {
+    virtual void log_valgrind(Variable tag, Variable text) override {
         std::string& indent = T::instance().storage.indent;
-        out << indent << variable << "->log_valgrind(" << tag << ", " << text << ", " << type << ");" << std::endl;
+        out << indent << variable << "->log_valgrind(" << tag << ", " << text << ");" << std::endl;
     }
     virtual void subtest(Variable name) override {
         std::string& indent = T::instance().storage.indent;

@@ -89,7 +89,7 @@ public:
 
     virtual void log_run_fail(Variable message) = 0;
     virtual void log_tag(Variable tag, Variable text, Variable type = "both") = 0;
-    virtual void log_valgrind(Variable tag, Variable text, Variable type = "both") = 0;
+    virtual void log_valgrind(Variable tag, Variable text) = 0;
     virtual void subtest(Variable name) = 0;    
 };
 
@@ -139,7 +139,7 @@ public:
 
     virtual void log_run_fail(Variable message) override { kontr::unused(message); }
     virtual void log_tag(Variable tag, Variable text, Variable type = "both") override { kontr::unused(tag, text, type); }
-    virtual void log_valgrind(Variable tag, Variable text, Variable type = "both") override { kontr::unused(tag, text, type); }
+    virtual void log_valgrind(Variable tag, Variable text) override { kontr::unused(tag, text); }
     virtual void subtest(Variable name) override { kontr::unused(name); }
 };
 
@@ -213,7 +213,7 @@ public:
 
     virtual void log_run_fail(Variable message) override { delegate.log_run_fail(message); }
     virtual void log_tag(Variable tag, Variable text, Variable type = "both") override { delegate.log_tag(tag, text, type); }
-    virtual void log_valgrind(Variable tag, Variable text, Variable type = "both") override { delegate.log_valgrind(tag, text, type); }
+    virtual void log_valgrind(Variable tag, Variable text) override { delegate.log_valgrind(tag, text); }
     virtual void subtest(Variable name) override { delegate.subtest(name); }
 
     /// Get class name of the UnitTest
