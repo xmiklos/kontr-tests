@@ -106,6 +106,16 @@ public:
         for (Variable v : args) { out << ", " << v; }
         out << ");" << std::endl;
     }
+    virtual void run_split(Variable input, Variable arg_str) override {
+        std::string& indent = T::instance().storage.indent;
+        out << indent << variable << "->run_split(" << input;
+        out << ", " << arg_str << ");" << std::endl;
+    }
+    virtual void run_grind_split(Variable input, Variable arg_str) override {
+        std::string& indent = T::instance().storage.indent;
+        out << indent << variable << "->run_grind_split(" << input;
+        out << ", " << arg_str << ");" << std::endl;
+    }
 
     virtual void diff_stdout(Variable mode, Variable file) override {
         std::string& indent = T::instance().storage.indent;

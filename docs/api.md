@@ -53,6 +53,18 @@ This is an implementation limit and may change in the future. But for now, if me
 
 This should all be hinted to you by your editor. (See [Installation](installation.md).)
 
+### Passing arguments to `run*` methods
+Methods `run_split` and `run_grind_split` offers a way how to pass variable number of arguments to application being tested. Their second argument is a (perl) string used like command line. For example, calling
+```C++
+run_grind_split("stdin", "--arg1 -a --long\\ arg\\\\3");
+```
+is similar to code
+```C++
+run_grind("stdin", {"--arg1", "-a", "--long arg\\3"});
+```
+Double quotes are treated as normal character, but it may change in future. Do not use them unless really needed.
+
+
 ## Control flow
 In order to make the translation work, I needed to create a new way to control flow of the program. If try to use the C++ keyword, **a warning will be issued**.
 

@@ -53,6 +53,8 @@
         using kontr::UnitTest::Delegator<T>::compile; \
         using kontr::UnitTest::Delegator<T>::run; \
         using kontr::UnitTest::Delegator<T>::run_grind; \
+        using kontr::UnitTest::Delegator<T>::run_split; \
+        using kontr::UnitTest::Delegator<T>::run_grind_split; \
         using kontr::UnitTest::Delegator<T>::diff_stdout; \
         using kontr::UnitTest::Delegator<T>::diff_stderr; \
         using kontr::UnitTest::Delegator<T>::diff_generic; \
