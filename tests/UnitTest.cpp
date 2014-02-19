@@ -76,6 +76,9 @@ UNIT_TEST(functions) {
     run_grind("em");
     run_grind("file1", {"file2", "-o", "file3"});
 
+    run_split("/dev/null", "-arg1 -arg2 \"string\\ with\\ space\\ and\\ backslash\\\"");
+    run_grind_split("/dev/null", "-arg1 -arg2 \"string\\ with\\ space\\ and\\ backslash\\\"");
+
     diff_stdout("case", "file");
     diff_stderr("case", "file");
     diff_generic("case", "file", "file2");
@@ -230,6 +233,8 @@ $unit_test->run('/dev/null');
 $unit_test->run('file1', 'file2', '-o', 'file3');
 $unit_test->run_grind('em');
 $unit_test->run_grind('file1', 'file2', '-o', 'file3');
+$unit_test->run_split('/dev/null', '-arg1 -arg2 "string\ with\ space\ and\ backslash\"');
+$unit_test->run_grind_split('/dev/null', '-arg1 -arg2 "string\ with\ space\ and\ backslash\"');
 $unit_test->diff_stdout('case', 'file');
 $unit_test->diff_stderr('case', 'file');
 $unit_test->diff_generic('case', 'file', 'file2');
