@@ -69,6 +69,8 @@ public:
     //TODO - not an array?
     virtual void run(Variable input, std::vector<Variable> args = {}) = 0;
     virtual void run_grind(Variable input, std::vector<Variable> args = {}) = 0;
+    virtual void run_split(Variable input, Variable arg_str) = 0;
+    virtual void run_grind_split(Variable input, Variable arg_str) = 0;
 
     virtual void diff_stdout(Variable mode, Variable file) = 0;
     virtual void diff_stderr(Variable mode, Variable file) = 0;
@@ -124,6 +126,8 @@ public:
 
     virtual void run(Variable input, std::vector<Variable> args = {}) override { kontr::unused(input, args); }
     virtual void run_grind(Variable input, std::vector<Variable> args = {}) override { kontr::unused(input, args); }
+    virtual void run_split(Variable input, Variable arg_str) override { kontr::unused(input, arg_str); }
+    virtual void run_grind_split(Variable input, Variable arg_str) override { kontr::unused(input, arg_str); }
 
     virtual void diff_stdout(Variable mode, Variable file) override { kontr::unused(mode, file); }
     virtual void diff_stderr(Variable mode, Variable file) override { kontr::unused(mode, file); }
@@ -198,6 +202,8 @@ public:
 
     virtual void run(Variable input, std::vector<Variable> args = {}) override { delegate.run(input, args); }
     virtual void run_grind(Variable input, std::vector<Variable> args = {}) override { delegate.run_grind(input, args); }
+    virtual void run_split(Variable input, Variable arg_str) override { delegate.run_split(input, arg_str); }
+    virtual void run_grind_split(Variable input, Variable arg_str) override { delegate.run_grind_split(input, arg_str); }
 
     virtual void diff_stdout(Variable mode, Variable file) override { delegate.diff_stdout(mode, file); }
     virtual void diff_stderr(Variable mode, Variable file) override { delegate.diff_stderr(mode, file); }
