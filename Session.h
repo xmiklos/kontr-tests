@@ -112,6 +112,11 @@ public:
      * @return
      */
     virtual Variable available_file(const char* name) = 0;
+
+    virtual void set_value(Variable name, Variable value) = 0;
+    virtual Variable get_value(Variable name) = 0;
+    virtual Variable got_value(Variable name) = 0;
+    virtual void remove_value(Variable name) = 0;
 };
 
 /// Stores data for session
@@ -170,6 +175,11 @@ public:
     virtual void add_summary(Variable message) override { kontr::unused(message); }
     virtual Variable get_points(Variable points) override { kontr::unused(points); return false; }
     virtual Variable available_file(const char *name) override { kontr::unused(name); return false; }
+
+    virtual void set_value(Variable name, Variable value) override { kontr::unused(name, value); }
+    virtual Variable get_value(Variable name) override { kontr::unused(name); return false; }
+    virtual Variable got_value(Variable name) override { kontr::unused(name); return false; }
+    virtual void remove_value(Variable name) override { kontr::unused(name); }
 };
 
 /// Delegator class
@@ -243,6 +253,22 @@ public:
 
     virtual Variable available_file(const char *name) override {
         return delegate.available_file(name);
+    }
+
+    virtual void set_value(Variable name, Variable value) override {
+        delegate.set_value(name, value);
+    }
+
+    virtual Variable get_value(Variable name) override {
+        return delegate.get_value(name);
+    }
+
+    virtual Variable got_value(Variable name) override {
+        return delegate.got_value(name);
+    }
+
+    virtual void remove_value(Variable name) override {
+        delegate.remove_value(name);
     }
 };
 

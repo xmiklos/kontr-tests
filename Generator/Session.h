@@ -174,6 +174,34 @@ public:
                     ::kontr::Generator::Variable<T>(::kontr::Variable::DataType::String, "$session->available_file( sub { /" + ss.str() + "/ } )")
                     );
     }
+
+    virtual void set_value(Variable name, Variable value) override {
+        std::ostream& out = *(T::instance().storage.out_ptr);
+        std::string& indent = T::instance().storage.indent;
+        out << indent << "$session->set_value(" << name << ", " << value << ");" << std::endl;
+    }
+
+    virtual Variable get_value(Variable name) override {
+        std::stringstream ss;
+        ss << name;
+        return ::kontr::Variable::Delegator<T>::__create(
+                    ::kontr::Generator::Variable<T>(::kontr::Variable::DataType::String, "$session->get_value(" + ss.str() + ")")
+                    );
+    }
+
+    virtual Variable got_value(Variable name) override {
+        std::stringstream ss;
+        ss << name;
+        return ::kontr::Variable::Delegator<T>::__create(
+                    ::kontr::Generator::Variable<T>(::kontr::Variable::DataType::Bool, "$session->got_value(" + ss.str() + ")")
+                    );
+    }
+
+    virtual void remove_value(Variable name) override {
+        std::ostream& out = *(T::instance().storage.out_ptr);
+        std::string& indent = T::instance().storage.indent;
+        out << indent << "$session->remove_value(" << name << ");" << std::endl;
+    }
 };
 
 #if 0

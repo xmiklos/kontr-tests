@@ -107,6 +107,12 @@ UNIT_TEST(functions) {
        {
            log_valgrind("valgrind", "[VALGRIND] Chyba pri kontrole Valgrindem:");
        });
+
+    session()->set_value("run_output", 512000);
+    tmp = session()->got_value("run_output");
+    tmp = session()->get_value("run_output");
+    session()->remove_value("run_output");
+
 }
 
 SESSION_NAME(tmp, ".", ".", {}, {}, false, false)
@@ -257,6 +263,10 @@ $tmp = $session->available_file( sub { /bonus\.txt/ } );
 if ($unit_test->valgrind->grind_errors) {
 	$unit_test->log_valgrind('valgrind', '[VALGRIND] Chyba pri kontrole Valgrindem:');
 }
+$session->set_value('run_output', 512000);
+$tmp = $session->got_value('run_output');
+$tmp = $session->get_value('run_output');
+$session->remove_value('run_output');
 )delimiter";
 
         stringstream buf;
