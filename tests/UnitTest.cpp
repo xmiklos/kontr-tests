@@ -64,7 +64,7 @@ UNIT_TEST(functions) {
     tmp = work_path();
     tmp = file_path();
     tmp = compilation()->result();
-    extra_compiler_flags() = "flag";
+    extra_compiler_flags("flag");
     compilation_log_errors() = true;
     tmp = execution()->success();
     tmp = difference()->exit_value() != 0;
@@ -229,7 +229,7 @@ $unit_test->add_points('points' => 1);
 $tmp = $unit_test->work_path;
 $tmp = $unit_test->file_path;
 $tmp = $unit_test->compilation->result;
-$unit_test->extra_compiler_flags = 'flag';
+$unit_test->extra_compiler_flags('flag');
 $unit_test->compilation_log_errors = 1;
 $tmp = $unit_test->execution->success;
 $tmp = ($unit_test->difference->exit_value) != 0;

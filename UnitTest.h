@@ -58,7 +58,7 @@ public:
     virtual Variable file_path() = 0; //string
 
     virtual Compilation* compilation() = 0;
-    virtual Variable extra_compiler_flags() = 0; //string
+    virtual void extra_compiler_flags(Variable flags) = 0;
     virtual Variable compilation_log_errors() = 0; //bool
     virtual Execution* execution() = 0;
     virtual Execution* analysis() = 0;
@@ -115,7 +115,7 @@ public:
     virtual Variable work_path() override { return ""; }
     virtual Variable file_path() override { return ""; }
     virtual Compilation* compilation() override { return nullptr; }
-    virtual Variable extra_compiler_flags() override { return ""; }
+    virtual void extra_compiler_flags(Variable flags) override { kontr::unused(flags); }
     virtual Variable compilation_log_errors() override { return false; }
     virtual Execution* execution() override { return nullptr; }
     virtual Execution* analysis() override { return nullptr; }
@@ -191,7 +191,7 @@ public:
     virtual Variable work_path() override { return delegate.work_path(); }
     virtual Variable file_path() override { return delegate.file_path(); }
     virtual Compilation* compilation() override { return delegate.compilation(); }
-    virtual Variable extra_compiler_flags() override { return delegate.extra_compiler_flags(); }
+    virtual void extra_compiler_flags(Variable flags) override { delegate.extra_compiler_flags(flags); }
     virtual Variable compilation_log_errors() override { return delegate.compilation_log_errors(); }
     virtual Execution* execution() override { return delegate.execution(); }
     virtual Execution* analysis() override { return delegate.analysis(); }

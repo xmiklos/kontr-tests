@@ -81,7 +81,10 @@ public:
     GETTER(file_path, String)
 
     virtual Compilation* compilation() override { return &compilationResult; }
-    GETTER(extra_compiler_flags, String)
+    virtual void extra_compiler_flags(Variable flags) {
+        std::string& indent = T::instance().storage.indent;
+        out << indent << variable << "->extra_compiler_flags(" << flags << ");" << std::endl;
+    }
     GETTER(compilation_log_errors, Bool)
 
     virtual Execution* execution() override { return &executionResult; }
