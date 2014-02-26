@@ -290,6 +290,7 @@ TEST_CASE("Array"){
     Testing& cg = Testing::instance();;
     stringstream ss;
     cg.storage.out_ptr = &ss;
+    using Type = Variable::DataType;
 
     Variable::Delegator<Testing> a("a", {10, 10, 10});
     CHECK( ss.str() == "my @a = (10, 10, 10);\n");
@@ -364,6 +365,21 @@ TEST_CASE("Array"){
     ss.str("");
     a = d.size();
     CHECK( ss.str() == "$a = scalar @d;\n");
+
+    SECTION("split") {
+        a = "str";
+        ss.str("");
+        a = a.split(",");
+        CHECK( ss.str() == "@a = split(',', $a);\n" );
+        CHECK( a.__getDelegate().dataType == Type::Array );
+
+        b = {"a", "b"};
+        ss.str("");
+        a = b[0].split(b[1]);
+        CHECK( ss.str() == "@a = split(($b[1]), ($b[0]));\n" );
+        CHECK( a.__getDelegate().dataType == Type::Array );
+    }
+
 }
 
 TEST_CASE("Strings") {

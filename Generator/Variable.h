@@ -325,6 +325,21 @@ public:
         //Error
         return ::kontr::Variable::Delegator<T>::__create(*this);
     }
+    virtual ::kontr::Variable::Delegator<T> split (
+            const ::kontr::Variable::Delegator<T> &sep) const {
+        const Variable& s = sep.__getDelegate();
+        if (dataType == DataType::String && s.dataType == DataType::String) {
+            ::kontr::Generator::Variable<T> res(DataType::Array,
+                "split(" + s.__toString(true) + ", " + this->__toString(true) + ")");
+            res.data.Array.push_back(sep);
+            res.data.Array.push_back(
+                ::kontr::Variable::Delegator<T>::__create(*this)
+            );
+            return ::kontr::Variable::Delegator<T>::__create(res);
+        }
+        //Error
+        return ::kontr::Variable::Delegator<T>::__create(*this);
+    }
 
 #undef RET_EXP
 

@@ -131,7 +131,12 @@ public:
      */
     virtual Delegator<T> substr(const Delegator<T>& from, const Delegator<T>& to) const = 0;
 
-
+    /**
+     * Split string by separator
+     * @param sep
+     * @return array
+     */
+    virtual Delegator<T> split(const Delegator<T>& sep) const = 0;
 };
 
 /// Data storing version of Interface
@@ -237,6 +242,7 @@ public:
 
     virtual Delegator<T> size() const { DELEGATE }
     virtual Delegator<T> substr(const Delegator<T> &, const Delegator<T> &) const { DELEGATE }
+    virtual Delegator<T> split(const Delegator<T> &) const { DELEGATE }
 
 #undef DELEGATE
 
@@ -337,6 +343,10 @@ public:
 
     virtual Delegator<T> substr(const Delegator<T> &from, const Delegator<T> &to) const {
         return delegate.substr(from, to);
+    }
+
+    virtual Delegator<T> split(const Delegator<T> &sep) const {
+        return delegate.split(sep);
     }
 
 #define OP_DEL_SINGLE(OP, TYPE) friend Delegator<T> operator OP (TYPE first, const Delegator<T>& other) \
