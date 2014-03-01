@@ -287,6 +287,19 @@ public:
         }
     }
 
+    virtual ::kontr::Variable::Delegator<T> operator- (const ::kontr::Variable::Delegator<T>& o) const {
+        const Variable& other = o.__getDelegate();
+        if (this->dataType == DataType::Float || other.dataType == DataType::Float) {
+            RET_EXP(Float, this->__toString(true) + " - " + other.__toString(true));
+        }
+        else if (this->dataType == DataType::Int || other.dataType == DataType::Int) {
+            RET_EXP(Int, this->__toString(true) + " - " + other.__toString(true));
+        }
+        else { //Possibly error?
+            RET_EXP(Bool, this->__toString(true) + " - " + other.__toString(true));
+        }
+    }
+
     virtual ::kontr::Variable::Delegator<T> operator[] (const ::kontr::Variable::Delegator<T>& o) const {
         const Variable& other = o.__getDelegate();
         if (other.dataType == DataType::Int &&

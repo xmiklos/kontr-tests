@@ -286,6 +286,35 @@ TEST_CASE("Plus"){
     CHECK( c.__getDelegate().dataType == Type::Int);
 }
 
+TEST_CASE("Minus"){
+    Testing& cg = Testing::instance();;
+    stringstream ss;
+    cg.storage.out_ptr = &ss;
+    using Type = Variable::DataType;
+
+    Variable::Delegator<Testing> a("a", "10");
+    Variable::Delegator<Testing> b("b", "bu");
+    Variable::Delegator<Testing> c("c", 10);
+
+    b = 0.5;
+    ss.str("");
+    c = a - b;
+    CHECK( ss.str() == "$c = $a - $b;\n");
+    CHECK( c.__getDelegate().dataType == Type::Float);
+
+    a = 4;
+    ss.str("");
+    c = a - b;
+    CHECK( ss.str() == "$c = $a - $b;\n");
+    CHECK( c.__getDelegate().dataType == Type::Float);
+
+    b = 3;
+    ss.str("");
+    c = a - b;
+    CHECK( ss.str() == "$c = $a - $b;\n");
+    CHECK( c.__getDelegate().dataType == Type::Int);
+}
+
 TEST_CASE("Array"){
     Testing& cg = Testing::instance();;
     stringstream ss;

@@ -106,6 +106,7 @@ public:
     virtual Delegator<T> operator&& (const Delegator<T>& other) const = 0;
     virtual Delegator<T> operator|| (const Delegator<T>& other) const = 0;
     virtual Delegator<T> operator+ (const Delegator<T>& other) const = 0;
+    virtual Delegator<T> operator- (const Delegator<T>& other) const = 0;
 
     /**
       Array subscript and string character
@@ -238,6 +239,7 @@ public:
     virtual Delegator<T> operator&& (const Delegator<T>&) const { DELEGATE }
     virtual Delegator<T> operator|| (const Delegator<T>&) const { DELEGATE }
     virtual Delegator<T> operator+ (const Delegator<T>&) const { DELEGATE }
+    virtual Delegator<T> operator- (const Delegator<T>&) const { DELEGATE }
     virtual Delegator<T> operator[] (const Delegator<T>&) const { DELEGATE }
 
     virtual Delegator<T> size() const { DELEGATE }
@@ -333,6 +335,10 @@ public:
         return delegate + other;
     }
 
+    virtual Delegator<T> operator- (const Delegator<T>& other) const {
+        return delegate - other;
+    }
+
     virtual Delegator<T> operator[] (const Delegator<T>& other) const {
         return delegate[other];
     }
@@ -354,6 +360,7 @@ public:
 #define OP_DEL(OP) OP_DEL_SINGLE(OP, bool) OP_DEL_SINGLE(OP, int) OP_DEL_SINGLE(OP, double) OP_DEL_SINGLE(OP, const char *)
 
     OP_DEL(+)
+    OP_DEL(-)
     OP_DEL(||)
     OP_DEL(&&)
     OP_DEL(==)
