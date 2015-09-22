@@ -101,6 +101,7 @@ public:
                 });
             },
             {
+/* // standard version 
                    VAR(points, get_points("points"));
                    IF (has_tag("nanecisto") || has_tag("naostro"),
                    {
@@ -121,6 +122,27 @@ public:
                         { add_summary("Prosla kontrola Valgrindem.\n"); }
                        );
                    }
+*/
+			VAR(points, get_points("points"));
+			VAR(v_points, get_points("valgrind"));
+			VAR(total, points + v_points);
+			IF (has_tag("nanecisto") || has_tag("naostro"),
+			{
+				add_summary("* v testu byla nalezena chyba\n");
+				add_summary("* pocet bodu je: " + points + "\n");
+				if (valgrind) {
+					add_summary("* penalizace valgrind: " + v_points + "\n");
+					add_summary("* vysledny pocet bodu: " + total + "\n");
+				}
+			},
+			{
+				add_summary("* test prosel kompletne spravne\n");
+				add_summary("* pocet bodu za funcionalitu je: " + points + "\n");
+				if (valgrind) {
+					add_summary("* penalizace valgrind: " + v_points + "\n");
+					add_summary("* vysledny pocet bodu: " + total + "\n");
+				}
+			});
             });
             T::instance().storage.removeIndent();
         }
