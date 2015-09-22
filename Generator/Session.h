@@ -129,7 +129,7 @@ public:
 			IF (has_tag("nanecisto") || has_tag("naostro"),
 			{
 				add_summary("* v testu byla nalezena chyba\n");
-				add_summary("* pocet bodu je: " + points + "\n");
+				add_summary("* pocet bodu za funcionalitu je: " + points + "\n");
 				if (valgrind) {
 					add_summary("* penalizace valgrind: " + v_points + "\n");
 					add_summary("* vysledny pocet bodu: " + total + "\n");
@@ -141,6 +141,10 @@ public:
 				if (valgrind) {
 					add_summary("* penalizace valgrind: " + v_points + "\n");
 					add_summary("* vysledny pocet bodu: " + total + "\n");
+				}
+				if (bonus) {
+					VAR(bonus, get_points("bonus"));
+					add_summary("* pocet bodu za bonus je: " + bonus + "\n");
 				}
 			});
             });
