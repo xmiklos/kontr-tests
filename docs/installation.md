@@ -19,10 +19,8 @@ In order to update this installation just update the repository (```git pull```)
 
 To install the full version:
 ```Bash
-git clone https://github.com/xbrukner/kontr-tests.git
+git clone --recursive https://github.com/xbrukner/kontr-tests.git
 cd kontr-tests
-git submodule init
-git submodule update
 cmake .
 make
 make test
